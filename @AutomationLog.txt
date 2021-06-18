@@ -1,0 +1,8 @@
+BenchmarkAutomationGame does not initialized with a valid relativePath.
+BenchmarkAutomationGame does not initialized with a valid absolutePath.
+BenchmarkAutomationGame does not initialized with a valid relativePath.
+BenchmarkAutomationGame does not initialized with a valid absolutePath.
+warning: BenchmarkAutomationGame is not initialized with a valid relativePath.
+warning: BenchmarkAutomationGame is not initialized with a valid absolutePath.
+warning: BenchmarkAutomationGame is not initialized with a valid relativePath.
+warning: BenchmarkAutomationGame is not initialized with a valid absolutePath.

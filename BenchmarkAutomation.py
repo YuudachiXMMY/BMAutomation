@@ -1,15 +1,16 @@
 import Game
+from typing import Any
 
 class BenchmarkAutomation:
     '''
     '''
 
-    def __init__(self, steamDirectory="", documentDirectory="") -> None:
+    def __init__(self, steamDirectory: str = "", documentDirectory: str = "") -> None:
         '''
         '''
         pass
 
-    def addGame(self, exe="", relativePath="", absolutePath=""):
+    def addGame(self, exe: str = "", relativePath: str = "", absolutePath: str = "") -> Any:
         '''
         '''
         return Game(self.getSteamDirectory, self.getDocumentDirectory(), \
@@ -17,22 +18,24 @@ class BenchmarkAutomation:
 
 
     ############################################################################
-    def addSteamDirectory(self, dir):
+    def setSteamDirectory(self, dir: str) -> Any:
+        '''
+        '''
         self.steamDirectory = dir
 
-    def changeSteamDirectory(self, dir):
-        self.addSteamDirectory(dir)
-
-    def getSteamDirectory(self):
+    def getSteamDirectory(self) -> str:
+        '''
+        '''
         return self.steamDirectory
 
-    def addDocumentDirectory(self, dir):
+    def setDocumentDirectory(self, dir: str) -> Any:
+        '''
+        '''
         self.documentDirectory = dir
 
-    def changeDocumentDirectory(self, dir):
-        self.addSteamDirectory(dir)
-
-    def getDocumentDirectory(self):
+    def getDocumentDirectory(self) -> str:
+        '''
+        '''
         return self.documentDirectory
 
 
