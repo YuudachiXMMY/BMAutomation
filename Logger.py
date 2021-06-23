@@ -7,6 +7,9 @@ import ctypes.wintypes
 from typing import (Any, Callable, Dict, List, Iterable, Tuple)  # need 'pip install typing' for Python3.4 or lower
 
 
+############################################################################
+################################# Console ##################################
+############################################################################
 _StdOutputHandle = -11
 _ConsoleOutputHandle = ctypes.c_void_p(0)
 _DefaultConsoleColor = None
@@ -67,8 +70,10 @@ def ResetConsoleColor() -> bool:
         sys.stdout.flush()
     return bool(ctypes.windll.kernel32.SetConsoleTextAttribute(_ConsoleOutputHandle, ctypes.c_ushort(_DefaultConsoleColor)))
 
-################################################################################
 
+############################################################################
+################################## Logger ##################################
+############################################################################
 class Logger:
     """
     Logger for print and log. Support for printing log with different colors on console.
