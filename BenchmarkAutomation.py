@@ -16,12 +16,13 @@ import uiautomation as auto
 import win32api
 import win32con
 
-############################################################################
-################################# Console ##################################
-############################################################################
+################################################################################
+################################### Console ####################################
+################################################################################
 _StdOutputHandle = -11
 _ConsoleOutputHandle = ctypes.c_void_p(0)
 _DefaultConsoleColor = None
+
 
 class ConsoleColor:
     """ConsoleColor from Win32."""
@@ -43,6 +44,7 @@ class ConsoleColor:
     Yellow = 14
     White = 15
 
+
 class ConsoleScreenBufferInfo(ctypes.Structure):
     _fields_ = [
         ('dwSize', ctypes.wintypes._COORD),
@@ -51,6 +53,7 @@ class ConsoleScreenBufferInfo(ctypes.Structure):
         ('srWindow', ctypes.wintypes.SMALL_RECT),
         ('dwMaximumWindowSize', ctypes.wintypes._COORD),
     ]
+
 
 def SetConsoleColor(color: int) -> bool:
     """
@@ -62,13 +65,16 @@ def SetConsoleColor(color: int) -> bool:
     global _DefaultConsoleColor
     if not _DefaultConsoleColor:
         if not _ConsoleOutputHandle:
-            _ConsoleOutputHandle = ctypes.c_void_p(ctypes.windll.kernel32.GetStdHandle(_StdOutputHandle))
+            _ConsoleOutputHandle = ctypes.c_void_p(
+                ctypes.windll.kernel32.GetStdHandle(_StdOutputHandle))
         bufferInfo = ConsoleScreenBufferInfo()
-        ctypes.windll.kernel32.GetConsoleScreenBufferInfo(_ConsoleOutputHandle, ctypes.byref(bufferInfo))
+        ctypes.windll.kernel32.GetConsoleScreenBufferInfo(
+            _ConsoleOutputHandle, ctypes.byref(bufferInfo))
         _DefaultConsoleColor = int(bufferInfo.wAttributes & 0xFF)
     if sys.stdout:
         sys.stdout.flush()
     return bool(ctypes.windll.kernel32.SetConsoleTextAttribute(_ConsoleOutputHandle, ctypes.c_ushort(color)))
+
 
 def ResetConsoleColor() -> bool:
     """
@@ -80,9 +86,9 @@ def ResetConsoleColor() -> bool:
     return bool(ctypes.windll.kernel32.SetConsoleTextAttribute(_ConsoleOutputHandle, ctypes.c_ushort(_DefaultConsoleColor)))
 
 
-############################################################################
-################################## Logger ##################################
-############################################################################
+################################################################################
+#################################### Logger ####################################
+################################################################################
 class Logger:
     """
     Logger for print and log. Support for printing log with different colors on console.
@@ -125,7 +131,8 @@ class Logger:
         if not isinstance(log, str):
             log = str(log)
         if printToStdout and sys.stdout:
-            isValidColor = (consoleColor >= ConsoleColor.Black and consoleColor <= ConsoleColor.White)
+            isValidColor = (
+                consoleColor >= ConsoleColor.Black and consoleColor <= ConsoleColor.White)
             if isValidColor:
                 SetConsoleColor(consoleColor)
             try:
@@ -136,7 +143,8 @@ class Logger:
             except Exception as ex:
                 SetConsoleColor(ConsoleColor.Red)
                 isValidColor = True
-                sys.stdout.write(ex.__class__.__name__ + ': can\'t print the log!')
+                sys.stdout.write(ex.__class__.__name__ +
+                                 ': can\'t print the log!')
                 if log.endswith('\n'):
                     sys.stdout.write('\n')
             if isValidColor:
@@ -151,7 +159,8 @@ class Logger:
             fout.write(log)
         except Exception as ex:
             if sys.stdout:
-                sys.stdout.write(ex.__class__.__name__ + ': can\'t write the log!')
+                sys.stdout.write(ex.__class__.__name__ +
+                                 ': can\'t write the log!')
         finally:
             if fout:
                 fout.close()
@@ -165,7 +174,8 @@ class Logger:
         printToStdout: bool.
         logFile: str, log file path.
         """
-        Logger.Write('{}\n'.format(log), consoleColor, writeToFile, printToStdout, logFile)
+        Logger.Write('{}\n'.format(log), consoleColor,
+                     writeToFile, printToStdout, logFile)
 
     @staticmethod
     def ColorfullyWrite(log: str, consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
@@ -187,7 +197,8 @@ class Logger:
                 index2 = log.find('>', index1)
                 colorName = log[index1+7:index2]
                 index3 = log.find('</Color>', index2 + 1)
-                text.append((log[index2 + 1:index3], Logger.ColorNames[colorName]))
+                text.append((log[index2 + 1:index3],
+                            Logger.ColorNames[colorName]))
                 start = index3 + 8
             else:
                 if start < len(log):
@@ -207,7 +218,8 @@ class Logger:
 
         ColorfullyWriteLine('Hello <Color=Green>Green</Color> !!!'), color name must be in Logger.ColorNames.
         """
-        Logger.ColorfullyWrite(log + '\n', consoleColor, writeToFile, printToStdout, logFile)
+        Logger.ColorfullyWrite(log + '\n', consoleColor,
+                               writeToFile, printToStdout, logFile)
 
     @staticmethod
     def Log(log: Any = '', consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
@@ -228,7 +240,7 @@ class Logger:
 
         t = datetime.datetime.now()
         log = '{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03} {}[{}] {} -> {}\n'.format(t.year, t.month, t.day,
-            t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
+                                                                                t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
         Logger.Write(log, consoleColor, writeToFile, printToStdout, logFile)
 
     @staticmethod
@@ -252,8 +264,9 @@ class Logger:
 
         t = datetime.datetime.now()
         log = '{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03} {}[{}] {} -> {}\n'.format(t.year, t.month, t.day,
-            t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
-        Logger.ColorfullyWrite(log, consoleColor, writeToFile, printToStdout, logFile)
+                                                                                t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
+        Logger.ColorfullyWrite(
+            log, consoleColor, writeToFile, printToStdout, logFile)
 
     @staticmethod
     def DeleteLog() -> None:
@@ -262,12 +275,12 @@ class Logger:
             os.remove(Logger.FileName)
 
 
-############################################################################
-############################### Benchmarking ###############################
-############################################################################
+################################################################################
+################################# Benchmarking #################################
+################################################################################
 class Benchmarking:
     '''Benchmarking Methods for Automation Testing'''
-    ## BM stands for BenchMarking
+    # BM stands for BenchMarking
     _ROTATE_ANGLE = [0, 90, 180, 270]
 
     _BM_WAIT_TIME_MIN = 0
@@ -286,16 +299,16 @@ class Benchmarking:
         "left_click",
         "right_click"
     ]
-        # "spacebar",
+    # "spacebar",
 
     _MOUSE_LIST = [
         "left_click",
         "right_click"
     ]
-        # "view_upward",
-        # "view_downward",
-        # "view_leftward",
-        # "view_rightward"
+    # "view_upward",
+    # "view_downward",
+    # "view_leftward",
+    # "view_rightward"
 
     @staticmethod
     def NormalTest(duration) -> None:
@@ -319,8 +332,10 @@ class Benchmarking:
         tmp = Benchmarking._RANDOM_KEY_LIST.copy()
         tmp.extend(Benchmarking._RANDOM_KEY_LIST)
         while(duration >= 0):
-            waitTime = random.uniform(Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
-            keyTime = random.uniform(Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
+            waitTime = random.uniform(
+                Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
+            keyTime = random.uniform(
+                Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
             action = random.choice(tmp)
 
             if action in Benchmarking._MOUSE_LIST:
@@ -342,8 +357,10 @@ class Benchmarking:
         '''
         waitTime = 0
         while(duration >= 0):
-            waitTime = random.uniform(Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
-            keyTime = random.uniform(Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
+            waitTime = random.uniform(
+                Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
+            keyTime = random.uniform(
+                Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
             action = random.choice(_RANDOM_WORD_LIST)
 
             keyTime = Benchmarking.keyCharacterControl(action, keyTime)
@@ -365,7 +382,8 @@ class Benchmarking:
         while(duration >= 0):
             waitTime = random.uniform(5, 20)
 
-            Benchmarking.changeDisplayDirection(0, random.choice(Benchmarking._ROTATE_ANGLE))
+            Benchmarking.changeDisplayDirection(
+                0, random.choice(Benchmarking._ROTATE_ANGLE))
 
             duration -= waitTime
             time.sleep(waitTime)
@@ -383,8 +401,10 @@ class Benchmarking:
         waitTime = 0
         altTabTime = 0
         while(duration >= 0):
-            waitTime = random.uniform(Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
-            altTabTime = random.uniform(Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
+            waitTime = random.uniform(
+                Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
+            altTabTime = random.uniform(
+                Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
             Input.key_alt_tab()
             time.sleep(altTabTime)
             Input.key_alt_tab()
@@ -447,12 +467,13 @@ class Benchmarking:
         #     return
         try:
             device = win32api.EnumDisplayDevices(None, deviceIndex)
-            dm = win32api.EnumDisplaySettings(device.DeviceName,win32con.ENUM_CURRENT_SETTINGS)
+            dm = win32api.EnumDisplaySettings(
+                device.DeviceName, win32con.ENUM_CURRENT_SETTINGS)
             if angle == 90:
-                dm.DisplayOrientation = win32con.DMDO_90 #待改变的值
-                #以下的720或者1280 代表我的屏幕的长宽
-                #在应用项目的时候,建议使用GetSystemMetrics 动态获取长宽
-                #在每次改变方向的时候,都要判断是否需要交换屏幕的长宽
+                dm.DisplayOrientation = win32con.DMDO_90  # 待改变的值
+                # 以下的720或者1280 代表我的屏幕的长宽
+                # 在应用项目的时候,建议使用GetSystemMetrics 动态获取长宽
+                # 在每次改变方向的时候,都要判断是否需要交换屏幕的长宽
                 if win32api.GetSystemMetrics(win32con.SM_CXSCREEN) != 720:
                     dm.PelsWidth, dm.PelsHeight = dm.PelsHeight, dm.PelsWidth
 
@@ -471,7 +492,7 @@ class Benchmarking:
                 if win32api.GetSystemMetrics(win32con.SM_CXSCREEN) != 1280:
                     dm.PelsWidth, dm.PelsHeight = dm.PelsHeight, dm.PelsWidth
 
-            win32api.ChangeDisplaySettingsEx(device.DeviceName,dm)
+            win32api.ChangeDisplaySettingsEx(device.DeviceName, dm)
 
             return True
 
@@ -486,201 +507,201 @@ class VK_CODE():
     '''Uses Two Dict to represent VK_CODE'''
 
     _VK_CODE1 = {
-        'backspace':0x08,
-        'tab':0x09,
-        'clear':0x0C,
-        'enter':0x0D,
-        'shift':0x10,
-        'ctrl':0x11,
-        'alt':0x12,
-        'pause':0x13,
-        'caps_lock':0x14,
-        'esc':0x1B,
-        'spacebar':0x20,
-        'page_up':0x21,
-        'page_down':0x22,
-        'end':0x23,
-        'home':0x24,
-        'left_arrow':0x25,
-        'up_arrow':0x26,
-        'right_arrow':0x27,
-        'down_arrow':0x28,
-        'select':0x29,
-        'print':0x2A,
-        'execute':0x2B,
-        'print_screen':0x2C,
-        'ins':0x2D,
-        'del':0x2E,
-        'help':0x2F,
-        '0':0x30,
-        '1':0x31,
-        '2':0x32,
-        '3':0x33,
-        '4':0x34,
-        '5':0x35,
-        '6':0x36,
-        '7':0x37,
-        '8':0x38,
-        '9':0x39,
-        'a':0x41,
-        'b':0x42,
-        'c':0x43,
-        'd':0x44,
-        'e':0x45,
-        'f':0x46,
-        'g':0x47,
-        'h':0x48,
-        'i':0x49,
-        'j':0x4A,
-        'k':0x4B,
-        'l':0x4C,
-        'm':0x4D,
-        'n':0x4E,
-        'o':0x4F,
-        'p':0x50,
-        'q':0x51,
-        'r':0x52,
-        's':0x53,
-        't':0x54,
-        'u':0x55,
-        'v':0x56,
-        'w':0x57,
-        'x':0x58,
-        'y':0x59,
-        'z':0x5A,
-        'numpad_0':0x60,
-        'numpad_1':0x61,
-        'numpad_2':0x62,
-        'numpad_3':0x63,
-        'numpad_4':0x64,
-        'numpad_5':0x65,
-        'numpad_6':0x66,
-        'numpad_7':0x67,
-        'numpad_8':0x68,
-        'numpad_9':0x69,
-        'multiply_key':0x6A,
-        'add_key':0x6B,
-        'separator_key':0x6C,
-        'subtract_key':0x6D,
-        'decimal_key':0x6E,
-        'divide_key':0x6F,
-        'F1':0x70,
-        'F2':0x71,
-        'F3':0x72,
-        'F4':0x73,
-        'F5':0x74,
-        'F6':0x75,
-        'F7':0x76,
-        'F8':0x77,
-        'F9':0x78,
-        'F10':0x79,
-        'F11':0x7A,
-        'F12':0x7B,
-        'F13':0x7C,
-        'F14':0x7D,
-        'F15':0x7E,
-        'F16':0x7F,
-        'F17':0x80,
-        'F18':0x81,
-        'F19':0x82,
-        'F20':0x83,
-        'F21':0x84,
-        'F22':0x85,
-        'F23':0x86,
-        'F24':0x87,
-        'num_lock':0x90,
-        'scroll_lock':0x91,
-        'left_shift':0xA0,
-        'right_shift ':0xA1,
-        'left_control':0xA2,
-        'right_control':0xA3,
-        'left_menu':0xA4,
-        'right_menu':0xA5,
-        'browser_back':0xA6,
-        'browser_forward':0xA7,
-        'browser_refresh':0xA8,
-        'browser_stop':0xA9,
-        'browser_search':0xAA,
-        'browser_favorites':0xAB,
-        'browser_start_and_home':0xAC,
-        'volume_mute':0xAD,
-        'volume_Down':0xAE,
-        'volume_up':0xAF,
-        'next_track':0xB0,
-        'previous_track':0xB1,
-        'stop_media':0xB2,
-        'play/pause_media':0xB3,
-        'start_mail':0xB4,
-        'select_media':0xB5,
-        'start_application_1':0xB6,
-        'start_application_2':0xB7,
-        'attn_key':0xF6,
-        'crsel_key':0xF7,
-        'exsel_key':0xF8,
-        'play_key':0xFA,
-        'zoom_key':0xFB,
-        'clear_key':0xFE,
-        '+':0xBB,
-        ',':0xBC,
-        '-':0xBD,
-        '.':0xBE,
-        '/':0xBF,
-        '`':0xC0,
-        ';':0xBA,
-        '[':0xDB,
-        '\\':0xDC,
-        ']':0xDD,
-        "'":0xDE
+        'backspace': 0x08,
+        'tab': 0x09,
+        'clear': 0x0C,
+        'enter': 0x0D,
+        'shift': 0x10,
+        'ctrl': 0x11,
+        'alt': 0x12,
+        'pause': 0x13,
+        'caps_lock': 0x14,
+        'esc': 0x1B,
+        'spacebar': 0x20,
+        'page_up': 0x21,
+        'page_down': 0x22,
+        'end': 0x23,
+        'home': 0x24,
+        'left_arrow': 0x25,
+        'up_arrow': 0x26,
+        'right_arrow': 0x27,
+        'down_arrow': 0x28,
+        'select': 0x29,
+        'print': 0x2A,
+        'execute': 0x2B,
+        'print_screen': 0x2C,
+        'ins': 0x2D,
+        'del': 0x2E,
+        'help': 0x2F,
+        '0': 0x30,
+        '1': 0x31,
+        '2': 0x32,
+        '3': 0x33,
+        '4': 0x34,
+        '5': 0x35,
+        '6': 0x36,
+        '7': 0x37,
+        '8': 0x38,
+        '9': 0x39,
+        'a': 0x41,
+        'b': 0x42,
+        'c': 0x43,
+        'd': 0x44,
+        'e': 0x45,
+        'f': 0x46,
+        'g': 0x47,
+        'h': 0x48,
+        'i': 0x49,
+        'j': 0x4A,
+        'k': 0x4B,
+        'l': 0x4C,
+        'm': 0x4D,
+        'n': 0x4E,
+        'o': 0x4F,
+        'p': 0x50,
+        'q': 0x51,
+        'r': 0x52,
+        's': 0x53,
+        't': 0x54,
+        'u': 0x55,
+        'v': 0x56,
+        'w': 0x57,
+        'x': 0x58,
+        'y': 0x59,
+        'z': 0x5A,
+        'numpad_0': 0x60,
+        'numpad_1': 0x61,
+        'numpad_2': 0x62,
+        'numpad_3': 0x63,
+        'numpad_4': 0x64,
+        'numpad_5': 0x65,
+        'numpad_6': 0x66,
+        'numpad_7': 0x67,
+        'numpad_8': 0x68,
+        'numpad_9': 0x69,
+        'multiply_key': 0x6A,
+        'add_key': 0x6B,
+        'separator_key': 0x6C,
+        'subtract_key': 0x6D,
+        'decimal_key': 0x6E,
+        'divide_key': 0x6F,
+        'F1': 0x70,
+        'F2': 0x71,
+        'F3': 0x72,
+        'F4': 0x73,
+        'F5': 0x74,
+        'F6': 0x75,
+        'F7': 0x76,
+        'F8': 0x77,
+        'F9': 0x78,
+        'F10': 0x79,
+        'F11': 0x7A,
+        'F12': 0x7B,
+        'F13': 0x7C,
+        'F14': 0x7D,
+        'F15': 0x7E,
+        'F16': 0x7F,
+        'F17': 0x80,
+        'F18': 0x81,
+        'F19': 0x82,
+        'F20': 0x83,
+        'F21': 0x84,
+        'F22': 0x85,
+        'F23': 0x86,
+        'F24': 0x87,
+        'num_lock': 0x90,
+        'scroll_lock': 0x91,
+        'left_shift': 0xA0,
+        'right_shift ': 0xA1,
+        'left_control': 0xA2,
+        'right_control': 0xA3,
+        'left_menu': 0xA4,
+        'right_menu': 0xA5,
+        'browser_back': 0xA6,
+        'browser_forward': 0xA7,
+        'browser_refresh': 0xA8,
+        'browser_stop': 0xA9,
+        'browser_search': 0xAA,
+        'browser_favorites': 0xAB,
+        'browser_start_and_home': 0xAC,
+        'volume_mute': 0xAD,
+        'volume_Down': 0xAE,
+        'volume_up': 0xAF,
+        'next_track': 0xB0,
+        'previous_track': 0xB1,
+        'stop_media': 0xB2,
+        'play/pause_media': 0xB3,
+        'start_mail': 0xB4,
+        'select_media': 0xB5,
+        'start_application_1': 0xB6,
+        'start_application_2': 0xB7,
+        'attn_key': 0xF6,
+        'crsel_key': 0xF7,
+        'exsel_key': 0xF8,
+        'play_key': 0xFA,
+        'zoom_key': 0xFB,
+        'clear_key': 0xFE,
+        '+': 0xBB,
+        ',': 0xBC,
+        '-': 0xBD,
+        '.': 0xBE,
+        '/': 0xBF,
+        '`': 0xC0,
+        ';': 0xBA,
+        '[': 0xDB,
+        '\\': 0xDC,
+        ']': 0xDD,
+        "'": 0xDE
     }
 
     _VK_CODE2 = {
-        'A':'a',
-        'B':'b',
-        'C':'c',
-        'D':'d',
-        'E':'e',
-        'F':'f',
-        'G':'g',
-        'H':'h',
-        'I':'i',
-        'J':'j',
-        'K':'k',
-        'L':'l',
-        'M':'m',
-        'N':'n',
-        'O':'o',
-        'P':'p',
-        'Q':'q',
-        'R':'r',
-        'S':'s',
-        'T':'t',
-        'U':'u',
-        'V':'v',
-        'W':'w',
-        'X':'x',
-        'Y':'y',
-        'Z':'z',
-        ')':'0',
-        '!':'1',
-        '@':'2',
-        '#':'3',
-        '$':'4',
-        '%':'5',
-        '^':'6',
-        '&':'7',
-        '*':'8',
-        '(':'9',
-        '=':'+',
-        '<':',',
-        '_':'-',
-        '>':'.',
-        '?':'/',
-        '~':'`',
-        ':':';',
-        '{':'[',
-        '|':'\\',
-        '}':']',
-        '"':"'"
+        'A': 'a',
+        'B': 'b',
+        'C': 'c',
+        'D': 'd',
+        'E': 'e',
+        'F': 'f',
+        'G': 'g',
+        'H': 'h',
+        'I': 'i',
+        'J': 'j',
+        'K': 'k',
+        'L': 'l',
+        'M': 'm',
+        'N': 'n',
+        'O': 'o',
+        'P': 'p',
+        'Q': 'q',
+        'R': 'r',
+        'S': 's',
+        'T': 't',
+        'U': 'u',
+        'V': 'v',
+        'W': 'w',
+        'X': 'x',
+        'Y': 'y',
+        'Z': 'z',
+        ')': '0',
+        '!': '1',
+        '@': '2',
+        '#': '3',
+        '$': '4',
+        '%': '5',
+        '^': '6',
+        '&': '7',
+        '*': '8',
+        '(': '9',
+        '=': '+',
+        '<': ',',
+        '_': '-',
+        '>': '.',
+        '?': '/',
+        '~': '`',
+        ':': ';',
+        '{': '[',
+        '|': '\\',
+        '}': ']',
+        '"': "'"
     }
 
     @staticmethod
@@ -701,14 +722,15 @@ class VK_CODE():
         '''
         return dict(VK_CODE._VK_CODE2)
 
+
 _RANDOM_WORD_LIST = VK_CODE.getVK_CODE2().copy()
 _RANDOM_WORD_LIST.update(VK_CODE.getVK_CODE1())
 _RANDOM_WORD_LIST = list(_RANDOM_WORD_LIST.keys())
 
 
-############################################################################
-################################## Input ###################################
-############################################################################
+################################################################################
+#################################### Input #####################################
+################################################################################
 class Input:
     '''Assisting Input Methods'''
 
@@ -729,11 +751,12 @@ class Input:
             key = VK_CODE._VK_CODE2[key]
         if key in VK_CODE._VK_CODE1:
             # Pressdown
-            win32api.keybd_event(VK_CODE._VK_CODE1[key],0,0,0)
+            win32api.keybd_event(VK_CODE._VK_CODE1[key], 0, 0, 0)
             # Duration between pressdown and pressup
             time.sleep(t)
             # Pressup
-            win32api.keybd_event(VK_CODE._VK_CODE1[key],0,win32con.KEYEVENTF_KEYUP,0)
+            win32api.keybd_event(
+                VK_CODE._VK_CODE1[key], 0, win32con.KEYEVENTF_KEYUP, 0)
             return 1
         return 0
 
@@ -765,11 +788,13 @@ class Input:
         @param:
             - t - time period in second between pressdown and pressup (default to 0.05).
         '''
-        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,0,0)
-        win32api.keybd_event(VK_CODE._VK_CODE1["tab"],0,0,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["alt"], 0, 0, 0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["tab"], 0, 0, 0)
         time.sleep(t)
-        win32api.keybd_event(VK_CODE._VK_CODE1["tab"],0,win32con.KEYEVENTF_KEYUP,0)
-        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,win32con.KEYEVENTF_KEYUP,0)
+        win32api.keybd_event(
+            VK_CODE._VK_CODE1["tab"], 0, win32con.KEYEVENTF_KEYUP, 0)
+        win32api.keybd_event(
+            VK_CODE._VK_CODE1["alt"], 0, win32con.KEYEVENTF_KEYUP, 0)
 
     @staticmethod
     def key_alt_f4() -> None:
@@ -779,13 +804,15 @@ class Input:
         @param:
             - t - time period in second between pressdown and pressup (default to 0.05).
         '''
-        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,0,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["alt"], 0, 0, 0)
         time.sleep(0.2)
-        win32api.keybd_event(VK_CODE._VK_CODE1["F4"],0,0,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["F4"], 0, 0, 0)
         time.sleep(0.2)
-        win32api.keybd_event(VK_CODE._VK_CODE1["F4"],0,win32con.KEYEVENTF_KEYUP,0)
+        win32api.keybd_event(
+            VK_CODE._VK_CODE1["F4"], 0, win32con.KEYEVENTF_KEYUP, 0)
         time.sleep(0.2)
-        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,win32con.KEYEVENTF_KEYUP,0)
+        win32api.keybd_event(
+            VK_CODE._VK_CODE1["alt"], 0, win32con.KEYEVENTF_KEYUP, 0)
 
     @staticmethod
     def clickLeft(x=None, y=None, duration=0) -> Tuple:
@@ -872,7 +899,8 @@ class Input:
                 print("Press Ctrl-C to end")
                 screenWidth, screenHeight = pag.size()  # 获取屏幕的尺寸
                 x, y = pag.position()  # 返回鼠标的坐标
-                print("Screen size: (%s %s),  Position : (%s, %s)\n" % (screenWidth, screenHeight, x, y))  # 打印坐标
+                print("Screen size: (%s %s),  Position : (%s, %s)\n" %
+                      (screenWidth, screenHeight, x, y))  # 打印坐标
 
                 time.sleep(t)  # 每个1s中打印一次 , 并执行清屏
                 os.system('cls')  # 执行系统清屏指令
@@ -896,7 +924,8 @@ class Input:
                 screenWidth, screenHeight = pag.size()  # 获取屏幕的尺寸
                 xNew, yNew = pag.position()  # 返回鼠标的坐标
                 if xNew != x and yNew != y:
-                    print("Screen size: (%s %s),  Position : (%s, %s)\n" % (screenWidth, screenHeight, x, y))  # 打印坐标
+                    print("Screen size: (%s %s),  Position : (%s, %s)\n" %
+                          (screenWidth, screenHeight, x, y))  # 打印坐标
                     x, y = (xNew, yNew)
 
         except KeyboardInterrupt:
@@ -918,16 +947,16 @@ class Input:
         return win32api.ShellExecute(1, 'open', file, '', '', 1)
 
 
-############################################################################
-################################### Game ###################################
-############################################################################
+################################################################################
+##################################### Game #####################################
+################################################################################
 class Game:
     '''a Game Object to Save Game Automation Info'''
 
-    def __init__(self, gameName: str = "", \
-        steamDirectory: str = "", documentDirectory: str = "", benchDirectory: str = "",\
-        exe: str = "", relativePath: str = "", absolutePath: str = "", \
-        loopTimes: int = 1, mode: Literal[0,1,2,3,4] = 0) -> None:
+    def __init__(self, gameName: str = "",
+                 steamDirectory: str = "", documentDirectory: str = "", benchDirectory: str = "",
+                 exe: str = "", relativePath: str = "", absolutePath: str = "",
+                 loopTimes: int = 1, mode: Literal[0, 1, 2, 3, 4] = 0) -> None:
         '''
 
         mode:
@@ -941,19 +970,22 @@ class Game:
 
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
         if not benchDirectory is None and not os.path.isdir(benchDirectory):
             self.benchDirectory = None
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.', ConsoleColor.Yellow)
         else:
             self.benchDirectory = benchDirectory
 
@@ -961,22 +993,25 @@ class Game:
 
         if not relativePath is None and not os.path.isdir(relativePath):
             self.relativePath = None
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid relativePath.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid relativePath.', ConsoleColor.Yellow)
         else:
             self.relativePath = relativePath
 
         if not absolutePath is None and not os.path.isdir(absolutePath) and not os.path.isabs(absolutePath):
             self.absolutePath = None
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.', ConsoleColor.Yellow)
         else:
             self.absolutePath = absolutePath
 
         self.loopTimes = loopTimes
 
-        if mode >= 0 and mode <=4:
+        if mode >= 0 and mode <= 4:
             self.mode = mode
         else:
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid mode.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid mode.', ConsoleColor.Yellow)
 
         self.exePath = ""
         self.launcherMode = -1
@@ -1066,17 +1101,20 @@ class Game:
         for p in paths:
             if str.lower(p) == "s":
                 if self.getSteamDirectory() is None:
-                    Logger.WriteLine("ERROR: try to join None Steam Directory.", ConsoleColor.Red)
+                    Logger.WriteLine(
+                        "ERROR: try to join None Steam Directory.", ConsoleColor.Red)
                     return -1
                 full_exe = os.path.join(full_exe, self.getSteamDirectory())
             elif str.lower(p) == "r":
                 if self.getRelativePath() is None:
-                    Logger.WriteLine("ERROR: try to join None Relative Path.", ConsoleColor.Red)
+                    Logger.WriteLine(
+                        "ERROR: try to join None Relative Path.", ConsoleColor.Red)
                     return -1
                 full_exe = os.path.join(full_exe, self.getRelativePath())
             elif str.lower(p) == "a":
                 if self.getAbsolutePath() is None:
-                    Logger.WriteLine("ERROR: try to join None Absolute Path.", ConsoleColor.Red)
+                    Logger.WriteLine(
+                        "ERROR: try to join None Absolute Path.", ConsoleColor.Red)
                     return -1
                 full_exe = os.path.join(full_exe, self.getAbsolutePath())
             else:
@@ -1089,7 +1127,7 @@ class Game:
         '''
         return self.exePath
 
-    def setLauncherMode(self, mode: Literal[0,1,2,3]) -> None:
+    def setLauncherMode(self, mode: Literal[0, 1, 2, 3]) -> None:
         '''
         0- No launcher
         1- UIAutomation
@@ -1098,7 +1136,7 @@ class Game:
         '''
         self.launcherMode = mode
 
-    def getLauncherMode(self) -> Literal[0,1,2,3]:
+    def getLauncherMode(self) -> Literal[0, 1, 2, 3]:
         '''
         0- No launcher
         1- UIAutomation
@@ -1107,15 +1145,16 @@ class Game:
         '''
         return self.launcherMode
 
-    def setLauncher(self, \
-        uiAppControlType: str = None, uiAppName: str = None, \
-        uiStartControlType: str = None, uiStartIndex: int = None, uiStartName: str = None,\
-        clickPos: tuple = None, \
-        TinyTaskName: str = None) -> None:
+    def setLauncher(self,
+                    uiAppControlType: str = None, uiAppName: str = None,
+                    uiStartControlType: str = None, uiStartIndex: int = None, uiStartName: str = None,
+                    clickPos: tuple = None,
+                    TinyTaskName: str = None) -> None:
         '''
         '''
         if not self.hasLauncher():
-            Logger.WriteLine('WARNING: Launcher Mode is not enabled.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: Launcher Mode is not enabled.', ConsoleColor.Yellow)
             return
         if self.getLauncherMode() == 1:
             ## 1 - UIAutomation
@@ -1128,15 +1167,17 @@ class Game:
             else:
                 self.uiStartIndex: int = uiStartIndex
         elif self.getLauncherMode() == 2:
-            ## 2 - click on given position
+            # 2 - click on given position
             if clickPos is None:
-                Logger.WriteLine('ERROR: clickPos should not be None.', ConsoleColor.Red)
+                Logger.WriteLine(
+                    'ERROR: clickPos should not be None.', ConsoleColor.Red)
                 return
             self.clickPos: tuple = clickPos
         elif self.getLauncherMode() == 3:
-            ## 3 - call TinyTask
+            # 3 - call TinyTask
             if TinyTaskName is None:
-                Logger.WriteLine('ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
+                Logger.WriteLine(
+                    'ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
                 return
             self.TinyTaskName: str = TinyTaskName
 
@@ -1160,46 +1201,56 @@ class Game:
         '''
         '''
         if self.getExecutor() is None:
-            Logger.WriteLine('ERROR: Executor is None. Please use setExecutor() to initialize first.', ConsoleColor.Red)
+            Logger.WriteLine(
+                'ERROR: Executor is None. Please use setExecutor() to initialize first.', ConsoleColor.Red)
             return False
         if self.getExecutorPath() is None:
-            Logger.WriteLine('ERROR: Executor Path is None. Please use setExecutorPath() to initialize first.', ConsoleColor.Red)
+            Logger.WriteLine(
+                'ERROR: Executor Path is None. Please use setExecutorPath() to initialize first.', ConsoleColor.Red)
             return False
         exeLocation = os.path.join(self.getExecutorPath(), self.getExecutor())
         if not os.path.isfile(exeLocation):
-            Logger.WriteLine('ERROR: Executor\'s Full Path is not valid. Current Path: %s'%exeLocation, ConsoleColor.Red)
+            Logger.WriteLine(
+                'ERROR: Executor\'s Full Path is not valid. Current Path: %s' % exeLocation, ConsoleColor.Red)
             return False
 
-        ## Check Executor
+        # Check Executor
         if self.hasLauncher():
-            ## Using UIAutomation
+            # Using UIAutomation
             if self.getLauncherMode() == 1:
-                ## Check APP
+                # Check APP
                 if self.uiAppControlType is None:
-                    Logger.WriteLine('ERROR: uiAppControlType should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine(
+                        'ERROR: uiAppControlType should not be None.', ConsoleColor.Red)
                     return False
                 if self.uiAppName is None:
-                    Logger.WriteLine('ERROR: uiAppName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine(
+                        'ERROR: uiAppName should not be None.', ConsoleColor.Red)
                     return False
-                ## Check Start Button
+                # Check Start Button
                 if self.uiStartControlType is None:
-                    Logger.WriteLine('ERROR: uiStartControlType should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine(
+                        'ERROR: uiStartControlType should not be None.', ConsoleColor.Red)
                     return False
                 if self.uiStartName is None:
-                    Logger.WriteLine('ERROR: uiStartName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine(
+                        'ERROR: uiStartName should not be None.', ConsoleColor.Red)
                     return False
                 if self.uiStartIndex is None and self.uiStartName is None:
-                    Logger.WriteLine('ERROR: uiStartIndex or uiStartName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine(
+                        'ERROR: uiStartIndex or uiStartName should not be None.', ConsoleColor.Red)
                     return False
-            ## Using win32 Mouse Click Action
+            # Using win32 Mouse Click Action
             elif self.getLauncherMode() == 2:
                 if self.clickPos is None:
-                    Logger.WriteLine('ERROR: clickPos should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine(
+                        'ERROR: clickPos should not be None.', ConsoleColor.Red)
                     return False
-            ## Calling TinyTask executor
+            # Calling TinyTask executor
             elif self.getLauncherMode() == 3:
                 if self.TinyTaskName is None:
-                    Logger.WriteLine('ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine(
+                        'ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
                     return False
 
         return True
@@ -1216,52 +1267,65 @@ class Game:
             startGame = win32api.ShellExecute(1, 'open', exe, '', '', 1)
 
             if self.hasLauncher:
-                Logger.WriteLine('waiting 20 seconds for launcher to start......', ConsoleColor.Gray)
+                Logger.WriteLine(
+                    'waiting 20 seconds for launcher to start......', ConsoleColor.Gray)
                 time.sleep(20)
 
-                ## Using UIAutomation
+                # Using UIAutomation
                 if self.getLauncherMode() == 1:
                     if self.uiAppControlType == "PaneControl":
-                        app = auto.PaneControl(searchDepth=1, Name=self.uiAppName)
+                        app = auto.PaneControl(
+                            searchDepth=1, Name=self.uiAppName)
                     elif self.uiAppControlType == "WindowControl":
-                        app = auto.WindowControl(searchDepth=1, Name=self.uiAppName)
+                        app = auto.WindowControl(
+                            searchDepth=1, Name=self.uiAppName)
                     elif self.uiAppControlType == "ImageControl":
-                        app = auto.ImageControl(searchDepth=1, Name=self.uiAppName)
+                        app = auto.ImageControl(
+                            searchDepth=1, Name=self.uiAppName)
                     elif self.uiAppControlType == "ButtonControl":
-                        app = auto.ButtonControl(searchDepth=1, Name=self.uiAppName)
+                        app = auto.ButtonControl(
+                            searchDepth=1, Name=self.uiAppName)
                     else:
-                        Logger.WriteLine("ERROR: %s is not recognized as a ControlType. Please check again or report this issue."%uiAppControlType, ConsoleColor.Red)
+                        Logger.WriteLine(
+                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % uiAppControlType, ConsoleColor.Red)
                         return -1
 
-                    ## Set the launcher window to the very top of the screen
+                    # Set the launcher window to the very top of the screen
                     app.SetTopmost(True)
 
-                    ## Click on Start Button
+                    # Click on Start Button
                     if self.uiStartControlType == "PaneControl":
-                        auto.PaneControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                        auto.PaneControl(
+                            foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     elif self.uiStartControlType == "WindowControl":
-                        auto.WindowControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                        auto.WindowControl(
+                            foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     elif self.uiStartControlType == "ImageControl":
-                        auto.ImageControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                        auto.ImageControl(
+                            foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     elif self.uiStartControlType == "ButtonControl":
-                        auto.ButtonControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                        auto.ButtonControl(
+                            foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     else:
-                        Logger.WriteLine("ERROR: %s is not recognized as a ControlType. Please check again or report this issue."%uiStartControlType, ConsoleColor.Red)
+                        Logger.WriteLine(
+                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % uiStartControlType, ConsoleColor.Red)
                         return -1
 
-                ## Using win32 Mouse Click Action
+                # Using win32 Mouse Click Action
                 elif self.getLauncherMode() == 2:
                     xClickPos, yClickPos = self.clickPos
                     Input.clickLeft(xClickPos, yClickPos)
 
-                ## Calling TinyTask executor
+                # Calling TinyTask executor
                 elif self.getLauncherMode() == 3:
                     Input.callTinyTask(self.TinyTaskName)
 
-            Logger.WriteLine('waiting 60 seconds for Game to start......', ConsoleColor.Gray)
+            Logger.WriteLine(
+                'waiting 60 seconds for Game to start......', ConsoleColor.Gray)
             time.sleep(60)
         except Exception:
-            Logger.WriteLine('ERROR: Unknown Error Occurred for %s'%self.getGameName(), ConsoleColor.Gray)
+            Logger.WriteLine('ERROR: Unknown Error Occurred for %s' %
+                             self.getGameName(), ConsoleColor.Gray)
 
         return startGame
 
@@ -1274,45 +1338,48 @@ class Game:
             3- randomInput
             4- randomRotate
         '''
-        ## Normal Benchmarking
+        # Normal Benchmarking
         if self.getBenchmarkingMode == 0:
             Benchmarking.NormalTest(duration)
-        ## Alt-Tab Benchmarking
+        # Alt-Tab Benchmarking
         elif self.getBenchmarkingMode == 1:
             Benchmarking.StressTest(duration)
-        ## Random-Control Benchmarking
+        # Random-Control Benchmarking
         elif self.getBenchmarkingMode == 2:
             Benchmarking.RandomControlTest(duration)
-        ## Random-Input Benchmarking
+        # Random-Input Benchmarking
         elif self.getBenchmarkingMode == 3:
             Benchmarking.RandomInputTest(duration)
-        ## Random-Rotate Benchmarking
+        # Random-Rotate Benchmarking
         elif self.getBenchmarkingMode == 4:
             Benchmarking.RandomRotateTest(duration)
         else:
-            Logger.WriteLine("ERROR: Benchmarking Mode %s is not valid"%self.getBenchmarkingMode(), ConsoleColor.Red)
+            Logger.WriteLine("ERROR: Benchmarking Mode %s is not valid" %
+                             self.getBenchmarkingMode(), ConsoleColor.Red)
 
 
-############################################################################
-########################### BenchmarkAutomation ############################
-############################################################################
+################################################################################
+############################# BenchmarkAutomation ##############################
+################################################################################
 class BenchmarkAutomation:
     '''
     '''
 
-    def __init__(self, steamDirectory: str = "", documentDirectory: str = "", \
-        OverallLoopTimes: int = 1, GameLoopTimes: int = -1) -> None:
+    def __init__(self, steamDirectory: str = "", documentDirectory: str = "",
+                 OverallLoopTimes: int = 1, GameLoopTimes: int = -1) -> None:
         '''
         '''
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine(
+                'WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
@@ -1322,23 +1389,25 @@ class BenchmarkAutomation:
         self.GameLoopTimes = GameLoopTimes
 
     ############################################################################
-    def addGameList(self, gameName: str, gameObj: Game = None, \
-        exe: str = "", relativePath: str = "", absolutePath: str = "", \
-        mode: int = 0) -> Any:
+    def addGameList(self, gameName: str, gameObj: Game = None,
+                    exe: str = "", relativePath: str = "", absolutePath: str = "",
+                    mode: int = 0) -> Any:
         '''
         '''
         if gameName is None:
-            Logger.WriteLine('ERROR: addGameList() should be called with at least 1 arguments',ConsoleColor.Red)
+            Logger.WriteLine(
+                'ERROR: addGameList() should be called with at least 1 arguments', ConsoleColor.Red)
         try:
             if not gameObj is None:
                 self.gameList[gameName] = gameObj
             else:
-                self.gameList[gameName] = Game( \
-                    gameName=gameName, steamDirectory=self.getSteamDirectory, documentDirectory=self.getDocumentDirectory(), \
-                    exe=exe, relativePath=relativePath, absolutePath=absolutePath, \
+                self.gameList[gameName] = Game(
+                    gameName=gameName, steamDirectory=self.getSteamDirectory, documentDirectory=self.getDocumentDirectory(),
+                    exe=exe, relativePath=relativePath, absolutePath=absolutePath,
                     loopTimes=self.getGameLoopTimes(), mode=mode)
         except Exception:
-            Logger.WriteLine('ERROR: Unknown Error addGameList()',ConsoleColor.Red)
+            Logger.WriteLine(
+                'ERROR: Unknown Error addGameList()', ConsoleColor.Red)
 
     def getGameList(self) -> List:
         '''
@@ -1353,7 +1422,8 @@ class BenchmarkAutomation:
                 self.gameList[game].start()
             return 1
         except Exception:
-            Logger.WriteLine('ERROR: Unknown Error startGameList()',ConsoleColor.Red)
+            Logger.WriteLine(
+                'ERROR: Unknown Error startGameList()', ConsoleColor.Red)
             return -1
 
     ############################################################################
@@ -1397,9 +1467,9 @@ class BenchmarkAutomation:
         '''
         return self.GameLoopTimes
 
-
     ############################################################################
-    ## Helper Methods
+    # Helper Methods
+
     @staticmethod
     def searchFile(pathname, filename):
         '''
@@ -1412,11 +1482,11 @@ class BenchmarkAutomation:
         @RETURN:
             - A list of sting representing all matched file names
         '''
-        matchedFile =[]
+        matchedFile = []
         for root, dirs, files in os.walk(pathname):
             for file in files:
-                if re.match(filename,file):
-                    file_name = os.path.abspath(os.path.join(root,file))
+                if re.match(filename, file):
+                    file_name = os.path.abspath(os.path.join(root, file))
                     matchedFile.append(file_name)
         return matchedFile
 
@@ -1436,7 +1506,8 @@ class BenchmarkAutomation:
         # return os.system('taskkill /F /IM %s'%name) # An alternative way to kill a process.
         statusCode = 0
         try:
-            statusCode = subprocess.Popen('taskkill /F /IM %s'%process, close_fds=True)
+            statusCode = subprocess.Popen(
+                'taskkill /F /IM %s' % process, close_fds=True)
         except Exception:
             return -1
         else:
@@ -1460,7 +1531,8 @@ class BenchmarkAutomation:
                 data = dict()
             return data
         except Exception:
-            Logger.WriteLine('ERROR: Unable to read %s'%(data, file), ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Unable to read %s' %
+                             (data, file), ConsoleColor.Red)
             return None
 
     @staticmethod
@@ -1481,7 +1553,8 @@ class BenchmarkAutomation:
                 json.dump(data, f)
             return True
         except Exception:
-            Logger.WriteLine('ERROR: Unable to write %s in %s'%(data, file), ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Unable to write %s in %s' %
+                             (data, file), ConsoleColor.Red)
             return False
 
     @staticmethod
@@ -1496,7 +1569,7 @@ class BenchmarkAutomation:
                 print(d)
 
     @staticmethod
-    def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list ,list]:
+    def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
         '''
         Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps
 
@@ -1509,7 +1582,7 @@ class BenchmarkAutomation:
         '''
         # path = "%LOCALAPPDATA%\CrashDumps"
         src1 = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
-        src2= os.path.expandvars(r'C:\Windows')
+        src2 = os.path.expandvars(r'C:\Windows')
         return BenchmarkAutomation.searchFile(src1, tar), BenchmarkAutomation.searchFile(src2, "MEMORY.DMP")
 
     @staticmethod
@@ -1525,17 +1598,18 @@ class BenchmarkAutomation:
         files1, files2 = BenchmarkAutomation.detectCrashDumps()
         while files1 + files2:
 
-            ######################################################
-            ## New Code
+            ####################################################################
+            # New Code
             src = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
             for files in os.listdir(src):
                 if files == "MEMORY.DMP":
-                    dst_name = os.path.join(dst, "MEMORY_%s.DMP"%datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
+                    dst_name = os.path.join(
+                        dst, "MEMORY_%s.DMP" % datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
                 else:
                     dst_name = os.path.join(dst, files)
                 src_name = os.path.join(src, files)
                 if os.path.isfile(src_name):
-                    exe = 'copy ' + src_name +' %s'%dst_name
+                    exe = 'copy ' + src_name + ' %s' % dst_name
                     os.system(exe)
                     if BenchmarkAutomation.searchFile(src, files):
                         os.system('del '+src_name)
@@ -1544,10 +1618,11 @@ class BenchmarkAutomation:
 
             src = "C:\\Windows"
             for files in files2:
-                dst_name = os.path.join(dst, "[Windows]MEMORY_%s.DMP"%datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
+                dst_name = os.path.join(
+                    dst, "[Windows]MEMORY_%s.DMP" % datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
                 src_name = files
                 if os.path.isfile(src_name):
-                    exe = 'copy ' + src_name +' %s'%dst_name
+                    exe = 'copy ' + src_name + ' %s' % dst_name
                     os.system(exe)
                     if BenchmarkAutomation.searchFile(src, "MEMORY.DMP"):
                         os.system('del '+src_name)
@@ -1555,8 +1630,8 @@ class BenchmarkAutomation:
             # TODO optional: cmd command=> xcopy /s/e "D:\A_FOLDER" "E:\B_FOLDER\"
             files1, files2 = BenchmarkAutomation.detectCrashDumps()
 
-        ######################################################
-        ## Past Code
+        ########################################################################
+        # Past Code
         # # Copy the dump file
         # tarFile = "MEMORY_" + datetime.datetime.now().strftime("%m.%d-%H%M-%Y")
         # if not tar is None:
@@ -1569,6 +1644,3 @@ class BenchmarkAutomation:
         # if searchFile(tar, tarFile):
         #     os.system('del %LOCALAPPDATA%\CrashDumps\MEMORY.DMP')
         #     return res
-
-
-
