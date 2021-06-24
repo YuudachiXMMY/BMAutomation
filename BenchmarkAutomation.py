@@ -1,8 +1,13 @@
 import os
 import sys
+import re
+import subprocess
+
+import json
 import random
 import time
 import datetime
+
 import ctypes
 import ctypes.wintypes
 from typing import (Any, Callable, Dict, List, Iterable, Literal, Tuple)  # need 'pip install typing' for Python3.4 or lower
@@ -697,9 +702,6 @@ class VK_CODE():
         '''
         return dict(VK_CODE._VK_CODE2)
 
-_VK_CODE1 = VK_CODE.getVK_CODE1()
-_VK_CODE2 = VK_CODE.getVK_CODE2()
-
 _RANDOM_WORD_LIST = VK_CODE.getVK_CODE2().copy()
 _RANDOM_WORD_LIST.update(VK_CODE.getVK_CODE1())
 _RANDOM_WORD_LIST = list(_RANDOM_WORD_LIST.keys())
@@ -724,15 +726,15 @@ class Input:
             - 1 - succeed in performing a key pressing process.
             - 0 - failed to perform a key pressing process.
         '''
-        if key in _VK_CODE2:
-            key = _VK_CODE2[key]
-        if key in _VK_CODE1:
+        if key in VK_CODE._VK_CODE2:
+            key = VK_CODE._VK_CODE2[key]
+        if key in VK_CODE._VK_CODE1:
             # Pressdown
-            win32api.keybd_event(_VK_CODE1[key],0,0,0)
+            win32api.keybd_event(VK_CODE._VK_CODE1[key],0,0,0)
             # Duration between pressdown and pressup
             time.sleep(t)
             # Pressup
-            win32api.keybd_event(_VK_CODE1[key],0,win32con.KEYEVENTF_KEYUP,0)
+            win32api.keybd_event(VK_CODE._VK_CODE1[key],0,win32con.KEYEVENTF_KEYUP,0)
             return 1
         return 0
 
@@ -764,11 +766,11 @@ class Input:
         @param:
             - t - time period in second between pressdown and pressup (default to 0.05).
         '''
-        win32api.keybd_event(_VK_CODE1["alt"],0,0,0)
-        win32api.keybd_event(_VK_CODE1["tab"],0,0,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,0,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["tab"],0,0,0)
         time.sleep(t)
-        win32api.keybd_event(_VK_CODE1["tab"],0,win32con.KEYEVENTF_KEYUP,0)
-        win32api.keybd_event(_VK_CODE1["alt"],0,win32con.KEYEVENTF_KEYUP,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["tab"],0,win32con.KEYEVENTF_KEYUP,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,win32con.KEYEVENTF_KEYUP,0)
 
     @staticmethod
     def key_alt_f4() -> None:
@@ -778,16 +780,16 @@ class Input:
         @param:
             - t - time period in second between pressdown and pressup (default to 0.05).
         '''
-        win32api.keybd_event(_VK_CODE1["alt"],0,0,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,0,0)
         time.sleep(0.2)
-        win32api.keybd_event(_VK_CODE1["F4"],0,0,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["F4"],0,0,0)
         time.sleep(0.2)
-        win32api.keybd_event(_VK_CODE1["F4"],0,win32con.KEYEVENTF_KEYUP,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["F4"],0,win32con.KEYEVENTF_KEYUP,0)
         time.sleep(0.2)
-        win32api.keybd_event(_VK_CODE1["alt"],0,win32con.KEYEVENTF_KEYUP,0)
+        win32api.keybd_event(VK_CODE._VK_CODE1["alt"],0,win32con.KEYEVENTF_KEYUP,0)
 
     @staticmethod
-    def clickLeft(x=None, y=None, duration=0) -> tuple:
+    def clickLeft(x=None, y=None, duration=0) -> Tuple:
         '''
         Perform a mouse action of left clicking on screen position at (x, y).
 
@@ -805,7 +807,7 @@ class Input:
         return x, y
 
     @staticmethod
-    def clickRight(x=None, y=None, duration=0) -> tuple:
+    def clickRight(x=None, y=None, duration=0) -> Tuple:
         '''
         Perform a mouse action of right clicking on screen position at (x, y).
 
@@ -823,7 +825,7 @@ class Input:
         return x, y
 
     @staticmethod
-    def move(dest_x, dest_y, start_x=None, start_y=None, duration=0) -> tuple:
+    def move(dest_x, dest_y, start_x=None, start_y=None, duration=0) -> Tuple:
         '''
         Perform a mouse action to Input.move the mouse
         from (start_x, start_y) to (dest_x, dest_y) in duration time.
@@ -926,7 +928,7 @@ class Game:
     def __init__(self, gameName: str = "", \
         steamDirectory: str = "", documentDirectory: str = "", benchDirectory: str = "",\
         exe: str = "", relativePath: str = "", absolutePath: str = "", \
-        loopTimes: int = 1, stressTest: bool = False, mode: int = 0) -> None:
+        loopTimes: int = 1, mode: Literal[0,1,2,3,4] = 0) -> None:
         '''
 
         mode:
@@ -940,19 +942,19 @@ class Game:
 
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomationGame is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomationGame is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
         if not benchDirectory is None and not os.path.isdir(benchDirectory):
             self.benchDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomationGame is not initialized with a valid benchDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid benchDirectory.', ConsoleColor.Yellow)
         else:
             self.benchDirectory = benchDirectory
 
@@ -960,25 +962,37 @@ class Game:
 
         if not relativePath is None and not os.path.isdir(relativePath):
             self.relativePath = None
-            Logger.WriteLine('warning: BenchmarkAutomationGame is not initialized with a valid relativePath.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid relativePath.', ConsoleColor.Yellow)
         else:
             self.relativePath = relativePath
 
         if not absolutePath is None and not os.path.isdir(absolutePath) and not os.path.isabs(absolutePath):
             self.absolutePath = None
-            Logger.WriteLine('warning: BenchmarkAutomationGame is not initialized with a valid absolutePath.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid absolutePath.', ConsoleColor.Yellow)
         else:
             self.absolutePath = absolutePath
 
         self.loopTimes = loopTimes
-        self.stressTest = stressTest
 
         if mode >= 0 and mode <=4:
             self.mode = mode
         else:
-            Logger.WriteLine('BenchmarkAutomationGame does not initialized with a valid mode.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid mode.', ConsoleColor.Yellow)
+
+        self.exePath = ""
+        self.launcherMode = -1
 
     ############################################################################
+    def setGameName(self, name: str) -> None:
+        '''
+        '''
+        self.gameName = name
+
+    def getGameName(self) -> str:
+        '''
+        '''
+        return self.gameName
+
     def setSteamDirectory(self, dir: str) -> None:
         '''
         '''
@@ -1039,117 +1053,216 @@ class Game:
         '''
         return self.exe
 
+    def setExecutorPath(self, exePath: str) -> None:
+        '''
+        exePath:
+        S/s- Steam
+        R/r- Relative
+        A/a- Abolute
+        Other- Directly add to full .exe path
+        '''
+        paths = exePath.split("/")
+
+        full_exe = ""
+        for p in paths:
+            if str.lower(p) == "s":
+                if self.getSteamDirectory() is None:
+                    Logger.WriteLine("error: try to join None Steam Directory.", ConsoleColor.Red)
+                    return -1
+                full_exe = os.path.join(full_exe, self.getSteamDirectory())
+            elif str.lower(p) == "r":
+                if self.getRelativePath() is None:
+                    Logger.WriteLine("error: try to join None Relative Path.", ConsoleColor.Red)
+                    return -1
+                full_exe = os.path.join(full_exe, self.getRelativePath())
+            elif str.lower(p) == "a":
+                if self.getAbsolutePath() is None:
+                    Logger.WriteLine("error: try to join None Absolute Path.", ConsoleColor.Red)
+                    return -1
+                full_exe = os.path.join(full_exe, self.getAbsolutePath())
+            else:
+                full_exe = os.path.join(full_exe, p)
+
+        self.exePath: str = full_exe
+
+    def getExecutorPath(self) -> str:
+        '''
+        '''
+        return self.exePath
+
+    def setLauncherMode(self, mode: Literal[0,1,2,3]) -> None:
+        '''
+        0- No launcher
+        1- UIAutomation
+        2- Click on given position
+        3- call TinyTask
+        '''
+        self.launcherMode = mode
+
+    def getLauncherMode(self) -> Literal[0,1,2,3]:
+        '''
+        0- No launcher
+        1- UIAutomation
+        2- Click on given position
+        3- call TinyTask
+        '''
+        return self.launcherMode
+
+    def setLauncher(self, \
+        uiAppControlType: str = None, uiAppName: str = None, \
+        uiStartControlType: str = None, uiStartIndex: int = None, uiStartName: str = None,\
+        clickPos: tuple = None, \
+        TinyTaskName: str = None) -> None:
+        '''
+        '''
+        if not self.hasLauncher():
+            Logger.WriteLine('warning: Launcher Mode is not enabled.', ConsoleColor.Yellow)
+            return
+        if self.getLauncherMode() == 1:
+            ## 1 - UIAutomation
+            self.uiAppControlType: str = uiAppControlType
+            self.uiAppName: str = uiAppName
+            self.uiStartControlType: str = uiStartControlType
+            self.uiStartName: str = uiStartName
+            if uiStartIndex is None and not uiStartName is None:
+                self.uiStartIndex = 0
+            else:
+                self.uiStartIndex: int = uiStartIndex
+        elif self.getLauncherMode() == 2:
+            ## 2 - click on given position
+            if clickPos is None:
+                Logger.WriteLine('error: clickPos should not be None.', ConsoleColor.Red)
+                return
+            self.clickPos: tuple = clickPos
+        elif self.getLauncherMode() == 3:
+            ## 3 - call TinyTask
+            if TinyTaskName is None:
+                Logger.WriteLine('error: TinyTaskName should not be None.', ConsoleColor.Red)
+                return
+            self.TinyTaskName: str = TinyTaskName
+
+    def hasLauncher(self) -> bool:
+        '''
+        '''
+        return self.getLauncherMode() > 0 and self.getLauncherMode() <= 3
+
+    def setBenchmarkingMode(self, mode: int) -> None:
+        '''
+        '''
+        self.mode = mode
+
     def getBenchmarkingMode(self) -> int:
         '''
         '''
         return self.mode
 
     ############################################################################
-    def startGame(self, exePath: str, exeName: str = None, \
-        hasLauncher: bool = False, launcherMode: int = None, \
-        uiAppControlType: str = None, uiAppName: str = None, \
-        uiButtonType: str = None, uiButtonIndex: int = None, uiButtonName: str = None,\
-        clickPos: tuple = None, \
-        TinyTaskName: str = None) -> int:
+    def checkStart(self) -> bool:
         '''
-        S/s- Steam
-        R/r- Relative
-        A/a- Abolute
-        Other- Directly add to full .exe path
+        '''
+        if self.getExecutor() is None:
+            Logger.WriteLine('error: Executor is None. Please use setExecutor() to initialize first.', ConsoleColor.Red)
+            return False
+        if self.getExecutorPath() is None:
+            Logger.WriteLine('error: Executor Path is None. Please use setExecutorPath() to initialize first.', ConsoleColor.Red)
+            return False
+        exeLocation = os.path.join(self.getExecutorPath(), self.getExecutor())
+        if not os.path.isfile(exeLocation):
+            Logger.WriteLine('error: Executor\'s Full Path is not valid. Current Path: %s'%exeLocation, ConsoleColor.Red)
+            return False
 
-        exe- Executor
+        ## Check Executor
+        if self.hasLauncher():
+            ## Using UIAutomation
+            if self.getLauncherMode() == 1:
+                ## Check APP
+                if self.uiAppControlType is None:
+                    Logger.WriteLine('error: uiAppControlType should not be None.', ConsoleColor.Red)
+                    return False
+                if self.uiAppName is None:
+                    Logger.WriteLine('error: uiAppName should not be None.', ConsoleColor.Red)
+                    return False
+                ## Check Start Button
+                if self.uiStartControlType is None:
+                    Logger.WriteLine('error: uiStartControlType should not be None.', ConsoleColor.Red)
+                    return False
+                if self.uiStartName is None:
+                    Logger.WriteLine('error: uiStartName should not be None.', ConsoleColor.Red)
+                    return False
+                if self.uiStartIndex is None and self.uiStartName is None:
+                    Logger.WriteLine('error: uiStartIndex or uiStartName should not be None.', ConsoleColor.Red)
+                    return False
+            ## Using win32 Mouse Click Action
+            elif self.getLauncherMode() == 2:
+                if self.clickPos is None:
+                    Logger.WriteLine('error: clickPos should not be None.', ConsoleColor.Red)
+                    return False
+            ## Calling TinyTask executor
+            elif self.getLauncherMode() == 3:
+                if self.TinyTaskName is None:
+                    Logger.WriteLine('error: TinyTaskName should not be None.', ConsoleColor.Red)
+                    return False
 
-        launcherMode:
-            0 - UIAutomation
-            1 - click on given position
-            2 - call TinyTask
+        return True
+
+    def start(self) -> int:
+        '''
         '''
         startGame: int = 0
-        if exeName is None:
-            if self.exe is None or self.exe == "":
-                Logger.WriteLine('error: Executor is None. Please use setExecutor() to initialize first.', ConsoleColor.Red)
-                return 0
-            exe = self.exe
 
-        paths = str.lower(exePath).split("-")
+        self.checkStart()
 
-        full_exe = ""
-        for p in paths:
-            if p == "s":
-                full_exe = os.path.join(full_exe, self.getSteamDirectory())
-            elif p == "r":
-                full_exe = os.path.join(full_exe, self.getRelativePath())
-            elif p == "a":
-                full_exe = os.path.join(full_exe, self.getAbsolutePath())
-            else:
-                full_exe = os.path.join(full_exe, p)
+        exe = os.path.join(self.getExecutorPath(), self.getExecutor())
+        try:
+            startGame = win32api.ShellExecute(1, 'open', exe, '', '', 1)
 
-        full_exe = os.path.join(full_exe, exe)
+            if self.hasLauncher:
+                Logger.WriteLine('waiting 20 seconds for launcher to start......', ConsoleColor.Gray)
+                time.sleep(20)
 
-        if not os.path.isfile(full_exe):
-            Logger.WriteLine('error: Executor\'s Full Path is not valid. Current Path: %s'%full_exe, ConsoleColor.Red)
-            return 0
-        startGame = win32api.ShellExecute(1, 'open', full_exe, '', '', 1)
+                ## Using UIAutomation
+                if self.getLauncherMode() == 1:
+                    if self.uiAppControlType == "PaneControl":
+                        app = auto.PaneControl(searchDepth=1, Name=self.uiAppName)
+                    elif self.uiAppControlType == "WindowControl":
+                        app = auto.WindowControl(searchDepth=1, Name=self.uiAppName)
+                    elif self.uiAppControlType == "ImageControl":
+                        app = auto.ImageControl(searchDepth=1, Name=self.uiAppName)
+                    elif self.uiAppControlType == "ButtonControl":
+                        app = auto.ButtonControl(searchDepth=1, Name=self.uiAppName)
+                    else:
+                        Logger.WriteLine("error: %s is not recognized as a ControlType. Please check again or report this issue."%uiAppControlType, ConsoleColor.Red)
+                        return -1
 
-        if hasLauncher:
-            Logger.WriteLine('waiting 20 seconds for launcher to start......', ConsoleColor.Gray)
-            time.sleep(20)
+                    ## Set the launcher window to the very top of the screen
+                    app.SetTopmost(True)
 
-            ## Using UIAutomation
-            if launcherMode == 0:
-                if uiAppControlType is None:
-                    Logger.WriteLine('error: uiAppControlType should not be None.', ConsoleColor.Red)
-                    return 0
-                if uiAppName is None:
-                    Logger.WriteLine('error: uiAppName should not be None.', ConsoleColor.Red)
-                    return 0
+                    ## Click on Start Button
+                    if self.uiStartControlType == "PaneControl":
+                        auto.PaneControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                    elif self.uiStartControlType == "WindowControl":
+                        auto.WindowControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                    elif self.uiStartControlType == "ImageControl":
+                        auto.ImageControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                    elif self.uiStartControlType == "ButtonControl":
+                        auto.ButtonControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                    else:
+                        Logger.WriteLine("error: %s is not recognized as a ControlType. Please check again or report this issue."%uiStartControlType, ConsoleColor.Red)
+                        return -1
 
-                if uiButtonType is None:
-                    Logger.WriteLine('error: uiButtonType should not be None.', ConsoleColor.Red)
-                    return 0
-                if uiButtonIndex is None and uiButtonName is None:
-                    Logger.WriteLine('error: uiButtonIndex or uiButtonName should not be None.', ConsoleColor.Red)
-                    return 0
-                if uiButtonIndex is None and not uiButtonName is None:
-                    uiButtonIndex = 0
+                ## Using win32 Mouse Click Action
+                elif self.getLauncherMode() == 2:
+                    xClickPos, yClickPos = self.clickPos
+                    Input.clickLeft(xClickPos, yClickPos)
 
+                ## Calling TinyTask executor
+                elif self.getLauncherMode() == 3:
+                    Input.callTinyTask(self.TinyTaskName)
 
-                if uiAppControlType == "PaneControl":
-                    app = auto.PaneControl(searchDepth=1, Name=uiAppName)
-                elif uiAppControlType == "WindowControl":
-                    app = auto.WindowControl(searchDepth=1, Name=uiAppName)
-                elif uiAppControlType == "ImageControl":
-                    app = auto.ImageControl(searchDepth=1, Name=uiAppName)
-                elif uiAppControlType == "ButtonControl":
-                    app = auto.ButtonControl(searchDepth=1, Name=uiAppName)
-                else:
-                    Logger.WriteLine("error: %s is not recognized as a ControlType. Please check again or report this issue."%uiAppControlType, ConsoleColor.Red)
-                    return 0
-
-                ## Set the launcher window to the very top of the screen
-                app.SetTopmost(True)
-
-                ## Click on Start Button
-                if uiButtonType == "PaneControl":
-                    auto.PaneControl(foundIndex=uiButtonIndex, Name=uiButtonName).Click()
-                elif uiButtonType == "WindowControl":
-                    auto.WindowControl(foundIndex=uiButtonIndex, Name=uiButtonName).Click()
-                elif uiButtonType == "ImageControl":
-                    auto.ImageControl(foundIndex=uiButtonIndex, Name=uiButtonName).Click()
-                elif uiButtonType == "ButtonControl":
-                    auto.ButtonControl(foundIndex=uiButtonIndex, Name=uiButtonName).Click()
-                else:
-                    Logger.WriteLine("error: %s is not recognized as a ControlType. Please check again or report this issue."%uiButtonType, ConsoleColor.Red)
-                    return 0
-
-            ## Using win32 Mouse Click Action
-            elif launcherMode == 1:
-                xClickPos, yClickPos = clickPos
-                Input.clickLeft(xClickPos, yClickPos)
-
-            ## Calling TinyTask executor
-            elif launcherMode == 2:
-                Input.callTinyTask(TinyTaskName)
+            Logger.WriteLine('waiting 60 seconds for Game to start......', ConsoleColor.Gray)
+            time.sleep(60)
+        except Exception:
+            Logger.WriteLine('error: Unknown Error Occurred for %s'%self.getGameName(), ConsoleColor.Gray)
 
         return startGame
 
@@ -1178,7 +1291,7 @@ class Game:
         elif self.getBenchmarkingMode == 4:
             Benchmarking.RandomRotateTest(duration)
         else:
-            Logger.WriteLine("error: Benchmarking Mode failed.", ConsoleColor.Red)
+            Logger.WriteLine("error: Benchmarking Mode %s is not valid"%self.getBenchmarkingMode(), ConsoleColor.Red)
 
 
 ############################################################################
@@ -1194,13 +1307,13 @@ class BenchmarkAutomation:
         '''
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomationGame is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomationGame is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
@@ -1211,23 +1324,41 @@ class BenchmarkAutomation:
 
     ############################################################################
     def addGameList(self, gameName: str, gameObj: Game = None, \
-        exe: str = "", relativePath: str = "", absolutePath: str = "") -> Any:
+        exe: str = "", relativePath: str = "", absolutePath: str = "", \
+        mode: int = 0) -> Any:
         '''
         '''
-        if not gameObj is None:
-            self.gameList[gameName] = gameObj
-        else:
-            self.gameList[gameName] = Game( \
-                self.getSteamDirectory, self.getDocumentDirectory(), \
-                exe, relativePath, absolutePath)
+        if gameName is None:
+            Logger.WriteLine('error: addGameList() should be called with at least 1 arguments',ConsoleColor.Red)
+        try:
+            if not gameObj is None:
+                self.gameList[gameName] = gameObj
+            else:
+                self.gameList[gameName] = Game( \
+                    gameName=gameName, steamDirectory=self.getSteamDirectory, documentDirectory=self.getDocumentDirectory(), \
+                    exe=exe, relativePath=relativePath, absolutePath=absolutePath, \
+                    loopTimes=self.getGameLoopTimes(), mode=mode)
+        except Exception:
+            Logger.WriteLine('error: Unknown Error addGameList()',ConsoleColor.Red)
 
-    def getGameList(self) -> dict:
+    def getGameList(self) -> List:
         '''
         '''
-        return self.gameList
+        return list(self.gameList.keys())
+
+    def start(self) -> int:
+        '''
+        '''
+        try:
+            for game in self.getGameList():
+                self.gameList[game].start()
+            return 1
+        except Exception:
+            Logger.WriteLine('error: Unknown Error startGameList()',ConsoleColor.Red)
+            return -1
 
     ############################################################################
-    def setSteamDirectory(self, dir: str) -> Any:
+    def setSteamDirectory(self, dir: str) -> None:
         '''
         '''
         self.steamDirectory = dir
@@ -1237,7 +1368,7 @@ class BenchmarkAutomation:
         '''
         return self.steamDirectory
 
-    def setDocumentDirectory(self, dir: str) -> Any:
+    def setDocumentDirectory(self, dir: str) -> None:
         '''
         '''
         self.documentDirectory = dir
@@ -1247,5 +1378,198 @@ class BenchmarkAutomation:
         '''
         return self.documentDirectory
 
+    def setOverallLoopTimes(self, tar: int) -> None:
+        '''
+        '''
+        self.OverallLoopTimes = tar
+
+    def getOverallLoopTimes(self) -> int:
+        '''
+        '''
+        return self.OverallLoopTimes
+
+    def setGameLoopTimes(self, tar: int) -> None:
+        '''
+        '''
+        self.GameLoopTimes = tar
+
+    def getGameLoopTimes(self) -> int:
+        '''
+        '''
+        return self.GameLoopTimes
+
 
     ############################################################################
+    ## Helper Methods
+    @staticmethod
+    def searchFile(pathname, filename):
+        '''
+        Return all matched files under a specific path.
+
+        @param:
+            - pathname - a specific path to search for.
+            - filename - a filename to search for (Regular Expression can be used).
+
+        @RETURN:
+            - A list of sting representing all matched file names
+        '''
+        matchedFile =[]
+        for root, dirs, files in os.walk(pathname):
+            for file in files:
+                if re.match(filename,file):
+                    file_name = os.path.abspath(os.path.join(root,file))
+                    matchedFile.append(file_name)
+        return matchedFile
+
+    @staticmethod
+    def killProgress(process):
+        '''
+        A function call a terminal and utilize CMD command to kill a progress.
+
+        @param:
+            - process - a process to be forced to kill.
+
+        @RETURN:
+            - non-Zero - succeed to call the terminal for killing the process.
+            - 0 - failed to open the terminal.
+            - -1 - EXCEPTION occurred.
+        '''
+        # return os.system('taskkill /F /IM %s'%name) # An alternative way to kill a process.
+        statusCode = 0
+        try:
+            statusCode = subprocess.Popen('taskkill /F /IM %s'%process, close_fds=True)
+        except Exception:
+            return -1
+        else:
+            return statusCode
+
+    @staticmethod
+    def read_json(file) -> Dict:
+        '''
+        Read a .json file and return a json type.
+
+        @param:
+            - file - a filename to be read as .json data.
+
+        @RETURN:
+            - A Python's Data Object representing the data in the .json file.
+        '''
+        try:
+            with open(file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if data == None:
+                data = dict()
+            return data
+        except Exception:
+            Logger.WriteLine('error: Unable to read %s'%(data, file), ConsoleColor.Red)
+            return None
+
+    @staticmethod
+    def write_json(file, data) -> bool:
+        '''
+        Over-write the .json file with input data.
+
+        @param:
+            - file - a filename to be write.
+            - data - data to write in the .json file
+
+        @RETURN:
+            - True - Succeed to Write data in json
+            - False - Exception occurred
+        '''
+        try:
+            with open(file, 'w', encoding='utf-8') as f:
+                json.dump(data, f)
+            return True
+        except Exception:
+            Logger.WriteLine('error: Unable to write %s in %s'%(data, file), ConsoleColor.Red)
+            return False
+
+    @staticmethod
+    def printAll(data):
+        '''
+        Print everything in the data Object
+        '''
+        if type(data) == type(str()):
+            print(data)
+        else:
+            for d in data:
+                print(d)
+
+    @staticmethod
+    def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list ,list]:
+        '''
+        Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps
+
+        @param:
+            - tar - the target path to copy to (default to "C:\WinDumps")
+
+        @RETURN:
+            - True - The dump file is detected
+            - False - otherwise, the file is not detected
+        '''
+        # path = "%LOCALAPPDATA%\CrashDumps"
+        src1 = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
+        src2= os.path.expandvars(r'C:\Windows')
+        return BenchmarkAutomation.searchFile(src1, tar), BenchmarkAutomation.searchFile(src2, "MEMORY.DMP")
+
+    @staticmethod
+    def dealCrashDumps(tar="C:\\WinDumps") -> None:
+        '''
+        Copy the Windows dump file to the desired location and remove the dump files under %LOCALAPPDATA%\CrashDumps
+
+        @param:
+            - tar - the target path to copy to (default to "C:\WinDumps")
+        '''
+
+        dst = tar
+        files1, files2 = BenchmarkAutomation.detectCrashDumps()
+        while files1 + files2:
+
+            ######################################################
+            ## New Code
+            src = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
+            for files in os.listdir(src):
+                if files == "MEMORY.DMP":
+                    dst_name = os.path.join(dst, "MEMORY_%s.DMP"%datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
+                else:
+                    dst_name = os.path.join(dst, files)
+                src_name = os.path.join(src, files)
+                if os.path.isfile(src_name):
+                    exe = 'copy ' + src_name +' %s'%dst_name
+                    os.system(exe)
+                    if BenchmarkAutomation.searchFile(src, files):
+                        os.system('del '+src_name)
+                else:
+                    print("TAR is not a file!")
+
+            src = "C:\\Windows"
+            for files in files2:
+                dst_name = os.path.join(dst, "[Windows]MEMORY_%s.DMP"%datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
+                src_name = files
+                if os.path.isfile(src_name):
+                    exe = 'copy ' + src_name +' %s'%dst_name
+                    os.system(exe)
+                    if BenchmarkAutomation.searchFile(src, "MEMORY.DMP"):
+                        os.system('del '+src_name)
+
+            # TODO optional: cmd command=> xcopy /s/e "D:\A_FOLDER" "E:\B_FOLDER\"
+            files1, files2 = BenchmarkAutomation.detectCrashDumps()
+
+        ######################################################
+        ## Past Code
+        # # Copy the dump file
+        # tarFile = "MEMORY_" + datetime.datetime.now().strftime("%m.%d-%H%M-%Y")
+        # if not tar is None:
+        #     exe = 'copy %LOCALAPPDATA%\CrashDumps\MEMORY.DMP '+tar+'\%s.DMP'%tarFile
+        #     res = tar+'\%s.DMP'%tarFile
+        # else:
+        #     exe = 'copy %LOCALAPPDATA%\CrashDumps\MEMORY.DMP %s.DMP'%tarFile
+        #     res = '\%s.DMP'%tarFile
+        # os.system(exe)
+        # if searchFile(tar, tarFile):
+        #     os.system('del %LOCALAPPDATA%\CrashDumps\MEMORY.DMP')
+        #     return res
+
+
+
