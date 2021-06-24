@@ -1,21 +1,20 @@
-import os
-import sys
-import re
-import subprocess
-
-import json
-import random
-import time
-import datetime
-
 import ctypes
 import ctypes.wintypes
-from typing import (Any, Callable, Dict, List, Iterable, Literal, Tuple)  # need 'pip install typing' for Python3.4 or lower
+import datetime
+import json
+import os
+import random
+import re
+import subprocess
+import sys
+import time
+from typing import Any  # need 'pip install typing' for Python3.4 or lower
+from typing import Callable, Dict, Iterable, List, Literal, Tuple
 
-import win32api, win32con
 import pyautogui as pag
 import uiautomation as auto
-
+import win32api
+import win32con
 
 ############################################################################
 ################################# Console ##################################
@@ -942,19 +941,19 @@ class Game:
 
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
         if not benchDirectory is None and not os.path.isdir(benchDirectory):
             self.benchDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid benchDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.', ConsoleColor.Yellow)
         else:
             self.benchDirectory = benchDirectory
 
@@ -962,13 +961,13 @@ class Game:
 
         if not relativePath is None and not os.path.isdir(relativePath):
             self.relativePath = None
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid relativePath.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid relativePath.', ConsoleColor.Yellow)
         else:
             self.relativePath = relativePath
 
         if not absolutePath is None and not os.path.isdir(absolutePath) and not os.path.isabs(absolutePath):
             self.absolutePath = None
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid absolutePath.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.', ConsoleColor.Yellow)
         else:
             self.absolutePath = absolutePath
 
@@ -977,7 +976,7 @@ class Game:
         if mode >= 0 and mode <=4:
             self.mode = mode
         else:
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid mode.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid mode.', ConsoleColor.Yellow)
 
         self.exePath = ""
         self.launcherMode = -1
@@ -1067,17 +1066,17 @@ class Game:
         for p in paths:
             if str.lower(p) == "s":
                 if self.getSteamDirectory() is None:
-                    Logger.WriteLine("error: try to join None Steam Directory.", ConsoleColor.Red)
+                    Logger.WriteLine("ERROR: try to join None Steam Directory.", ConsoleColor.Red)
                     return -1
                 full_exe = os.path.join(full_exe, self.getSteamDirectory())
             elif str.lower(p) == "r":
                 if self.getRelativePath() is None:
-                    Logger.WriteLine("error: try to join None Relative Path.", ConsoleColor.Red)
+                    Logger.WriteLine("ERROR: try to join None Relative Path.", ConsoleColor.Red)
                     return -1
                 full_exe = os.path.join(full_exe, self.getRelativePath())
             elif str.lower(p) == "a":
                 if self.getAbsolutePath() is None:
-                    Logger.WriteLine("error: try to join None Absolute Path.", ConsoleColor.Red)
+                    Logger.WriteLine("ERROR: try to join None Absolute Path.", ConsoleColor.Red)
                     return -1
                 full_exe = os.path.join(full_exe, self.getAbsolutePath())
             else:
@@ -1116,7 +1115,7 @@ class Game:
         '''
         '''
         if not self.hasLauncher():
-            Logger.WriteLine('warning: Launcher Mode is not enabled.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: Launcher Mode is not enabled.', ConsoleColor.Yellow)
             return
         if self.getLauncherMode() == 1:
             ## 1 - UIAutomation
@@ -1131,13 +1130,13 @@ class Game:
         elif self.getLauncherMode() == 2:
             ## 2 - click on given position
             if clickPos is None:
-                Logger.WriteLine('error: clickPos should not be None.', ConsoleColor.Red)
+                Logger.WriteLine('ERROR: clickPos should not be None.', ConsoleColor.Red)
                 return
             self.clickPos: tuple = clickPos
         elif self.getLauncherMode() == 3:
             ## 3 - call TinyTask
             if TinyTaskName is None:
-                Logger.WriteLine('error: TinyTaskName should not be None.', ConsoleColor.Red)
+                Logger.WriteLine('ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
                 return
             self.TinyTaskName: str = TinyTaskName
 
@@ -1161,14 +1160,14 @@ class Game:
         '''
         '''
         if self.getExecutor() is None:
-            Logger.WriteLine('error: Executor is None. Please use setExecutor() to initialize first.', ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Executor is None. Please use setExecutor() to initialize first.', ConsoleColor.Red)
             return False
         if self.getExecutorPath() is None:
-            Logger.WriteLine('error: Executor Path is None. Please use setExecutorPath() to initialize first.', ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Executor Path is None. Please use setExecutorPath() to initialize first.', ConsoleColor.Red)
             return False
         exeLocation = os.path.join(self.getExecutorPath(), self.getExecutor())
         if not os.path.isfile(exeLocation):
-            Logger.WriteLine('error: Executor\'s Full Path is not valid. Current Path: %s'%exeLocation, ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Executor\'s Full Path is not valid. Current Path: %s'%exeLocation, ConsoleColor.Red)
             return False
 
         ## Check Executor
@@ -1177,30 +1176,30 @@ class Game:
             if self.getLauncherMode() == 1:
                 ## Check APP
                 if self.uiAppControlType is None:
-                    Logger.WriteLine('error: uiAppControlType should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine('ERROR: uiAppControlType should not be None.', ConsoleColor.Red)
                     return False
                 if self.uiAppName is None:
-                    Logger.WriteLine('error: uiAppName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine('ERROR: uiAppName should not be None.', ConsoleColor.Red)
                     return False
                 ## Check Start Button
                 if self.uiStartControlType is None:
-                    Logger.WriteLine('error: uiStartControlType should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine('ERROR: uiStartControlType should not be None.', ConsoleColor.Red)
                     return False
                 if self.uiStartName is None:
-                    Logger.WriteLine('error: uiStartName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine('ERROR: uiStartName should not be None.', ConsoleColor.Red)
                     return False
                 if self.uiStartIndex is None and self.uiStartName is None:
-                    Logger.WriteLine('error: uiStartIndex or uiStartName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine('ERROR: uiStartIndex or uiStartName should not be None.', ConsoleColor.Red)
                     return False
             ## Using win32 Mouse Click Action
             elif self.getLauncherMode() == 2:
                 if self.clickPos is None:
-                    Logger.WriteLine('error: clickPos should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine('ERROR: clickPos should not be None.', ConsoleColor.Red)
                     return False
             ## Calling TinyTask executor
             elif self.getLauncherMode() == 3:
                 if self.TinyTaskName is None:
-                    Logger.WriteLine('error: TinyTaskName should not be None.', ConsoleColor.Red)
+                    Logger.WriteLine('ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
                     return False
 
         return True
@@ -1231,7 +1230,7 @@ class Game:
                     elif self.uiAppControlType == "ButtonControl":
                         app = auto.ButtonControl(searchDepth=1, Name=self.uiAppName)
                     else:
-                        Logger.WriteLine("error: %s is not recognized as a ControlType. Please check again or report this issue."%uiAppControlType, ConsoleColor.Red)
+                        Logger.WriteLine("ERROR: %s is not recognized as a ControlType. Please check again or report this issue."%uiAppControlType, ConsoleColor.Red)
                         return -1
 
                     ## Set the launcher window to the very top of the screen
@@ -1247,7 +1246,7 @@ class Game:
                     elif self.uiStartControlType == "ButtonControl":
                         auto.ButtonControl(foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     else:
-                        Logger.WriteLine("error: %s is not recognized as a ControlType. Please check again or report this issue."%uiStartControlType, ConsoleColor.Red)
+                        Logger.WriteLine("ERROR: %s is not recognized as a ControlType. Please check again or report this issue."%uiStartControlType, ConsoleColor.Red)
                         return -1
 
                 ## Using win32 Mouse Click Action
@@ -1262,7 +1261,7 @@ class Game:
             Logger.WriteLine('waiting 60 seconds for Game to start......', ConsoleColor.Gray)
             time.sleep(60)
         except Exception:
-            Logger.WriteLine('error: Unknown Error Occurred for %s'%self.getGameName(), ConsoleColor.Gray)
+            Logger.WriteLine('ERROR: Unknown Error Occurred for %s'%self.getGameName(), ConsoleColor.Gray)
 
         return startGame
 
@@ -1291,7 +1290,7 @@ class Game:
         elif self.getBenchmarkingMode == 4:
             Benchmarking.RandomRotateTest(duration)
         else:
-            Logger.WriteLine("error: Benchmarking Mode %s is not valid"%self.getBenchmarkingMode(), ConsoleColor.Red)
+            Logger.WriteLine("ERROR: Benchmarking Mode %s is not valid"%self.getBenchmarkingMode(), ConsoleColor.Red)
 
 
 ############################################################################
@@ -1307,13 +1306,13 @@ class BenchmarkAutomation:
         '''
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine('warning: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+            Logger.WriteLine('WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
@@ -1329,7 +1328,7 @@ class BenchmarkAutomation:
         '''
         '''
         if gameName is None:
-            Logger.WriteLine('error: addGameList() should be called with at least 1 arguments',ConsoleColor.Red)
+            Logger.WriteLine('ERROR: addGameList() should be called with at least 1 arguments',ConsoleColor.Red)
         try:
             if not gameObj is None:
                 self.gameList[gameName] = gameObj
@@ -1339,7 +1338,7 @@ class BenchmarkAutomation:
                     exe=exe, relativePath=relativePath, absolutePath=absolutePath, \
                     loopTimes=self.getGameLoopTimes(), mode=mode)
         except Exception:
-            Logger.WriteLine('error: Unknown Error addGameList()',ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Unknown Error addGameList()',ConsoleColor.Red)
 
     def getGameList(self) -> List:
         '''
@@ -1354,7 +1353,7 @@ class BenchmarkAutomation:
                 self.gameList[game].start()
             return 1
         except Exception:
-            Logger.WriteLine('error: Unknown Error startGameList()',ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Unknown Error startGameList()',ConsoleColor.Red)
             return -1
 
     ############################################################################
@@ -1461,7 +1460,7 @@ class BenchmarkAutomation:
                 data = dict()
             return data
         except Exception:
-            Logger.WriteLine('error: Unable to read %s'%(data, file), ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Unable to read %s'%(data, file), ConsoleColor.Red)
             return None
 
     @staticmethod
@@ -1482,7 +1481,7 @@ class BenchmarkAutomation:
                 json.dump(data, f)
             return True
         except Exception:
-            Logger.WriteLine('error: Unable to write %s in %s'%(data, file), ConsoleColor.Red)
+            Logger.WriteLine('ERROR: Unable to write %s in %s'%(data, file), ConsoleColor.Red)
             return False
 
     @staticmethod
