@@ -1186,6 +1186,79 @@ class Game:
         '''
         return self.getLauncherMode() > 0 and self.getLauncherMode() <= 3
 
+    def setStartGame(self, actions: List[List[Any]]) -> int:
+        '''
+        [["w", "wait", duration],
+         ["k", key, duration],
+         ["ks", keys, duration],
+         ["cl", (x, y), duration],
+         ["cr", (x, y), duration],
+         ["mv", (x, y), duration],
+         ["t", "TinyTaskName", duration]]
+        '''
+        try:
+            for action in actions:
+                if not isinstance(action, List):
+                    Logger.WriteLine(
+                        'ERROR: setStartGame() actions Type error', ConsoleColor.Red)
+                    return -1
+
+                ActionType, tar, duration = action
+
+                ActionType = str.lower(ActionType)
+                if not ActionType in ["w", "k", "ks", "cl", "cr", "mv", "t"]:
+                    Logger.WriteLine('ERROR: Invalid ActionType %s' %
+                                     ActionType, ConsoleColor.Red)
+                    return -1
+                if not isinstance(duration, int) or not isinstance(duration, float):
+                    Logger.WriteLine('ERROR: Invalid Duration %s' %
+                                     duration, ConsoleColor.Red)
+                    return -1
+                if ActionType == "w":
+                    time.sleep(duration)
+                    return duration
+
+                if not isinstance(tar, str) or not isinstance(tar, Tuple):
+                    Logger.WriteLine('ERROR: Invalid TargetType %s' %
+                                     tar, ConsoleColor.Red)
+                    return -1
+
+                # k - Single key
+                if ActionType == "k":
+                    resCode = Input.key_input(tar, duration)
+
+                # ks - Multiple Keys
+                if ActionType == "ks":
+                    resCode = Input.key_inputs(tar, duration)
+
+                # cl - Left-Click
+                if ActionType == "cl":
+                    x, y = tar
+                    resCode = sum(Input.clickLeft(x, y, duration))
+
+                # cr - Right-Click
+                if ActionType == "cr":
+                    x, y = tar
+                    resCode = sum(Input.clickRight(x, y, duration))
+
+                # mv - Move mouse position
+                if ActionType == "mv":
+                    x, y = tar
+                    resCode = sum(Input.moveTo(x, y, duration))
+
+                # t - Call TinyTask
+                if ActionType == "t":
+                    resCode = sum(Input.callTinyTask(tar))
+
+                if not resCode:
+                    Logger.WriteLine(
+                        'WARNING: Input Failed in setStartGame(): %s' % action, ConsoleColor.Yellow)
+        except Exception:
+            Logger.WriteLine(
+                'ERROR: Unknown Error in setStartGame()', ConsoleColor.Red)
+        else:
+            return resCode
+
     def setBenchmarkingMode(self, mode: int) -> None:
         '''
         '''
@@ -1262,6 +1335,7 @@ class Game:
 
         self.checkStart()
 
+        # Open Game
         exe = os.path.join(self.getExecutorPath(), self.getExecutor())
         try:
             startGame = win32api.ShellExecute(1, 'open', exe, '', '', 1)
@@ -1287,7 +1361,7 @@ class Game:
                             searchDepth=1, Name=self.uiAppName)
                     else:
                         Logger.WriteLine(
-                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % uiAppControlType, ConsoleColor.Red)
+                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % self.uiAppControlType, ConsoleColor.Red)
                         return -1
 
                     # Set the launcher window to the very top of the screen
@@ -1308,7 +1382,7 @@ class Game:
                             foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     else:
                         Logger.WriteLine(
-                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % uiStartControlType, ConsoleColor.Red)
+                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % self.uiStartControlType, ConsoleColor.Red)
                         return -1
 
                 # Using win32 Mouse Click Action
@@ -1326,6 +1400,8 @@ class Game:
         except Exception:
             Logger.WriteLine('ERROR: Unknown Error Occurred for %s' %
                              self.getGameName(), ConsoleColor.Gray)
+
+        # Dealling In-Game Start Buttons
 
         return startGame
 
