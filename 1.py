@@ -1,25 +1,60 @@
-import sys, time
+import sys, time, random
 
-class ProgressBar:
-    def __init__(self, count = 0, total = 0, width = 50):
-        self.count = count
-        self.total = total
-        self.width = width
-    def move(self):
-        self.count += 1
-    def log(self, s):
-        sys.stdout.write(' ' * (self.width + 9) + '\r')
-        sys.stdout.flush()
-        progress = self.width * self.count / self.total
-        progress = int(progress)
-        sys.stdout.write('{0:3}/{1:3}: '.format(self.count, self.total))
-        sys.stdout.write('#' * progress + '-' * int(self.width - progress) + '\r')
-        if progress == self.width:
-            sys.stdout.write('\n')
-        sys.stdout.flush()
+def WriteProgress(counts: int, total: int, step: int = 1, width: int = 50, unit: str = None):
+    '''
+    '''
+    # sys.stdout.write(' ' * (width + 9) + '\r')
+    # sys.stdout.flush()
+    progress = int(width * counts / total)
+    sys.stdout.write('|' + '█' * progress + ' ' *
+                        int(width - progress) + '|')
+    if unit is None:
+        sys.stdout.write(' {0} / {1}  {2}%\r'.format(int(counts), total, ('%.2f' % (100*counts/total))))
+    else:
+        sys.stdout.write(' {0} {3} / {1} {3}  {2}%\r'.format(int(counts), total, ('%.2f' % (100*counts/total)), unit))
+    if progress == width:
+        sys.stdout.write('\n')
+    sys.stdout.flush()
 
-bar = ProgressBar(total = 10)
-for i in range(10):
-    bar.move()
-    bar.log('We have arrived at: ' + str(i + 1))
-    time.sleep(1)
+def CountProgress(total: int, step: int = 1, width: int = 50, unit: str = None):
+    '''
+    '''
+    for counts in range(0, total+1, step):
+        WriteProgress(counts, total, step, width, unit)
+        time.sleep(step)
+
+# CountProgress(20, unit="s")
+
+def RandomControlTest(duration: int, width:int = 50) -> None:
+    '''
+    Perform a random Character Control for games.
+
+    @param:
+        - duration: duration to perform the random character control
+    '''
+    waitTime = 0
+
+    total = duration
+    counts = 0
+    WriteProgress(counts, total, width=width, unit="s")
+    while(duration > 0):
+
+        waitTime = random.uniform(0, 1)
+        keyTime = random.uniform(1, 3)
+
+        if keyTime > duration:
+            keyTime = int(duration / 2)
+            waitTime = duration - keyTime
+
+
+        duration -= keyTime
+        counts += keyTime
+        WriteProgress(counts, total, width=width, unit="s")
+
+        time.sleep(waitTime)
+
+        duration -= waitTime
+        counts += waitTime
+        WriteProgress(counts, total, width=width, unit="s")
+
+RandomControlTest(30)

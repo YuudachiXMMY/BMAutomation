@@ -115,6 +115,33 @@ class Logger:
     }
 
     @staticmethod
+    def WriteProgress(counts: int, total: int, step: int = 1, width: int = 50, unit: str = None):
+        '''
+        '''
+        # sys.stdout.write(' ' * (width + 9) + '\r')
+        # sys.stdout.flush()
+        progress = int(width * counts / total)
+        sys.stdout.write('|' + '█' * progress + ' ' *
+                         int(width - progress) + '|')
+        if unit is None:
+            sys.stdout.write(
+                ' {0} / {1}  {2}%\r'.format(int(counts), total, ('%.2f' % (100*counts/total))))
+        else:
+            sys.stdout.write(' {0} {3} / {1} {3}  {2}%\r'.format(int(counts),
+                             total, ('%.2f' % (100*counts/total)), unit))
+        if progress == width:
+            sys.stdout.write('\n')
+        sys.stdout.flush()
+
+    @staticmethod
+    def CountProgress(total: int, step: int = 1, width: int = 50, unit: str = None):
+        '''
+        '''
+        for counts in range(0, total+1, step):
+            Logger.WriteProgress(counts, total, step, width, unit)
+            time.sleep(step)
+
+    @staticmethod
     def SetLogFile(path: str) -> None:
         Logger.FileName = path
 
@@ -310,18 +337,22 @@ class Benchmarking:
     # "view_leftward",
     # "view_rightward"
 
+    # Logger Progress Bar width
+    _WIDTH = 50
+
     @staticmethod
-    def NormalTest(duration) -> None:
+    def NormalTest(duration, width: int = 50) -> None:
         '''
         Perform a normal Benchmarking. No actions would be made.
 
         @param:
             - duration: duration to perform the normal benchmarking
         '''
-        time.sleep(duration)
+        Logger.WriteProgress(duration, width=width, unit="s")
+        # time.sleep(duration)
 
     @staticmethod
-    def RandomControlTest(duration) -> None:
+    def RandomControlTest(duration: int) -> None:
         '''
         Perform a random Character Control for games.
 
@@ -331,24 +362,40 @@ class Benchmarking:
         waitTime = 0
         tmp = Benchmarking._RANDOM_KEY_LIST.copy()
         tmp.extend(Benchmarking._RANDOM_KEY_LIST)
-        while(duration >= 0):
+
+        total = duration
+        counts = 0
+        Logger.WriteProgress(
+            counts, total, width=Benchmarking._WIDTH, unit="s")
+        while(duration > 0):
+
             waitTime = random.uniform(
                 Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
             keyTime = random.uniform(
                 Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
             action = random.choice(tmp)
 
+            if keyTime > duration:
+                keyTime = int(duration / 2)
+                waitTime = duration - keyTime
+
             if action in Benchmarking._MOUSE_LIST:
                 keyTime = Benchmarking.mouseCharacterControl(action, keyTime)
             elif action in Benchmarking._RANDOM_KEY_LIST:
                 keyTime = Benchmarking.keyCharacterControl(action, keyTime)
 
-            duration -= waitTime
             duration -= keyTime
+            counts += keyTime
+            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+
             time.sleep(waitTime)
 
+            duration -= waitTime
+            counts += waitTime
+            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+
     @staticmethod
-    def RandomInputTest(duration) -> None:
+    def RandomInputTest(duration, ) -> None:
         '''
         Perform a random Typing Words for Office.
 
@@ -356,18 +403,33 @@ class Benchmarking:
             - duration: duration to perform the random typing
         '''
         waitTime = 0
-        while(duration >= 0):
+
+        total = duration
+        counts = 0
+        Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+        while(duration > 0):
+
             waitTime = random.uniform(
                 Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
             keyTime = random.uniform(
                 Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
             action = random.choice(_RANDOM_WORD_LIST)
 
-            keyTime = Benchmarking.keyCharacterControl(action, keyTime)
+            if keyTime > duration:
+                keyTime = int(duration / 2)
+                waitTime = duration - keyTime
+
+            Benchmarking.keyCharacterControl(action, keyTime)
+
+            duration -= keyTime
+            counts += keyTime
+            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+
+            time.sleep(waitTime)
 
             duration -= waitTime
-            duration -= keyTime
-            time.sleep(waitTime)
+            counts += waitTime
+            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def RandomRotateTest(duration) -> None:
@@ -379,14 +441,22 @@ class Benchmarking:
         '''
         waitTime = 0
         altTabTime = 0
-        while(duration >= 0):
+
+        total = duration
+        counts = 0
+        Logger.WriteProgress(
+            counts, total, width=Benchmarking._WIDTH, unit="s")
+        while(duration > 0):
             waitTime = random.uniform(5, 20)
 
             Benchmarking.changeDisplayDirection(
                 0, random.choice(Benchmarking._ROTATE_ANGLE))
 
-            duration -= waitTime
             time.sleep(waitTime)
+
+            duration -= waitTime
+            counts += waitTime
+            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
 
         Benchmarking.changeDisplayDirection(0, 0)
 
@@ -399,20 +469,35 @@ class Benchmarking:
             - duration: duration to perform the stressed benchmarking
         '''
         waitTime = 0
-        altTabTime = 0
+        keyTime = 0
+
+        total = duration
+        counts = 0
+        Logger.WriteProgress(
+            counts, total, width=Benchmarking._WIDTH, unit="s")
         while(duration >= 0):
+
             waitTime = random.uniform(
                 Benchmarking._BM_WAIT_TIME_MIN, Benchmarking._BM_WAIT_TIME_MAX)
-            altTabTime = random.uniform(
+            keyTime = random.uniform(
                 Benchmarking._KEY_PRESS_WAIT_TIME_MIN, Benchmarking._KEY_PRESS_WAIT_TIME_MAX)
+
+            if keyTime > duration:
+                keyTime = int(duration / 2)
+                waitTime = duration - keyTime
+
             Input.key_alt_tab()
-            time.sleep(altTabTime)
+            time.sleep(keyTime)
+            duration -= keyTime
+            counts += keyTime
+            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+
             Input.key_alt_tab()
             time.sleep(waitTime)
 
-            duration -= 1
             duration -= waitTime
-            duration -= altTabTime
+            counts += waitTime
+            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def mouseCharacterControl(action, keyTime) -> None:
@@ -1343,7 +1428,8 @@ class Game:
             if self.hasLauncher:
                 Logger.WriteLine(
                     'waiting 20 seconds for launcher to start......', ConsoleColor.Gray)
-                time.sleep(20)
+                Logger.CountProgress(20, unit="s")
+                # time.sleep(20)
 
                 # Using UIAutomation
                 if self.getLauncherMode() == 1:
@@ -1396,7 +1482,8 @@ class Game:
 
             Logger.WriteLine(
                 'waiting 60 seconds for Game to start......', ConsoleColor.Gray)
-            time.sleep(60)
+            Logger.CountProgress(60, unit="s")
+            # time.sleep(60)
         except Exception:
             Logger.WriteLine('ERROR: Unknown Error Occurred for %s' %
                              self.getGameName(), ConsoleColor.Gray)
