@@ -115,13 +115,18 @@ class Logger:
     }
 
     @staticmethod
-    def WriteProgress(counts: int, total: int, step: int = 1, width: int = 50, unit: str = None):
+    def WriteProgress(counts: int, total: int, log: str = "", step: int = 1, width: int = 50, unit: str = None, consoleColor: int = ConsoleColor.Default):
         '''
         '''
+        log = str(log)
+        isValidColor = (
+            consoleColor >= ConsoleColor.Black and consoleColor <= ConsoleColor.White)
+        if isValidColor:
+            SetConsoleColor(consoleColor)
         # sys.stdout.write(' ' * (width + 9) + '\r')
         # sys.stdout.flush()
         progress = int(width * counts / total)
-        sys.stdout.write('|' + '█' * progress + ' ' *
+        sys.stdout.write(log + '|' + '█' * progress + ' ' *
                          int(width - progress) + '|')
         if unit is None:
             sys.stdout.write(
@@ -131,14 +136,17 @@ class Logger:
                              total, ('%.2f' % (100*counts/total)), unit))
         if progress == width:
             sys.stdout.write('\n')
+        if isValidColor:
+            ResetConsoleColor()
         sys.stdout.flush()
 
     @staticmethod
-    def CountProgress(total: int, step: int = 1, width: int = 50, unit: str = None):
+    def CountProgress(total: int, log: str = "Progressing", step: int = 1, width: int = 50, unit: str = None, consoleColor: int = ConsoleColor.Default):
         '''
         '''
         for counts in range(0, total+1, step):
-            Logger.WriteProgress(counts, total, step, width, unit)
+            Logger.WriteProgress(counts, total, log, step,
+                                 width, unit, consoleColor)
             time.sleep(step)
 
     @staticmethod
@@ -202,6 +210,18 @@ class Logger:
         logFile: str, log file path.
         """
         Logger.Write('{}\n'.format(log), consoleColor,
+                     writeToFile, printToStdout, logFile)
+
+    @staticmethod
+    def WriteFlush(log: Any, consoleColor: int = ConsoleColor.Default, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None, printTruncateLen: int = 0) -> None:
+        """
+        log: any type.
+        consoleColor: int, a value in class `ConsoleColor`, such as `ConsoleColor.DarkGreen`.
+        writeToFile: bool.
+        printToStdout: bool.
+        logFile: str, log file path.
+        """
+        Logger.Write('{}\r'.format(log), consoleColor,
                      writeToFile, printToStdout, logFile)
 
     @staticmethod
@@ -341,14 +361,14 @@ class Benchmarking:
     _WIDTH = 50
 
     @staticmethod
-    def NormalTest(duration, width: int = 50) -> None:
+    def NormalTest(duration) -> None:
         '''
         Perform a normal Benchmarking. No actions would be made.
 
         @param:
             - duration: duration to perform the normal benchmarking
         '''
-        Logger.WriteProgress(duration, width=width, unit="s")
+        Logger.CountProgress(duration, width=Benchmarking._WIDTH, unit="s")
         # time.sleep(duration)
 
     @staticmethod
@@ -380,19 +400,19 @@ class Benchmarking:
                 waitTime = duration - keyTime
 
             if action in Benchmarking._MOUSE_LIST:
-                keyTime = Benchmarking.mouseCharacterControl(action, keyTime)
+                Benchmarking.mouseCharacterControl(action, keyTime)
             elif action in Benchmarking._RANDOM_KEY_LIST:
-                keyTime = Benchmarking.keyCharacterControl(action, keyTime)
+                Benchmarking.keyCharacterControl(action, keyTime)
 
             duration -= keyTime
             counts += keyTime
-            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
 
             time.sleep(waitTime)
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def RandomInputTest(duration, ) -> None:
@@ -406,7 +426,7 @@ class Benchmarking:
 
         total = duration
         counts = 0
-        Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+        Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
         while(duration > 0):
 
             waitTime = random.uniform(
@@ -423,13 +443,13 @@ class Benchmarking:
 
             duration -= keyTime
             counts += keyTime
-            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
 
             time.sleep(waitTime)
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def RandomRotateTest(duration) -> None:
@@ -456,7 +476,7 @@ class Benchmarking:
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
 
         Benchmarking.changeDisplayDirection(0, 0)
 
@@ -490,14 +510,14 @@ class Benchmarking:
             time.sleep(keyTime)
             duration -= keyTime
             counts += keyTime
-            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
 
             Input.key_alt_tab()
             time.sleep(waitTime)
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def mouseCharacterControl(action, keyTime) -> None:
@@ -523,7 +543,7 @@ class Benchmarking:
             Input.clickRight(None, None, keyTime)
 
     @staticmethod
-    def keyCharacterControl(action, keyTime) -> None:
+    def keyCharacterControl(action, keyTime, WriteProgress: bool = False) -> None:
         '''
         A method called by randomCharacterControl() to perform keyboard control for characters.
 
@@ -532,8 +552,12 @@ class Benchmarking:
             - keyTime: duration to perform the key time
         '''
         # utils.input.key_input(action, keyTime)
-        Input.callTinyTask(action)
-        time.sleep(keyTime)
+        Input.callTinyTask('tinytask/'+action)
+        if WriteProgress:
+            Logger.CountProgress(
+                0, keyTime, width=Benchmarking._WIDTH, unit="s")
+        else:
+            time.sleep(keyTime)
 
     @staticmethod
     def changeDisplayDirection(deviceIndex, angle) -> bool:
@@ -882,20 +906,21 @@ class Input:
             VK_CODE._VK_CODE1["alt"], 0, win32con.KEYEVENTF_KEYUP, 0)
 
     @staticmethod
-    def key_alt_f4() -> None:
+    def key_alt_f4(t=0.6) -> None:
         '''
         Perform a key action of ALT + F4.
 
         @param:
             - t - time period in second between pressdown and pressup (default to 0.05).
         '''
+        duration = float('%.1f' % (t / 3))
         win32api.keybd_event(VK_CODE._VK_CODE1["alt"], 0, 0, 0)
-        time.sleep(0.2)
+        time.sleep(duration)
         win32api.keybd_event(VK_CODE._VK_CODE1["F4"], 0, 0, 0)
-        time.sleep(0.2)
+        time.sleep(duration)
         win32api.keybd_event(
             VK_CODE._VK_CODE1["F4"], 0, win32con.KEYEVENTF_KEYUP, 0)
-        time.sleep(0.2)
+        time.sleep(duration)
         win32api.keybd_event(
             VK_CODE._VK_CODE1["alt"], 0, win32con.KEYEVENTF_KEYUP, 0)
 
@@ -1029,7 +1054,7 @@ class Input:
             - 0 - failed
             - 1 - succeed
         '''
-        return win32api.ShellExecute(1, 'open', file, '', '', 1)
+        return win32api.ShellExecute(1, 'open', os.path.join(os.getcwd(), file), '', '', 1)
 
 
 ################################################################################
@@ -1100,6 +1125,8 @@ class Game:
 
         self.exePath = ""
         self.launcherMode = -1
+
+        self.LauncherWaitTime = 15
 
     ############################################################################
     def setGameName(self, name: str) -> None:
@@ -1230,13 +1257,14 @@ class Game:
         '''
         return self.launcherMode
 
-    def setLauncher(self,
+    def setLauncher(self, waitTime: int = 20,
                     uiAppControlType: str = None, uiAppName: str = None,
                     uiStartControlType: str = None, uiStartIndex: int = None, uiStartName: str = None,
                     clickPos: tuple = None,
                     TinyTaskName: str = None) -> None:
         '''
         '''
+        self.LauncherWaitTime = waitTime
         if not self.hasLauncher():
             Logger.WriteLine(
                 'WARNING: Launcher Mode is not enabled.', ConsoleColor.Yellow)
@@ -1271,7 +1299,7 @@ class Game:
         '''
         return self.getLauncherMode() > 0 and self.getLauncherMode() <= 3
 
-    def setStartGame(self, actions: List[List[Any]]) -> int:
+    def Actions(self, actions: List[List[Any]]) -> int:
         '''
         [["w", "wait", duration],
          ["k", key, duration],
@@ -1279,31 +1307,37 @@ class Game:
          ["cl", (x, y), duration],
          ["cr", (x, y), duration],
          ["mv", (x, y), duration],
-         ["t", "TinyTaskName", duration]]
+         ["t", "TinyTaskName", duration],
+         ["s", "key_alt_tab | key_alt_f4", duration]]
         '''
         try:
             for action in actions:
                 if not isinstance(action, List):
                     Logger.WriteLine(
-                        'ERROR: setStartGame() actions Type error', ConsoleColor.Red)
+                        'ERROR: Actions() actions Type error', ConsoleColor.Red)
                     return -1
 
                 ActionType, tar, duration = action
 
+                Logger.WriteFlush('Performing Action: %s at %s with %s seconds' % (
+                    ActionType, tar, duration), ConsoleColor.DarkGray)
+
                 ActionType = str.lower(ActionType)
-                if not ActionType in ["w", "k", "ks", "cl", "cr", "mv", "t"]:
+                if not ActionType in ["w", "k", "ks", "cl", "cr", "mv", "t", "s"]:
                     Logger.WriteLine('ERROR: Invalid ActionType %s' %
                                      ActionType, ConsoleColor.Red)
                     return -1
-                if not isinstance(duration, int) or not isinstance(duration, float):
+                if not isinstance(duration, int) and not isinstance(duration, float):
                     Logger.WriteLine('ERROR: Invalid Duration %s' %
                                      duration, ConsoleColor.Red)
                     return -1
                 if ActionType == "w":
-                    time.sleep(duration)
-                    return duration
+                    # time.sleep(duration)
+                    Logger.CountProgress(
+                        duration, log="Waiting", unit="s", consoleColor=ConsoleColor.DarkGray)
+                    resCode = duration
 
-                if not isinstance(tar, str) or not isinstance(tar, Tuple):
+                if not isinstance(tar, str) and not isinstance(tar, Tuple):
                     Logger.WriteLine('ERROR: Invalid TargetType %s' %
                                      tar, ConsoleColor.Red)
                     return -1
@@ -1333,14 +1367,23 @@ class Game:
 
                 # t - Call TinyTask
                 if ActionType == "t":
-                    resCode = sum(Input.callTinyTask(tar))
+                    resCode = Input.callTinyTask(tar)
+                    time.sleep(duration)
+
+                # s - Special Function in Input Class
+                if ActionType == "s":
+                    if tar == "key_alt_tab":
+                        Input.key_alt_tab(duration)
+                    if tar == "key_alt_f4":
+                        Input.key_alt_f4(duration)
+                    resCode = duration
 
                 if not resCode:
                     Logger.WriteLine(
-                        'WARNING: Input Failed in setStartGame(): %s' % action, ConsoleColor.Yellow)
+                        'WARNING: Action %s Failed in Actions()' % action, ConsoleColor.Yellow)
         except Exception:
             Logger.WriteLine(
-                'ERROR: Unknown Error in setStartGame()', ConsoleColor.Red)
+                'ERROR: Unknown Error in Actions()', ConsoleColor.Red)
         else:
             return resCode
 
@@ -1413,7 +1456,7 @@ class Game:
 
         return True
 
-    def start(self) -> int:
+    def start(self, GameWaitTime: int = 60) -> int:
         '''
         '''
         startGame: int = 0
@@ -1427,9 +1470,9 @@ class Game:
 
             if self.hasLauncher:
                 Logger.WriteLine(
-                    'waiting 20 seconds for launcher to start......', ConsoleColor.Gray)
-                Logger.CountProgress(20, unit="s")
-                # time.sleep(20)
+                    'waiting %s seconds for launcher to start......' % self.LauncherWaitTime, ConsoleColor.Gray)
+                Logger.CountProgress(self.LauncherWaitTime, unit="s")
+                # time.sleep(self.LauncherWaitTime)
 
                 # Using UIAutomation
                 if self.getLauncherMode() == 1:
@@ -1481,9 +1524,9 @@ class Game:
                     Input.callTinyTask(self.TinyTaskName)
 
             Logger.WriteLine(
-                'waiting 60 seconds for Game to start......', ConsoleColor.Gray)
-            Logger.CountProgress(60, unit="s")
-            # time.sleep(60)
+                'waiting %s seconds for Game to start......' % GameWaitTime, ConsoleColor.Gray)
+            Logger.CountProgress(GameWaitTime, unit="s")
+            # time.sleep(GameWaitTime )
         except Exception:
             Logger.WriteLine('ERROR: Unknown Error Occurred for %s' %
                              self.getGameName(), ConsoleColor.Gray)
@@ -1502,19 +1545,19 @@ class Game:
             4- randomRotate
         '''
         # Normal Benchmarking
-        if self.getBenchmarkingMode == 0:
+        if self.getBenchmarkingMode() == 0:
             Benchmarking.NormalTest(duration)
         # Alt-Tab Benchmarking
-        elif self.getBenchmarkingMode == 1:
+        elif self.getBenchmarkingMode() == 1:
             Benchmarking.StressTest(duration)
         # Random-Control Benchmarking
-        elif self.getBenchmarkingMode == 2:
+        elif self.getBenchmarkingMode() == 2:
             Benchmarking.RandomControlTest(duration)
         # Random-Input Benchmarking
-        elif self.getBenchmarkingMode == 3:
+        elif self.getBenchmarkingMode() == 3:
             Benchmarking.RandomInputTest(duration)
         # Random-Rotate Benchmarking
-        elif self.getBenchmarkingMode == 4:
+        elif self.getBenchmarkingMode() == 4:
             Benchmarking.RandomRotateTest(duration)
         else:
             Logger.WriteLine("ERROR: Benchmarking Mode %s is not valid" %
