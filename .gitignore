@@ -1,6 +1,3 @@
-# VSCode Envrionments
-.vscode/
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -8,6 +5,22 @@ __pycache__/
 
 # C extensions
 *.so
+
+# AMD Confidential
+BHScripts.py
+
+# Releases NOT IN ZIP
+builds/release
+builds/releases
+
+Logs/*
+
+# Office Files
+*.csv
+*.xls
+*.xlsx
+*.doc
+*.docx
 
 # Distribution / packaging
 .Python

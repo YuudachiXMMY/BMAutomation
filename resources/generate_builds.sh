@@ -1,0 +1,1 @@
+pyinstaller --distpath="./builds/release" --workpath="./builds/release" --specpath="./builds/release" -i="C:\Users\Navi\Desktop\BenchMark-Automation\resources\gui\Huskies.ico" -F m.py
