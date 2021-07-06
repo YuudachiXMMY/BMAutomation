@@ -153,3 +153,15 @@ GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid ab
 waiting 5 seconds for launcher to start......
 
 ***** Ctrl+C key input detected. Program Stopped! *****
+GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
+GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
+GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
+waiting 5 seconds for launcher to start......
+
+********** Ctrl+C key input detected. Program Stopped! **********
+GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
+GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
+GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
+waiting 5 seconds for launcher to start......
+
+********** Ctrl+C key input detected. Program Stopped! **********

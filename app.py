@@ -1,6 +1,6 @@
 import sys
 
-import BenchmarkAutomation as ba
+import BMAutomation as ba
 
 steamDir = "F:\\SteamLibrary\\steamapps\\common"
 docDir = "C:\\Users\\Navi\\Documents"
