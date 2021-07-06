@@ -1,5 +1,7 @@
 import sys
 
+# To Install BMAutomation, use the following Command in Windows CMD:
+# py -m pip install --index-url https://test.pypi.org/simple/ your-package
 import BMAutomation as ba
 
 steamDir = "F:\\SteamLibrary\\steamapps\\common"
