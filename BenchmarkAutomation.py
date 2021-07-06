@@ -126,8 +126,8 @@ class Logger:
         # sys.stdout.write(' ' * (width + 9) + '\r')
         # sys.stdout.flush()
         progress = int(width * counts / total)
-        sys.stdout.write(log + '|' + '█' * progress + ' ' *
-                         int(width - progress) + '|')
+        sys.stdout.write(log + '|' + '█' * progress +
+                         ' ' * int(width - progress) + '|')
         if unit is None:
             sys.stdout.write(
                 ' {0} / {1}  {2}%\r'.format(int(counts), total, ('%.2f' % (100*counts/total))))
@@ -286,8 +286,8 @@ class Logger:
             frameCount += 1
 
         t = datetime.datetime.now()
-        log = '{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03} {}[{}] {} -> {}\n'.format(t.year, t.month, t.day,
-                                                                                t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
+        log = '{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03} {}[{}] {} -> {}\n'.format(
+            t.year, t.month, t.day, t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
         Logger.Write(log, consoleColor, writeToFile, printToStdout, logFile)
 
     @staticmethod
@@ -310,8 +310,8 @@ class Logger:
             frameCount += 1
 
         t = datetime.datetime.now()
-        log = '{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03} {}[{}] {} -> {}\n'.format(t.year, t.month, t.day,
-                                                                                t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
+        log = '{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03} {}[{}] {} -> {}\n'.format(
+            t.year, t.month, t.day, t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
         Logger.ColorfullyWrite(
             log, consoleColor, writeToFile, printToStdout, logFile)
 
@@ -331,10 +331,10 @@ class Benchmarking:
     _ROTATE_ANGLE = [0, 90, 180, 270]
 
     _BM_WAIT_TIME_MIN = 0
-    _BM_WAIT_TIME_MAX = 15
+    _BM_WAIT_TIME_MAX = 3
 
     _KEY_PRESS_WAIT_TIME_MIN = 0
-    _KEY_PRESS_WAIT_TIME_MAX = 3
+    _KEY_PRESS_WAIT_TIME_MAX = 2
 
     _RANDOM_KEY_LIST = [
         "w",
@@ -406,13 +406,15 @@ class Benchmarking:
 
             duration -= keyTime
             counts += keyTime
-            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(
+                counts, total, width=Benchmarking._WIDTH, unit="s")
 
             time.sleep(waitTime)
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(
+                counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def RandomInputTest(duration, ) -> None:
@@ -426,7 +428,8 @@ class Benchmarking:
 
         total = duration
         counts = 0
-        Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+        Logger.WriteProgress(
+            counts, total, width=Benchmarking._WIDTH, unit="s")
         while(duration > 0):
 
             waitTime = random.uniform(
@@ -443,13 +446,15 @@ class Benchmarking:
 
             duration -= keyTime
             counts += keyTime
-            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(
+                counts, total, width=Benchmarking._WIDTH, unit="s")
 
             time.sleep(waitTime)
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(
+                counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def RandomRotateTest(duration) -> None:
@@ -476,7 +481,8 @@ class Benchmarking:
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(
+                counts, total, width=Benchmarking._WIDTH, unit="s")
 
         Benchmarking.changeDisplayDirection(0, 0)
 
@@ -510,14 +516,16 @@ class Benchmarking:
             time.sleep(keyTime)
             duration -= keyTime
             counts += keyTime
-            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(
+                counts, total, width=Benchmarking._WIDTH, unit="s")
 
             Input.key_alt_tab()
             time.sleep(waitTime)
 
             duration -= waitTime
             counts += waitTime
-            Logger.WriteProgress(counts, total, width=Benchmarking._WIDTH, unit="s")
+            Logger.WriteProgress(
+                counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
     def mouseCharacterControl(action, keyTime) -> None:
@@ -1068,7 +1076,6 @@ class Game:
                  exe: str = "", relativePath: str = "", absolutePath: str = "",
                  loopTimes: int = 1, mode: Literal[0, 1, 2, 3, 4] = 0) -> None:
         '''
-
         mode:
             0- norm
             1- alt-tab
@@ -1081,21 +1088,21 @@ class Game:
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid steamDirectory.' % gameName, ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid documentDirectory.' % gameName, ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
         if not benchDirectory is None and not os.path.isdir(benchDirectory):
             self.benchDirectory = None
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.', ConsoleColor.Yellow)
+                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid benchDirectory.' % gameName, ConsoleColor.Yellow)
         else:
             self.benchDirectory = benchDirectory
 
@@ -1104,14 +1111,14 @@ class Game:
         if not relativePath is None and not os.path.isdir(relativePath):
             self.relativePath = None
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid relativePath.', ConsoleColor.Yellow)
+                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid relativePath.' % gameName, ConsoleColor.Yellow)
         else:
             self.relativePath = relativePath
 
         if not absolutePath is None and not os.path.isdir(absolutePath) and not os.path.isabs(absolutePath):
             self.absolutePath = None
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.', ConsoleColor.Yellow)
+                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid absolutePath.' % gameName, ConsoleColor.Yellow)
         else:
             self.absolutePath = absolutePath
 
@@ -1121,14 +1128,17 @@ class Game:
             self.mode = mode
         else:
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid mode.', ConsoleColor.Yellow)
+                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid mode.' % gameName, ConsoleColor.Yellow)
 
         self.exePath = ""
         self.launcherMode = -1
 
         self.LauncherWaitTime = 15
 
-    ############################################################################
+        self._START_ACTIONS = None
+        self._QUIT_ACTIONS = None
+
+    ################################ Base Info #################################
     def setGameName(self, name: str) -> None:
         '''
         '''
@@ -1189,6 +1199,7 @@ class Game:
         '''
         return self.absolutePath
 
+    ################################# Executor #################################
     def setExecutor(self, exe: str) -> None:
         '''
         '''
@@ -1214,20 +1225,20 @@ class Game:
             if str.lower(p) == "s":
                 if self.getSteamDirectory() is None:
                     Logger.WriteLine(
-                        "ERROR: try to join None Steam Directory.", ConsoleColor.Red)
-                    return -1
+                        "GAME() ERROR %s: try to join None Steam Directory." % self.getGameName(), ConsoleColor.Red)
+                    return 0
                 full_exe = os.path.join(full_exe, self.getSteamDirectory())
             elif str.lower(p) == "r":
                 if self.getRelativePath() is None:
                     Logger.WriteLine(
-                        "ERROR: try to join None Relative Path.", ConsoleColor.Red)
-                    return -1
+                        "GAME() ERROR %s: try to join None Relative Path." % self.getGameName(), ConsoleColor.Red)
+                    return 0
                 full_exe = os.path.join(full_exe, self.getRelativePath())
             elif str.lower(p) == "a":
                 if self.getAbsolutePath() is None:
                     Logger.WriteLine(
-                        "ERROR: try to join None Absolute Path.", ConsoleColor.Red)
-                    return -1
+                        "GAME() ERROR %s: try to join None Absolute Path." % self.getGameName(), ConsoleColor.Red)
+                    return 0
                 full_exe = os.path.join(full_exe, self.getAbsolutePath())
             else:
                 full_exe = os.path.join(full_exe, p)
@@ -1239,6 +1250,7 @@ class Game:
         '''
         return self.exePath
 
+    ################################# Launcher #################################
     def setLauncherMode(self, mode: Literal[0, 1, 2, 3]) -> None:
         '''
         0- No launcher
@@ -1267,7 +1279,7 @@ class Game:
         self.LauncherWaitTime = waitTime
         if not self.hasLauncher():
             Logger.WriteLine(
-                'WARNING: Launcher Mode is not enabled.', ConsoleColor.Yellow)
+                'GAME() WARNING %s: Launcher Mode is not enabled.' % self.getGameName(), ConsoleColor.Yellow)
             return
         if self.getLauncherMode() == 1:
             ## 1 - UIAutomation
@@ -1283,14 +1295,14 @@ class Game:
             # 2 - click on given position
             if clickPos is None:
                 Logger.WriteLine(
-                    'ERROR: clickPos should not be None.', ConsoleColor.Red)
+                    'GAME() ERROR %s: clickPos should not be None.' % self.getGameName(), ConsoleColor.Red)
                 return
             self.clickPos: tuple = clickPos
         elif self.getLauncherMode() == 3:
             # 3 - call TinyTask
             if TinyTaskName is None:
                 Logger.WriteLine(
-                    'ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
+                    'GAME() ERROR %s: TinyTaskName should not be None.' % self.getGameName(), ConsoleColor.Red)
                 return
             self.TinyTaskName: str = TinyTaskName
 
@@ -1299,7 +1311,28 @@ class Game:
         '''
         return self.getLauncherMode() > 0 and self.getLauncherMode() <= 3
 
-    def Actions(self, actions: List[List[Any]]) -> int:
+    ################################# Actions ##################################
+    def setStartActions(self, actions: List[List[Any]]):
+        '''
+        '''
+        self._START_ACTIONS = actions
+
+    def getStartActions(self):
+        '''
+        '''
+        return self._START_ACTIONS
+
+    def setQuitActions(self, actions: List[List[Any]]):
+        '''
+        '''
+        self._QUIT_ACTIONS = actions
+
+    def getQuitActions(self):
+        '''
+        '''
+        return self._QUIT_ACTIONS
+
+    def startActions(self, actions: List[List[Any]]) -> int:
         '''
         [["w", "wait", duration],
          ["k", key, duration],
@@ -1311,26 +1344,28 @@ class Game:
          ["s", "key_alt_tab | key_alt_f4", duration]]
         '''
         try:
+            num = 0
             for action in actions:
                 if not isinstance(action, List):
                     Logger.WriteLine(
-                        'ERROR: Actions() actions Type error', ConsoleColor.Red)
-                    return -1
+                        'GAME() ERROR %s: Actions() actions Type error' % self.getGameName(), ConsoleColor.Red)
+                    return 0
 
                 ActionType, tar, duration = action
 
-                Logger.WriteFlush('Performing Action: %s at %s with %s seconds' % (
-                    ActionType, tar, duration), ConsoleColor.DarkGray)
+                Logger.WriteFlush('Performing Action %s %s : At %s in %s seconds' % (
+                    num, ActionType, tar, duration), ConsoleColor.DarkGray)
+                num += 1
 
                 ActionType = str.lower(ActionType)
                 if not ActionType in ["w", "k", "ks", "cl", "cr", "mv", "t", "s"]:
-                    Logger.WriteLine('ERROR: Invalid ActionType %s' %
-                                     ActionType, ConsoleColor.Red)
-                    return -1
+                    Logger.WriteLine('GAME() ERROR %s: Invalid ActionType %s' % (
+                        self.getGameName(), ActionType), ConsoleColor.Red)
+                    return 0
                 if not isinstance(duration, int) and not isinstance(duration, float):
-                    Logger.WriteLine('ERROR: Invalid Duration %s' %
-                                     duration, ConsoleColor.Red)
-                    return -1
+                    Logger.WriteLine('GAME() ERROR %s: Invalid Duration %s' % (
+                        self.getGameName(), duration), ConsoleColor.Red)
+                    return 0
                 if ActionType == "w":
                     # time.sleep(duration)
                     Logger.CountProgress(
@@ -1338,9 +1373,9 @@ class Game:
                     resCode = duration
 
                 if not isinstance(tar, str) and not isinstance(tar, Tuple):
-                    Logger.WriteLine('ERROR: Invalid TargetType %s' %
-                                     tar, ConsoleColor.Red)
-                    return -1
+                    Logger.WriteLine('GAME() ERROR %s: Invalid TargetType %s' % (
+                        self.getGameName(), tar), ConsoleColor.Red)
+                    return 0
 
                 # k - Single key
                 if ActionType == "k":
@@ -1380,13 +1415,24 @@ class Game:
 
                 if not resCode:
                     Logger.WriteLine(
-                        'WARNING: Action %s Failed in Actions()' % action, ConsoleColor.Yellow)
-        except Exception:
+                        'GAME() ERROR %s: Action %s Failed in Actions()' % (self.getGameName(), action), ConsoleColor.Red)
+        except Exception as e:
             Logger.WriteLine(
-                'ERROR: Unknown Error in Actions()', ConsoleColor.Red)
+                'GAME() ERROR %s: %s' % (self.getGameName(), e), ConsoleColor.Red)
         else:
             return resCode
 
+    def start(self):
+        '''
+        '''
+        return self.startActions(self.getStartActions())
+
+    def quit(self):
+        '''
+        '''
+        return self.startActions(self.getQuitActions())
+
+    ############################### Benchmarking ###############################
     def setBenchmarkingMode(self, mode: int) -> None:
         '''
         '''
@@ -1397,22 +1443,50 @@ class Game:
         '''
         return self.mode
 
-    ############################################################################
-    def checkStart(self) -> bool:
+    def startBenchMarking(self, duration: int = 300) -> None:
+        '''
+        mode:
+            0- norm
+            1- alt-tab
+            2- randomControl
+            3- randomInput
+            4- randomRotate
+        '''
+        # Normal Benchmarking
+        if self.getBenchmarkingMode() == 0:
+            Benchmarking.NormalTest(duration)
+        # Alt-Tab Benchmarking
+        elif self.getBenchmarkingMode() == 1:
+            Benchmarking.StressTest(duration)
+        # Random-Control Benchmarking
+        elif self.getBenchmarkingMode() == 2:
+            Benchmarking.RandomControlTest(duration)
+        # Random-Input Benchmarking
+        elif self.getBenchmarkingMode() == 3:
+            Benchmarking.RandomInputTest(duration)
+        # Random-Rotate Benchmarking
+        elif self.getBenchmarkingMode() == 4:
+            Benchmarking.RandomRotateTest(duration)
+        else:
+            Logger.WriteLine("GAME() ERROR %s: Benchmarking Mode %s is not valid" %
+                             (self.getGameName(), self.getBenchmarkingMode()), ConsoleColor.Red)
+
+    ################################## Launch ##################################
+    def checkLaunch(self) -> bool:
         '''
         '''
         if self.getExecutor() is None:
             Logger.WriteLine(
-                'ERROR: Executor is None. Please use setExecutor() to initialize first.', ConsoleColor.Red)
+                'GAME() ERROR %s: Executor is None. Please use setExecutor() to initialize first.' % self.getGameName(), ConsoleColor.Red)
             return False
         if self.getExecutorPath() is None:
             Logger.WriteLine(
-                'ERROR: Executor Path is None. Please use setExecutorPath() to initialize first.', ConsoleColor.Red)
+                'GAME() ERROR %s: Executor Path is None. Please use setExecutorPath() to initialize first.' % self.getGameName(), ConsoleColor.Red)
             return False
         exeLocation = os.path.join(self.getExecutorPath(), self.getExecutor())
         if not os.path.isfile(exeLocation):
             Logger.WriteLine(
-                'ERROR: Executor\'s Full Path is not valid. Current Path: %s' % exeLocation, ConsoleColor.Red)
+                'GAME() ERROR %s: Executor\'s Full Path is not valid. Current Path: %s' % (self.getGameName(), exeLocation), ConsoleColor.Red)
             return False
 
         # Check Executor
@@ -1422,46 +1496,46 @@ class Game:
                 # Check APP
                 if self.uiAppControlType is None:
                     Logger.WriteLine(
-                        'ERROR: uiAppControlType should not be None.', ConsoleColor.Red)
+                        'GAME() ERROR %s: uiAppControlType should not be None.' % self.getGameName(), ConsoleColor.Red)
                     return False
                 if self.uiAppName is None:
                     Logger.WriteLine(
-                        'ERROR: uiAppName should not be None.', ConsoleColor.Red)
+                        'GAME() ERROR %s: uiAppName should not be None.' % self.getGameName(), ConsoleColor.Red)
                     return False
                 # Check Start Button
                 if self.uiStartControlType is None:
                     Logger.WriteLine(
-                        'ERROR: uiStartControlType should not be None.', ConsoleColor.Red)
+                        'GAME() ERROR %s: uiStartControlType should not be None.' % self.getGameName(), ConsoleColor.Red)
                     return False
                 if self.uiStartName is None:
                     Logger.WriteLine(
-                        'ERROR: uiStartName should not be None.', ConsoleColor.Red)
+                        'GAME() ERROR %s: uiStartName should not be None.' % self.getGameName(), ConsoleColor.Red)
                     return False
                 if self.uiStartIndex is None and self.uiStartName is None:
                     Logger.WriteLine(
-                        'ERROR: uiStartIndex or uiStartName should not be None.', ConsoleColor.Red)
+                        'GAME() ERROR %s: uiStartIndex or uiStartName should not be None.' % self.getGameName(), ConsoleColor.Red)
                     return False
             # Using win32 Mouse Click Action
             elif self.getLauncherMode() == 2:
                 if self.clickPos is None:
                     Logger.WriteLine(
-                        'ERROR: clickPos should not be None.', ConsoleColor.Red)
+                        'GAME() ERROR %s: clickPos should not be None.' % self.getGameName(), ConsoleColor.Red)
                     return False
             # Calling TinyTask executor
             elif self.getLauncherMode() == 3:
                 if self.TinyTaskName is None:
                     Logger.WriteLine(
-                        'ERROR: TinyTaskName should not be None.', ConsoleColor.Red)
+                        'GAME() ERROR %s: TinyTaskName should not be None.' % self.getGameName(), ConsoleColor.Red)
                     return False
 
         return True
 
-    def start(self, GameWaitTime: int = 60) -> int:
+    def launch(self, GameWaitTime: int = 60) -> int:
         '''
         '''
         startGame: int = 0
 
-        self.checkStart()
+        self.checkLaunch()
 
         # Open Game
         exe = os.path.join(self.getExecutorPath(), self.getExecutor())
@@ -1490,8 +1564,8 @@ class Game:
                             searchDepth=1, Name=self.uiAppName)
                     else:
                         Logger.WriteLine(
-                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % self.uiAppControlType, ConsoleColor.Red)
-                        return -1
+                            "GAME() ERROR %s: %s is not recognized as a ControlType. Please check again or report this issue." % (self.getGameName(), self.uiAppControlType), ConsoleColor.Red)
+                        return 0
 
                     # Set the launcher window to the very top of the screen
                     app.SetTopmost(True)
@@ -1511,8 +1585,8 @@ class Game:
                             foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     else:
                         Logger.WriteLine(
-                            "ERROR: %s is not recognized as a ControlType. Please check again or report this issue." % self.uiStartControlType, ConsoleColor.Red)
-                        return -1
+                            "GAME() ERROR %s: %s is not recognized as a ControlType. Please check again or report this issue." % (self.getGameName(), self.uiStartControlType), ConsoleColor.Red)
+                        return 0
 
                 # Using win32 Mouse Click Action
                 elif self.getLauncherMode() == 2:
@@ -1527,41 +1601,13 @@ class Game:
                 'waiting %s seconds for Game to start......' % GameWaitTime, ConsoleColor.Gray)
             Logger.CountProgress(GameWaitTime, unit="s")
             # time.sleep(GameWaitTime )
-        except Exception:
-            Logger.WriteLine('ERROR: Unknown Error Occurred for %s' %
-                             self.getGameName(), ConsoleColor.Gray)
+        except Exception as e:
+            Logger.WriteLine('GAME() ERROR %s: %e' %
+                             (self.getGameName(), e), ConsoleColor.Gray)
 
         # Dealling In-Game Start Buttons
 
         return startGame
-
-    def startBenchMarking(self, duration: int = 300) -> None:
-        '''
-        mode:
-            0- norm
-            1- alt-tab
-            2- randomControl
-            3- randomInput
-            4- randomRotate
-        '''
-        # Normal Benchmarking
-        if self.getBenchmarkingMode() == 0:
-            Benchmarking.NormalTest(duration)
-        # Alt-Tab Benchmarking
-        elif self.getBenchmarkingMode() == 1:
-            Benchmarking.StressTest(duration)
-        # Random-Control Benchmarking
-        elif self.getBenchmarkingMode() == 2:
-            Benchmarking.RandomControlTest(duration)
-        # Random-Input Benchmarking
-        elif self.getBenchmarkingMode() == 3:
-            Benchmarking.RandomInputTest(duration)
-        # Random-Rotate Benchmarking
-        elif self.getBenchmarkingMode() == 4:
-            Benchmarking.RandomRotateTest(duration)
-        else:
-            Logger.WriteLine("ERROR: Benchmarking Mode %s is not valid" %
-                             self.getBenchmarkingMode(), ConsoleColor.Red)
 
 
 ################################################################################
@@ -1572,20 +1618,20 @@ class BenchmarkAutomation:
     '''
 
     def __init__(self, steamDirectory: str = "", documentDirectory: str = "",
-                 OverallLoopTimes: int = 1, GameLoopTimes: int = -1) -> None:
+                 OverallLoopTimes: int = 1, GameLoopTimes: int = -1, BenchmarkingTime: int = 600) -> None:
         '''
         '''
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+                'BA() WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
             Logger.WriteLine(
-                'WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+                'BA() WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
@@ -1594,7 +1640,9 @@ class BenchmarkAutomation:
         self.OverallLoopTimes = OverallLoopTimes
         self.GameLoopTimes = GameLoopTimes
 
-    ############################################################################
+        self.BenchmarkingTime = BenchmarkingTime
+
+    ################################ Base Info #################################
     def addGameList(self, gameName: str, gameObj: Game = None,
                     exe: str = "", relativePath: str = "", absolutePath: str = "",
                     mode: int = 0) -> Any:
@@ -1602,7 +1650,7 @@ class BenchmarkAutomation:
         '''
         if gameName is None:
             Logger.WriteLine(
-                'ERROR: addGameList() should be called with at least 1 arguments', ConsoleColor.Red)
+                'BA() ERROR: addGameList() should be called with at least 1 arguments', ConsoleColor.Red)
         try:
             if not gameObj is None:
                 self.gameList[gameName] = gameObj
@@ -1613,26 +1661,13 @@ class BenchmarkAutomation:
                     loopTimes=self.getGameLoopTimes(), mode=mode)
         except Exception:
             Logger.WriteLine(
-                'ERROR: Unknown Error addGameList()', ConsoleColor.Red)
+                'BA() ERROR: Unknown Error addGameList()', ConsoleColor.Red)
 
     def getGameList(self) -> List:
         '''
         '''
         return list(self.gameList.keys())
 
-    def start(self) -> int:
-        '''
-        '''
-        try:
-            for game in self.getGameList():
-                self.gameList[game].start()
-            return 1
-        except Exception:
-            Logger.WriteLine(
-                'ERROR: Unknown Error startGameList()', ConsoleColor.Red)
-            return -1
-
-    ############################################################################
     def setSteamDirectory(self, dir: str) -> None:
         '''
         '''
@@ -1673,9 +1708,91 @@ class BenchmarkAutomation:
         '''
         return self.GameLoopTimes
 
-    ############################################################################
-    # Helper Methods
+    def setBenchmarkTime(self, tar: int) -> None:
+        '''
+        '''
+        self.BenchmarkingTime = tar
 
+    def getBenchmarkTime(self) -> int:
+        '''
+        '''
+        return self.BenchmarkingTime
+
+    ################################## Start ###################################
+    def checkStart(self) -> bool:
+        '''
+        '''
+        if self.getSteamDirectory() is None:
+            Logger.WriteLine(
+                'BA() ERROR: SteamDirectory is None. Please use setSteamDirectory() to initialize first.', ConsoleColor.Red)
+            return False
+
+        if self.getOverallLoopTimes() < 1:
+            Logger.WriteLine(
+                'BA() ERROR: OverallLoopTimes is less than 1. Please use setOverallLoopTimes() to reset first.', ConsoleColor.Red)
+            return False
+
+        if self.getBenchmarkTime() < 10:
+            Logger.WriteLine(
+                'BA() ERROR: BenchmarkTime is less than 10 seconds. Use setBenchmarkTime() to modify.', ConsoleColor.Red)
+            return False
+
+        if self.getGameList() is None:
+            Logger.WriteLine(
+                'BA() ERROR: GameList is None. Please use addGameList() to initialize first.', ConsoleColor.Red)
+            return False
+        for game in self.getGameList():
+            checkCode = self.gameList[game].checkStart()
+            if not checkCode:
+                Logger.WriteLine(
+                    'BA() ERROR: Game %s failed to passed the checkStart(). Please examine its Info again' % game, ConsoleColor.Red)
+                return False
+
+        if self.getGameLoopTimes() < -1:
+            Logger.WriteLine(
+                'BA() INFO: GameLoopTimes is negative. Game will only run once regarding success or failure. Use setGameLoopTimes() to modify.', ConsoleColor.White)
+
+        if self.getBenchmarkTime() < 60:
+            Logger.WriteLine(
+                'BA() WARNING: BenchmarkTime is less than 1 min. Use setBenchmarkTime() to modify.', ConsoleColor.Yellow)
+
+    def start(self) -> int:
+        '''
+        '''
+        try:
+            res = dict()
+            for game in self.getGameList():
+                if not game in res:
+                    res[game] = []
+
+                if self.getGameLoopTimes() < 1:
+                    startCode, quitCode = self._start(game)
+                    res[game].append((startCode, quitCode))
+                    Logger.WriteLine("BA() FINISHED %s: Start Code %s and Quit Code %s" % (
+                        game, startCode, quitCode))
+                    continue
+                for i in range(self.getGameLoopTimes()):
+                    startCode, quitCode = self._start(game)
+                    res[game].append((startCode, quitCode))
+                    Logger.WriteLine("BA() FINISHED %s: Start Code %s and Quit Code %s" % (
+                        game, startCode, quitCode))
+            return res
+        except Exception as e:
+            Logger.WriteLine(
+                'BA() ERROR: %s' % e, ConsoleColor.Red)
+            return
+
+    def _start(self, game: str) -> Tuple[int, int]:
+        '''
+        '''
+        startCode = self.gameList[game].launch(GameWaitTime=30)
+        startCode = self.gameList[game].start()
+        self.gameList[game].startBenchMarking(self.getBenchmarkTime())
+        quitCode = self.gameList[game].quit()
+        return startCode, quitCode
+
+    ############################## Helper Methods ##############################
+    ################################### WIN ####################################
     @staticmethod
     def searchFile(pathname, filename):
         '''
@@ -1715,10 +1832,11 @@ class BenchmarkAutomation:
             statusCode = subprocess.Popen(
                 'taskkill /F /IM %s' % process, close_fds=True)
         except Exception:
-            return -1
+            return 0
         else:
             return statusCode
 
+    ################################### Json ###################################
     @staticmethod
     def read_json(file) -> Dict:
         '''
@@ -1774,6 +1892,7 @@ class BenchmarkAutomation:
             for d in data:
                 print(d)
 
+    ############################### Crash Dumps ################################
     @staticmethod
     def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
         '''
