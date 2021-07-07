@@ -8,7 +8,7 @@ steamDir = "F:\\SteamLibrary\\steamapps\\common"
 docDir = "C:\\Users\\Navi\\Documents"
 
 app = ba.BenchmarkAutomation(steamDir, docDir)
-
+ba.Logger.Log("hi")
 
 def Fallout4():
     try:

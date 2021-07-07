@@ -115,10 +115,54 @@ class Logger:
     }
 
     @staticmethod
-    def WriteProgress(counts: int, total: int, log: str = "", step: int = 1, width: int = 50, unit: str = None, consoleColor: int = ConsoleColor.Default):
-        '''
-        '''
-        log = str(log)
+    def WriteProgress(counts: int, total: int, log: str = "", width: int = 50, unit: str = "", consoleColor: int = ConsoleColor.Default):
+        """
+        Write a progress bar with the given counts of total.
+
+        Parameters
+        ----------
+        counts : integer
+            Current counts of a progress.
+        total : int
+            Total counts of a progress.
+        log : string, optional.
+            Log message before the progress bar (default: ""). Usually passing 'Waiting' or 'Progressing'.
+        width : int, optional
+            The width in letters of the progress bar (default: 50).
+        unit : string, optional.
+            Unit of the counts (default: ""). Ususally passing a time unit like 's' and 'min'.
+            For example, by passing 's' will have an output '1 s / 10 s  10%'; otherwise, '1 / 10  10%'
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+
+        Notes
+        -----
+        * Logger.WriteProgress should always be used with vairables updated in loops; Please check the Examples section
+
+        Examples
+        --------
+        To init a new progress bar with 1 / 10, simply do this:
+
+        >>> Logger.WriteProgress(1, 10)
+        |                                                  | 1 / 10  10.00%
+
+        Adding log message and count units:
+
+        >>> Logger.WriteProgress(1, 10, log='Waiting', unit='s')
+        Waiting|                                                  | 1 s / 10 s  10.00%
+
+        The following code shows a small demo of having progress bar randomly increasing:
+
+        >>> import random
+        >>> counts = 0
+        >>> total = 100 # Total counts will be 100
+        >>> Logger.WriteProgress(counts, total) # Starting the progress bar from 0 to 100
+        >>> while counts < total:
+        >>>     counts += random.randint(0, 5) # Randomly increasing the progress bar.
+        >>>     Logger.WriteProgress(counts, total) # Updating the progress bar on console
+
+        """
+        log = str(log) + ' '
         isValidColor = (
             consoleColor >= ConsoleColor.Black and consoleColor <= ConsoleColor.White)
         if isValidColor:
@@ -128,7 +172,7 @@ class Logger:
         progress = int(width * counts / total)
         sys.stdout.write(log + '|' + '█' * progress +
                          ' ' * int(width - progress) + '|')
-        if unit is None:
+        if unit == "" or unit is None:
             sys.stdout.write(
                 ' {0} / {1}  {2}%\r'.format(int(counts), total, ('%.2f' % (100*counts/total))))
         else:
@@ -141,12 +185,45 @@ class Logger:
         sys.stdout.flush()
 
     @staticmethod
-    def CountProgress(total: int, log: str = "Progressing", step: int = 1, width: int = 50, unit: str = None, consoleColor: int = ConsoleColor.Default):
-        '''
-        '''
+    def CountProgress(total: int, log: str = "Progressing", step: int = 1, width: int = 50, consoleColor: int = ConsoleColor.Default):
+        """
+        Write a progress bar counting down in seconds
+
+        Parameters
+        ----------
+        total : int
+            Total counts of a progress.
+        log : string, optional.
+            Log message before the progress bar (default: "Progressing"). Usually passing 'Waiting' or 'Progressing'.
+        step : int, optional.
+            Steps or period to update the progress bar in seconds (default: 1).
+        width : int, optional
+            The width in letters of the progress bar (default: 50).
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+
+        Examples
+        --------
+        To show a progress bar uniformly progressing for 10 seconds with step 1:
+
+        >>> Logger.WriteProgress(10, log="Progressing", step=1)
+        Progressing|                                                  | 0 s / 10 s  0.00%
+        Progressing|█                                                 | 1 s / 10 s  10.00%
+        Progressing|██                                                | 2 s / 10 s  20.00%
+        ......
+
+        or just simply use the following code and will prodcue the same output:
+
+        >>> Logger.WriteProgress(10)
+        Progressing|                                                  | 0 s / 10 s  0.00%
+        Progressing|█                                                 | 1 s / 10 s  10.00%
+        Progressing|██                                                | 2 s / 10 s  20.00%
+        ......
+
+        """
         for counts in range(0, total+1, step):
             Logger.WriteProgress(counts, total, log, step,
-                                 width, unit, consoleColor)
+                                 width, "s", consoleColor)
             time.sleep(step)
 
     @staticmethod
@@ -156,12 +233,63 @@ class Logger:
     @staticmethod
     def Write(log: Any, consoleColor: int = ConsoleColor.Default, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None, printTruncateLen: int = 0) -> None:
         """
-        log: any type.
-        consoleColor: int, a value in class `ConsoleColor`, such as `ConsoleColor.DarkGreen`.
-        writeToFile: bool.
-        printToStdout: bool.
-        logFile: str, log file path.
-        printTruncateLen: int, if <= 0, log is not truncated when print.
+        Write logs to Console
+
+        Parameters
+        ----------
+        log : Any type. A string is preferred.
+            Logs text
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+        writeToFile : bool, optional.
+            True to write logs into a file (default: True).
+        printToStdout : bool, optional.
+            True to print to standard output (default: True).
+        logFile : str, optional.
+            Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
+        printTruncateLen : int, optional.
+            If <= 0, log is not truncated when print.
+
+        Notes
+        -----
+        'ConsoleColor' (or Logger.ColorNames) currently has supported the following colors:
+
+        ============  ===========
+            Color         int
+        ============  ===========
+        Default       -1
+        Black         0
+        DarkBlue      1
+        DarkGreen     2
+        DarkCyan      3
+        DarkRed       4
+        DarkMagenta   5
+        DarkYellow    6
+        Gray          7
+        DarkGray      8
+        Blue          9
+        Green         10
+        Cyan          11
+        Red           12
+        Magenta       13
+        Yellow        14
+        White         15
+        ============  ===========
+
+        Examples
+        --------
+        Logger.Write() is mainly used by other Logger Functions.
+
+        Logger.WriteLine() utilize this function to write logs to console line, and change a new line
+        for next log, by adding `\\n` in log parameter.
+
+        >>> Logger.Write('{}\\n'.format(log), consoleColor, writeToFile, printToStdout, logFile)
+
+        Logger.WriteFlush() utilize this function to write logs to console line, and will overwrite
+        the current line with next log, by adding `\\r` in log parameter.
+
+        >>> Logger.Write('{}\\r'.format(log), consoleColor, writeToFile, printToStdout, logFile)
+
         """
         if not isinstance(log, str):
             log = str(log)
@@ -203,11 +331,50 @@ class Logger:
     @staticmethod
     def WriteLine(log: Any, consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
         """
-        log: any type.
-        consoleColor: int, a value in class `ConsoleColor`, such as `ConsoleColor.DarkGreen`.
-        writeToFile: bool.
-        printToStdout: bool.
-        logFile: str, log file path.
+        Write logs to Console with a new line
+
+        Parameters
+        ----------
+        log : Any type. A string is preferred.
+            Logs text
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+        writeToFile : bool, optional.
+            True to write logs into a file (default: True).
+        printToStdout : bool, optional.
+            True to print to standard output (default: True).
+        logFile : str, optional.
+            Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
+        printTruncateLen : int, optional.
+            If <= 0, log is not truncated when print.
+
+        Notes
+        -----
+        * This function utilize Logger.Write(), please see more details in Logger.Write().
+        * Parameters of this functions must follow in Logger.Write() specification.
+
+        Examples
+        --------
+        To easily utilize Logger.WriteLine() to log error or warning message for this package:
+
+        >>> # The following line of code will log a message with Red color on console, representing an Error Message.
+        >>> Logger.WriteLine('ERROR: This is an error message.'.format(log), consoleColor=ConsoleColor.Red)
+        ERROR: This is an error message.
+
+        >>> # The following line of code will log a message with Yellow color on console, representing a Warning Message.
+        >>> Logger.WriteLine('Warning: This is a warning message.'.format(log), consoleColor=ConsoleColor.Red)
+        Warning: This is a warning message.
+
+        The following code by using Looger.Write() will have the same output as above:
+
+        >>> # The following line of code will log a message with Red color on console, representing an Error Message.
+        >>> Logger.Write('ERROR: This is an error message.\\n'.format(log), consoleColor=ConsoleColor.Red)
+        ERROR: This is an error message.
+
+        >>> # The following line of code will log a message with Yellow color on console, representing a Warning Message.
+        >>> Logger.Write('Warning: This is a warning message.\\n'.format(log), consoleColor=ConsoleColor.Red)
+        Warning: This is a warning message.
+
         """
         Logger.Write('{}\n'.format(log), consoleColor,
                      writeToFile, printToStdout, logFile)
@@ -215,24 +382,88 @@ class Logger:
     @staticmethod
     def WriteFlush(log: Any, consoleColor: int = ConsoleColor.Default, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None, printTruncateLen: int = 0) -> None:
         """
-        log: any type.
-        consoleColor: int, a value in class `ConsoleColor`, such as `ConsoleColor.DarkGreen`.
-        writeToFile: bool.
-        printToStdout: bool.
-        logFile: str, log file path.
+        Write logs to Console by overwriting the current line.
+
+        Parameters
+        ----------
+        log : Any type. A string is preferred.
+            Logs text
+        consoleColor : int, optional.  A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+        writeToFile : bool, optional.
+            True to write logs into a file (default: True).
+        printToStdout : bool, optional.
+            True to print to standard output (default: True).
+        logFile : str, optional.
+            Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
+        printTruncateLen : int, optional.
+            If <= 0, log is not truncated when print.
+
+        Notes
+        -----
+        * This function utilize Logger.Write(), please see more details in Logger.Write().
+        * Parameters of this functions must follow in Logger.Write() specification.
+
+        Examples
+        --------
+        To easily utilize Logger.WriteFlush() to log error or warning message for this package:
+
+        >>> # The following line of code will log a message with Red color on console, representing an Error Message.
+        >>> Logger.WriteFlush('ERROR: This is an error message.'.format(log), consoleColor=ConsoleColor.Red)
+
+        >>> # The following line of code will log a message with Yellow color on console, representing a Warning Message.
+        >>> Logger.WriteFlush('Warning: This is a warning message.'.format(log), consoleColor=ConsoleColor.Red)
+
+        The following code by using Looger.Write() will have the same output as above:
+
+        >>> # The following line of code will log a message with Red color on console, representing an Error Message.
+        >>> Logger.Write('ERROR: This is an error message.\\r'.format(log), consoleColor=ConsoleColor.Red)
+        ERROR: This is an error message.
+
+        >>> # The following line of code will log a message with Yellow color on console, representing a Warning Message.
+        >>> Logger.Write('Warning: This is a warning message.\\r'.format(log), consoleColor=ConsoleColor.Red)
+        Warning: This is a warning message.
+
         """
         Logger.Write('{}\r'.format(log), consoleColor,
                      writeToFile, printToStdout, logFile)
 
     @staticmethod
-    def ColorfullyWrite(log: str, consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
+    def ColorfulWrite(log: str, consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
         """
-        log: str.
-        consoleColor: int, a value in class `ConsoleColor`, such as `ConsoleColor.DarkGreen`.
-        writeToFile: bool.
-        printToStdout: bool.
-        logFile: str, log file path.
-        ColorfullyWrite('Hello <Color=Green>Green</Color> !!!'), color name must be in Logger.ColorNames.
+        Can write colorful logs to Console by using brackets.
+
+        Parameters
+        ----------
+        log : Sting
+            Logs text
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+        writeToFile : bool, optional.
+            True to write logs into a file (default: True).
+        printToStdout : bool, optional.
+            True to print to standard output (default: True).
+        logFile : str, optional.
+            Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
+        printTruncateLen : int, optional.
+            If <= 0, log is not truncated when print.
+
+        Notes
+        -----
+        * Parameters of this functions must follow in Logger.Write() specification.
+
+        Examples
+        --------
+        Logger.ColorfulWrite() can print colorfull outputs by using brackets:
+
+        >>> ColorfulWrite('Hello <Color=Green>Green</Color>!!')
+        Hello Green!!
+
+        where 'Hello' has default ConsoleColor (which is White), and 'Green' will be printed
+        in ConsoleColor.Green (which is Green).
+
+        The value on the right of `Color=Green` must be in Logger.ColorNames.
+
         """
         text = []
         start = 0
@@ -255,27 +486,80 @@ class Logger:
             Logger.Write(t, c, writeToFile, printToStdout, logFile)
 
     @staticmethod
-    def ColorfullyWriteLine(log: str, consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
+    def ColorfulWriteLine(log: str, consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
         """
-        log: str.
-        consoleColor: int, a value in class `ConsoleColor`, such as `ConsoleColor.DarkGreen`.
-        writeToFile: bool.
-        printToStdout: bool.
-        logFile: str, log file path.
+        Can write colorful logs to Console with a new line by using brackets.
 
-        ColorfullyWriteLine('Hello <Color=Green>Green</Color> !!!'), color name must be in Logger.ColorNames.
+        Parameters
+        ----------
+        log : Sting
+            Logs text
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+        writeToFile : bool, optional.
+            True to write logs into a file (default: True).
+        printToStdout : bool, optional.
+            True to print to standard output (default: True).
+        logFile : str, optional.
+            Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
+        printTruncateLen : int, optional.
+            If <= 0, log is not truncated when print.
+
+        Notes
+        -----
+        * This function utilize Logger.ColorfulWrite(), please see more details in Logger.ColorfulWrite().
+        * Parameters of this functions must follow in Logger.Write() specification.
+
+        Examples
+        --------
+        Logger.ColorfulWriteLine() can print colorfull outputs with a new line by using brackets:
+
+        >>> ColorfulWriteLine('Hello <Color=Green>Green</Color>!!')
+        Hello Green!!
+
+        where 'Hello' has default ConsoleColor (which is White), and Green will be printed
+        in ConsoleColor.Green (which is Green).
+
+        The value on the right of `Color=Green` must be in Logger.ColorNames.
+
+        The following code by using Looger.Write() will have the same output with same style as above:
+
+        >>> Logger.ColorfulWrite('Hello <Color=Green>Green</Color>!!')
+        Hello Green!!
+
         """
-        Logger.ColorfullyWrite(log + '\n', consoleColor,
+        Logger.ColorfulWrite(log + '\n', consoleColor,
                                writeToFile, printToStdout, logFile)
 
     @staticmethod
     def Log(log: Any = '', consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
         """
-        log: any type.
-        consoleColor: int, a value in class `ConsoleColor`, such as `ConsoleColor.DarkGreen`.
-        writeToFile: bool.
-        printToStdout: bool.
-        logFile: str, log file path.
+        Write logs to Console with current time information
+
+        Parameters
+        ----------
+        log : Any type. A string is preferred.
+            Logs text
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+        writeToFile : bool, optional.
+            True to write logs into a file (default: True).
+        printToStdout : bool, optional.
+            True to print to standard output (default: True).
+        logFile : str, optional.
+            Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
+        printTruncateLen : int, optional.
+            If <= 0, log is not truncated when print.
+
+        Notes
+        -----
+        * Parameters of this functions must follow in Logger.Write() specification.
+
+        Examples
+        --------
+        >>> Logger.Log("This line used Logger.Log()!")
+        2021-07-07 14:56:24.345 test.py[3] <module> -> This line used Logger.Log()!
+
         """
         frameCount = 1
         while True:
@@ -291,15 +575,39 @@ class Logger:
         Logger.Write(log, consoleColor, writeToFile, printToStdout, logFile)
 
     @staticmethod
-    def ColorfullyLog(log: str = '', consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
+    def ColorfulLog(log: str = '', consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
         """
-        log: any type.
-        consoleColor: int, a value in class ConsoleColor, such as ConsoleColor.DarkGreen.
-        writeToFile: bool.
-        printToStdout: bool.
-        logFile: str, log file path.
+        Write colorful logs to Console with current time information by using brackets.
 
-        ColorfullyLog('Hello <Color=Green>Green</Color> !!!'), color name must be in Logger.ColorNames
+        Parameters
+        ----------
+        log : Any type. A string is preferred.
+            Logs text
+        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+            Text's color on console (default: ConsoleColor.White).
+        writeToFile : bool, optional.
+            True to write logs into a file (default: True).
+        printToStdout : bool, optional.
+            True to print to standard output (default: True).
+        logFile : str, optional.
+            Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
+        printTruncateLen : int, optional.
+            If <= 0, log is not truncated when print.
+
+        Notes
+        -----
+        * Parameters of this functions must follow in Logger.Write() specification.
+
+        Examples
+        --------
+        >>> Logger.Log("This line used <Color=DarkGray>Logger.Log()</Color>!")
+        2021-07-07 14:56:24.345 test.py[3] <module> -> This line used Logger.Log()!
+
+        where 'This line used' and '!' has default ConsoleColor (which is White), and 'Logger.Log()' will be printed
+        in ConsoleColor.DarkGray (which is DarkGray).
+
+        The value on the right of `Color=DarkGray` must be in Logger.ColorNames.
+
         """
         frameCount = 1
         while True:
@@ -312,12 +620,12 @@ class Logger:
         t = datetime.datetime.now()
         log = '{}-{:02}-{:02} {:02}:{:02}:{:02}.{:03} {}[{}] {} -> {}\n'.format(
             t.year, t.month, t.day, t.hour, t.minute, t.second, t.microsecond // 1000, scriptFileName, frame.f_lineno, frame.f_code.co_name, log)
-        Logger.ColorfullyWrite(
+        Logger.ColorfulWrite(
             log, consoleColor, writeToFile, printToStdout, logFile)
 
     @staticmethod
     def DeleteLog() -> None:
-        """Delete log file."""
+        """Delete the log file."""
         if os.path.exists(Logger.FileName):
             os.remove(Logger.FileName)
 
@@ -326,7 +634,7 @@ class Logger:
 ################################# Benchmarking #################################
 ################################################################################
 class Benchmarking:
-    '''Benchmarking Methods for Automation Testing'''
+    """Benchmarking Methods for Automation Testing"""
     # BM stands for BenchMarking
     _ROTATE_ANGLE = [0, 90, 180, 270]
 
@@ -362,23 +670,23 @@ class Benchmarking:
 
     @staticmethod
     def NormalTest(duration) -> None:
-        '''
+        """
         Perform a normal Benchmarking. No actions would be made.
 
         @param:
             - duration: duration to perform the normal benchmarking
-        '''
-        Logger.CountProgress(duration, width=Benchmarking._WIDTH, unit="s")
+        """
+        Logger.CountProgress(duration, width=Benchmarking._WIDTH)
         # time.sleep(duration)
 
     @staticmethod
     def RandomControlTest(duration: int) -> None:
-        '''
+        """
         Perform a random Character Control for games.
 
         @param:
             - duration: duration to perform the random character control
-        '''
+        """
         waitTime = 0
         tmp = Benchmarking._RANDOM_KEY_LIST.copy()
         tmp.extend(Benchmarking._RANDOM_KEY_LIST)
@@ -386,7 +694,7 @@ class Benchmarking:
         total = duration
         counts = 0
         Logger.WriteProgress(
-            counts, total, width=Benchmarking._WIDTH, unit="s")
+            counts, total, width=Benchmarking._WIDTH)
         while(duration > 0):
 
             waitTime = random.uniform(
@@ -418,12 +726,12 @@ class Benchmarking:
 
     @staticmethod
     def RandomInputTest(duration, ) -> None:
-        '''
+        """
         Perform a random Typing Words for Office.
 
         @param:
             - duration: duration to perform the random typing
-        '''
+        """
         waitTime = 0
 
         total = duration
@@ -458,12 +766,12 @@ class Benchmarking:
 
     @staticmethod
     def RandomRotateTest(duration) -> None:
-        '''
+        """
         Perform a random screen rotating
 
         @param:
             - duration: duration to perform the random screen rotating
-        '''
+        """
         waitTime = 0
         altTabTime = 0
 
@@ -488,12 +796,12 @@ class Benchmarking:
 
     @staticmethod
     def StressTest(duration) -> None:
-        '''
+        """
         Perform a stressed Benchmarking. Randomly performing an ALT+TAB action.
 
         @param:
             - duration: duration to perform the stressed benchmarking
-        '''
+        """
         waitTime = 0
         keyTime = 0
 
@@ -529,13 +837,13 @@ class Benchmarking:
 
     @staticmethod
     def mouseCharacterControl(action, keyTime) -> None:
-        '''
+        """
         A method called by randomCharacterControl() to perform mouse control for characters.
 
         @param:
             - action: action to perform
             - keyTime: duration to perform the key time
-        '''
+        """
         res = keyTime
         if action == "view_upward":
             Input.moveTo(960, 1000, keyTime)
@@ -552,24 +860,24 @@ class Benchmarking:
 
     @staticmethod
     def keyCharacterControl(action, keyTime, WriteProgress: bool = False) -> None:
-        '''
+        """
         A method called by randomCharacterControl() to perform keyboard control for characters.
 
         @param:
             - action: action to perform
             - keyTime: duration to perform the key time
-        '''
+        """
         # utils.input.key_input(action, keyTime)
         Input.callTinyTask('tinytask/'+action)
         if WriteProgress:
             Logger.CountProgress(
-                0, keyTime, width=Benchmarking._WIDTH, unit="s")
+                0, keyTime, width=Benchmarking._WIDTH)
         else:
             time.sleep(keyTime)
 
     @staticmethod
     def changeDisplayDirection(deviceIndex, angle) -> bool:
-        '''
+        """
         Rotate the Display Screen's Direction
 
         @param:
@@ -579,7 +887,7 @@ class Benchmarking:
         @RETURN:
             - True - succeed in rotating the screen.
             - False - failed to rotate the screen.
-        '''
+        """
         # if not hasDisplayDevice(deviceIndex):
         #     return
         try:
@@ -621,7 +929,7 @@ class Benchmarking:
 ################################## VK_Code #################################
 ############################################################################
 class VK_CODE():
-    '''Uses Two Dict to represent VK_CODE'''
+    """Uses Two Dict to represent VK_CODE"""
 
     _VK_CODE1 = {
         'backspace': 0x08,
@@ -823,20 +1131,20 @@ class VK_CODE():
 
     @staticmethod
     def getVK_CODE1() -> Dict[str, str]:
-        '''
+        """
         Return the first type of representation of VK_CODE
 
         @RETURN: The first type of representation of VK_CODE
-        '''
+        """
         return dict(VK_CODE._VK_CODE1)
 
     @staticmethod
     def getVK_CODE2() -> Dict[str, str]:
-        '''
+        """
         Return the second type of representation of VK_CODE
 
         @RETURN: The second type of representation of VK_CODE
-        '''
+        """
         return dict(VK_CODE._VK_CODE2)
 
 
@@ -849,11 +1157,11 @@ _RANDOM_WORD_LIST = list(_RANDOM_WORD_LIST.keys())
 #################################### Input #####################################
 ################################################################################
 class Input:
-    '''Assisting Input Methods'''
+    """Assisting Input Methods"""
 
     @staticmethod
     def key_input(key, t=0.05):
-        '''
+        """
         Perform a key pressdown and pressup.
 
         @param:
@@ -863,7 +1171,7 @@ class Input:
         @RETURN:
             - 1 - succeed in performing a key pressing process.
             - 0 - failed to perform a key pressing process.
-        '''
+        """
         if key in VK_CODE._VK_CODE2:
             key = VK_CODE._VK_CODE2[key]
         if key in VK_CODE._VK_CODE1:
@@ -879,7 +1187,7 @@ class Input:
 
     @staticmethod
     def key_inputs(str_input='', t=0.05) -> Literal[0, 1]:
-        '''
+        """
         Perform a serious of key pressdowns and pressups.
 
         @param:
@@ -889,7 +1197,7 @@ class Input:
         @RETURN:
             - 1 - succeed in performing a key pressing process.
             - 0 - failed to perform a key pressing process.
-        '''
+        """
         for k in str_input:
             keyInputStatusCode = Input.key_input(k)
             if not keyInputStatusCode:
@@ -899,12 +1207,12 @@ class Input:
 
     @staticmethod
     def key_alt_tab(t=0.5) -> None:
-        '''
+        """
         Perform a key action of ALT + TAB.
 
         @param:
             - t - time period in second between pressdown and pressup (default to 0.05).
-        '''
+        """
         win32api.keybd_event(VK_CODE._VK_CODE1["alt"], 0, 0, 0)
         win32api.keybd_event(VK_CODE._VK_CODE1["tab"], 0, 0, 0)
         time.sleep(t)
@@ -915,12 +1223,12 @@ class Input:
 
     @staticmethod
     def key_alt_f4(t=0.6) -> None:
-        '''
+        """
         Perform a key action of ALT + F4.
 
         @param:
             - t - time period in second between pressdown and pressup (default to 0.05).
-        '''
+        """
         duration = float('%.1f' % (t / 3))
         win32api.keybd_event(VK_CODE._VK_CODE1["alt"], 0, 0, 0)
         time.sleep(duration)
@@ -934,13 +1242,13 @@ class Input:
 
     @staticmethod
     def clickLeft(x=None, y=None, duration=0) -> Tuple:
-        '''
+        """
         Perform a mouse action of left clicking on screen position at (x, y).
 
         @param:
             - x - horizontal position to be clicked.
             - y - vertical position to be clicked.
-        '''
+        """
         if x == None and y == None:
             x, y = win32api.GetCursorPos()
         # win32api.SetCursorPos((x, y))
@@ -952,13 +1260,13 @@ class Input:
 
     @staticmethod
     def clickRight(x=None, y=None, duration=0) -> Tuple:
-        '''
+        """
         Perform a mouse action of right clicking on screen position at (x, y).
 
         @param:
             - x - horizontal position to be clicked.
             - y - vertical position to be clicked.
-        '''
+        """
         if x == None and y == None:
             x, y = win32api.GetCursorPos()
         # win32api.SetCursorPos((x, y))
@@ -970,7 +1278,7 @@ class Input:
 
     @staticmethod
     def move(dest_x, dest_y, start_x=None, start_y=None, duration=0) -> Tuple:
-        '''
+        """
         Perform a mouse action to Input.move the mouse
         from (start_x, start_y) to (dest_x, dest_y) in duration time.
 
@@ -980,7 +1288,7 @@ class Input:
             - start_x - horizontal position to start
             - start_y - vertical position to start
             - duration - action's duration in seconds
-        '''
+        """
         if start_x == None:
             start_x = win32api.GetCursorPos()[0]
         if start_y == None:
@@ -991,19 +1299,19 @@ class Input:
 
     @staticmethod
     def moveTo(dest_x, dest_y, duration=0) -> None:
-        '''
+        """
         Perform a mouse action of clicking on screen position at (x, y).
 
         @param:
             - x - horizontal position to be clicked.
             - y - vertical position to be clicked.
-        '''
+        """
         start_x, start_y = win32api.GetCursorPos()
         Input.move(start_x, start_y, dest_x, dest_y, duration)
 
     @staticmethod
     def getMouse(t=0) -> None:
-        '''
+        """
         Get the mouse position and print in the console
 
         @param:
@@ -1011,7 +1319,7 @@ class Input:
 
         @RETURN:
             - (x, y) - a tuple which x represent the x-position of the mouse and y represent the y-position of the mouse.
-        '''
+        """
         try:
             while True:
                 print("Press Ctrl-C to end")
@@ -1027,7 +1335,7 @@ class Input:
 
     @staticmethod
     def logMouse(t=0) -> None:
-        '''
+        """
         Get the mouse position and print in the console only when the mouse position changes
 
         @param:
@@ -1035,7 +1343,7 @@ class Input:
 
         @RETURN:
             - (x, y) - a tuple which x represent the x-position of the mouse and y represent the y-position of the mouse.
-        '''
+        """
         try:
             x, y = pag.position()  # 返回鼠标的坐标
             while True:
@@ -1052,7 +1360,7 @@ class Input:
 
     @staticmethod
     def callTinyTask(file) -> Any:
-        '''
+        """
         Calling the .exe file made by TinyTask
 
         @param:
@@ -1061,7 +1369,7 @@ class Input:
         @RETURN:
             - 0 - failed
             - 1 - succeed
-        '''
+        """
         return win32api.ShellExecute(1, 'open', os.path.join(os.getcwd(), file), '', '', 1)
 
 
@@ -1069,20 +1377,20 @@ class Input:
 ##################################### Game #####################################
 ################################################################################
 class Game:
-    '''a Game Object to Save Game Automation Info'''
+    """a Game Object to Save Game Automation Info"""
 
     def __init__(self, gameName: str = "",
                  steamDirectory: str = "", documentDirectory: str = "", benchDirectory: str = "",
                  exe: str = "", relativePath: str = "", absolutePath: str = "",
                  loopTimes: int = 1, mode: Literal[0, 1, 2, 3, 4] = 0) -> None:
-        '''
+        """
         mode:
             0- norm
             1- alt-tab
             2- randomControl
             3- randomInput
             4- randomRotate
-        '''
+        """
         self.gameName = gameName
 
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
@@ -1140,84 +1448,84 @@ class Game:
 
     ################################ Base Info #################################
     def setGameName(self, name: str) -> None:
-        '''
-        '''
+        """
+        """
         self.gameName = name
 
     def getGameName(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.gameName
 
     def setSteamDirectory(self, dir: str) -> None:
-        '''
-        '''
+        """
+        """
         self.steamDirectory = dir
 
     def getSteamDirectory(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.steamDirectory
 
     def setDocumentDirectory(self, dir: str) -> None:
-        '''
-        '''
+        """
+        """
         self.documentDirectory = dir
 
     def getDocumentDirectory(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.documentDirectory
 
     def setBenchDirectory(self, dir: str) -> None:
-        '''
-        '''
+        """
+        """
         self.benchDirectory = dir
 
     def getBenchDirectory(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.benchDirectory
 
     def setRelativePath(self, dir: str) -> None:
-        '''
-        '''
+        """
+        """
         self.relativePath = dir
 
     def getRelativePath(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.relativePath
 
     def setAbsolutePath(self, dir: str) -> None:
-        '''
-        '''
+        """
+        """
         self.absolutePath = dir
 
     def getAbsolutePath(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.absolutePath
 
     ################################# Executor #################################
     def setExecutor(self, exe: str) -> None:
-        '''
-        '''
+        """
+        """
         self.exe = exe
 
     def getExecutor(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.exe
 
     def setExecutorPath(self, exePath: str) -> None:
-        '''
+        """
         exePath:
         S/s- Steam
         R/r- Relative
         A/a- Abolute
         Other- Directly add to full .exe path
-        '''
+        """
         paths = exePath.split("/")
 
         full_exe = ""
@@ -1246,27 +1554,27 @@ class Game:
         self.exePath: str = full_exe
 
     def getExecutorPath(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.exePath
 
     ################################# Launcher #################################
     def setLauncherMode(self, mode: Literal[0, 1, 2, 3]) -> None:
-        '''
+        """
         0- No launcher
         1- UIAutomation
         2- Click on given position
         3- call TinyTask
-        '''
+        """
         self.launcherMode = mode
 
     def getLauncherMode(self) -> Literal[0, 1, 2, 3]:
-        '''
+        """
         0- No launcher
         1- UIAutomation
         2- Click on given position
         3- call TinyTask
-        '''
+        """
         return self.launcherMode
 
     def setLauncher(self, waitTime: int = 20,
@@ -1274,8 +1582,8 @@ class Game:
                     uiStartControlType: str = None, uiStartIndex: int = None, uiStartName: str = None,
                     clickPos: tuple = None,
                     TinyTaskName: str = None) -> None:
-        '''
-        '''
+        """
+        """
         self.LauncherWaitTime = waitTime
         if not self.hasLauncher():
             Logger.WriteLine(
@@ -1307,33 +1615,33 @@ class Game:
             self.TinyTaskName: str = TinyTaskName
 
     def hasLauncher(self) -> bool:
-        '''
-        '''
+        """
+        """
         return self.getLauncherMode() > 0 and self.getLauncherMode() <= 3
 
     ################################# Actions ##################################
     def setStartActions(self, actions: List[List[Any]]):
-        '''
-        '''
+        """
+        """
         self._START_ACTIONS = actions
 
     def getStartActions(self):
-        '''
-        '''
+        """
+        """
         return self._START_ACTIONS
 
     def setQuitActions(self, actions: List[List[Any]]):
-        '''
-        '''
+        """
+        """
         self._QUIT_ACTIONS = actions
 
     def getQuitActions(self):
-        '''
-        '''
+        """
+        """
         return self._QUIT_ACTIONS
 
     def startActions(self, actions: List[List[Any]]) -> int:
-        '''
+        """
         [["w", "wait", duration],
          ["k", key, duration],
          ["ks", keys, duration],
@@ -1342,7 +1650,7 @@ class Game:
          ["mv", (x, y), duration],
          ["t", "TinyTaskName", duration],
          ["s", "key_alt_tab | key_alt_f4", duration]]
-        '''
+        """
         try:
             num = 0
             for action in actions:
@@ -1369,7 +1677,7 @@ class Game:
                 if ActionType == "w":
                     # time.sleep(duration)
                     Logger.CountProgress(
-                        duration, log="Waiting", unit="s", consoleColor=ConsoleColor.DarkGray)
+                        duration, log="Waiting", consoleColor=ConsoleColor.DarkGray)
                     resCode = duration
 
                 if not isinstance(tar, str) and not isinstance(tar, Tuple):
@@ -1423,35 +1731,35 @@ class Game:
             return resCode
 
     def start(self):
-        '''
-        '''
+        """
+        """
         return self.startActions(self.getStartActions())
 
     def quit(self):
-        '''
-        '''
+        """
+        """
         return self.startActions(self.getQuitActions())
 
     ############################### Benchmarking ###############################
     def setBenchmarkingMode(self, mode: int) -> None:
-        '''
-        '''
+        """
+        """
         self.mode = mode
 
     def getBenchmarkingMode(self) -> int:
-        '''
-        '''
+        """
+        """
         return self.mode
 
     def startBenchMarking(self, duration: int = 300) -> None:
-        '''
+        """
         mode:
             0- norm
             1- alt-tab
             2- randomControl
             3- randomInput
             4- randomRotate
-        '''
+        """
         # Normal Benchmarking
         if self.getBenchmarkingMode() == 0:
             Benchmarking.NormalTest(duration)
@@ -1473,8 +1781,8 @@ class Game:
 
     ################################## Launch ##################################
     def checkLaunch(self) -> bool:
-        '''
-        '''
+        """
+        """
         if self.getExecutor() is None:
             Logger.WriteLine(
                 'GAME() ERROR %s: Executor is None. Please use setExecutor() to initialize first.' % self.getGameName(), ConsoleColor.Red)
@@ -1531,8 +1839,8 @@ class Game:
         return True
 
     def launch(self, GameWaitTime: int = 60) -> int:
-        '''
-        '''
+        """
+        """
         startGame: int = 0
 
         self.checkLaunch()
@@ -1545,7 +1853,7 @@ class Game:
             if self.hasLauncher:
                 Logger.WriteLine(
                     'waiting %s seconds for launcher to start......' % self.LauncherWaitTime, ConsoleColor.Gray)
-                Logger.CountProgress(self.LauncherWaitTime, unit="s")
+                Logger.CountProgress(self.LauncherWaitTime)
                 # time.sleep(self.LauncherWaitTime)
 
                 # Using UIAutomation
@@ -1599,7 +1907,7 @@ class Game:
 
             Logger.WriteLine(
                 'waiting %s seconds for Game to start......' % GameWaitTime, ConsoleColor.Gray)
-            Logger.CountProgress(GameWaitTime, unit="s")
+            Logger.CountProgress(GameWaitTime)
             # time.sleep(GameWaitTime )
         except Exception as e:
             Logger.WriteLine('GAME() ERROR %s: %e' %
@@ -1614,13 +1922,13 @@ class Game:
 ############################# BenchmarkAutomation ##############################
 ################################################################################
 class BenchmarkAutomation:
-    '''
-    '''
+    """
+    """
 
     def __init__(self, steamDirectory: str = "", documentDirectory: str = "",
                  OverallLoopTimes: int = 1, GameLoopTimes: int = -1, BenchmarkingTime: int = 600) -> None:
-        '''
-        '''
+        """
+        """
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
             Logger.WriteLine(
@@ -1646,8 +1954,8 @@ class BenchmarkAutomation:
     def addGameList(self, gameName: str, gameObj: Game = None,
                     exe: str = "", relativePath: str = "", absolutePath: str = "",
                     mode: int = 0) -> Any:
-        '''
-        '''
+        """
+        """
         if gameName is None:
             Logger.WriteLine(
                 'BA() ERROR: addGameList() should be called with at least 1 arguments', ConsoleColor.Red)
@@ -1664,64 +1972,64 @@ class BenchmarkAutomation:
                 'BA() ERROR: Unknown Error addGameList()', ConsoleColor.Red)
 
     def getGameList(self) -> List:
-        '''
-        '''
+        """
+        """
         return list(self.gameList.keys())
 
     def setSteamDirectory(self, dir: str) -> None:
-        '''
-        '''
+        """
+        """
         self.steamDirectory = dir
 
     def getSteamDirectory(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.steamDirectory
 
     def setDocumentDirectory(self, dir: str) -> None:
-        '''
-        '''
+        """
+        """
         self.documentDirectory = dir
 
     def getDocumentDirectory(self) -> str:
-        '''
-        '''
+        """
+        """
         return self.documentDirectory
 
     def setOverallLoopTimes(self, tar: int) -> None:
-        '''
-        '''
+        """
+        """
         self.OverallLoopTimes = tar
 
     def getOverallLoopTimes(self) -> int:
-        '''
-        '''
+        """
+        """
         return self.OverallLoopTimes
 
     def setGameLoopTimes(self, tar: int) -> None:
-        '''
-        '''
+        """
+        """
         self.GameLoopTimes = tar
 
     def getGameLoopTimes(self) -> int:
-        '''
-        '''
+        """
+        """
         return self.GameLoopTimes
 
     def setBenchmarkTime(self, tar: int) -> None:
-        '''
-        '''
+        """
+        """
         self.BenchmarkingTime = tar
 
     def getBenchmarkTime(self) -> int:
-        '''
-        '''
+        """
+        """
         return self.BenchmarkingTime
 
     ################################## Start ###################################
     def checkStart(self) -> bool:
-        '''
-        '''
+        """
+        """
         if self.getSteamDirectory() is None:
             Logger.WriteLine(
                 'BA() ERROR: SteamDirectory is None. Please use setSteamDirectory() to initialize first.', ConsoleColor.Red)
@@ -1757,8 +2065,8 @@ class BenchmarkAutomation:
                 'BA() WARNING: BenchmarkTime is less than 1 min. Use setBenchmarkTime() to modify.', ConsoleColor.Yellow)
 
     def start(self) -> int:
-        '''
-        '''
+        """
+        """
         try:
             res = dict()
             for game in self.getGameList():
@@ -1783,8 +2091,8 @@ class BenchmarkAutomation:
             return
 
     def _start(self, game: str) -> Tuple[int, int]:
-        '''
-        '''
+        """
+        """
         startCode = self.gameList[game].launch(GameWaitTime=30)
         startCode = self.gameList[game].start()
         self.gameList[game].startBenchMarking(self.getBenchmarkTime())
@@ -1795,7 +2103,7 @@ class BenchmarkAutomation:
     ################################### WIN ####################################
     @staticmethod
     def searchFile(pathname, filename):
-        '''
+        """
         Return all matched files under a specific path.
 
         @param:
@@ -1804,7 +2112,7 @@ class BenchmarkAutomation:
 
         @RETURN:
             - A list of sting representing all matched file names
-        '''
+        """
         matchedFile = []
         for root, dirs, files in os.walk(pathname):
             for file in files:
@@ -1815,7 +2123,7 @@ class BenchmarkAutomation:
 
     @staticmethod
     def killProgress(process):
-        '''
+        """
         A function call a terminal and utilize CMD command to kill a progress.
 
         @param:
@@ -1825,7 +2133,7 @@ class BenchmarkAutomation:
             - non-Zero - succeed to call the terminal for killing the process.
             - 0 - failed to open the terminal.
             - -1 - EXCEPTION occurred.
-        '''
+        """
         # return os.system('taskkill /F /IM %s'%name) # An alternative way to kill a process.
         statusCode = 0
         try:
@@ -1839,7 +2147,7 @@ class BenchmarkAutomation:
     ################################### Json ###################################
     @staticmethod
     def read_json(file) -> Dict:
-        '''
+        """
         Read a .json file and return a json type.
 
         @param:
@@ -1847,7 +2155,7 @@ class BenchmarkAutomation:
 
         @RETURN:
             - A Python's Data Object representing the data in the .json file.
-        '''
+        """
         try:
             with open(file, 'r', encoding='utf-8') as f:
                 data = json.load(f)
@@ -1861,7 +2169,7 @@ class BenchmarkAutomation:
 
     @staticmethod
     def write_json(file, data) -> bool:
-        '''
+        """
         Over-write the .json file with input data.
 
         @param:
@@ -1871,7 +2179,7 @@ class BenchmarkAutomation:
         @RETURN:
             - True - Succeed to Write data in json
             - False - Exception occurred
-        '''
+        """
         try:
             with open(file, 'w', encoding='utf-8') as f:
                 json.dump(data, f)
@@ -1883,9 +2191,9 @@ class BenchmarkAutomation:
 
     @staticmethod
     def printAll(data):
-        '''
+        """
         Print everything in the data Object
-        '''
+        """
         if type(data) == type(str()):
             print(data)
         else:
@@ -1895,7 +2203,7 @@ class BenchmarkAutomation:
     ############################### Crash Dumps ################################
     @staticmethod
     def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
-        '''
+        """
         Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps
 
         @param:
@@ -1904,7 +2212,7 @@ class BenchmarkAutomation:
         @RETURN:
             - True - The dump file is detected
             - False - otherwise, the file is not detected
-        '''
+        """
         # path = "%LOCALAPPDATA%\CrashDumps"
         src1 = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
         src2 = os.path.expandvars(r'C:\Windows')
@@ -1912,12 +2220,12 @@ class BenchmarkAutomation:
 
     @staticmethod
     def dealCrashDumps(tar="C:\\WinDumps") -> None:
-        '''
+        """
         Copy the Windows dump file to the desired location and remove the dump files under %LOCALAPPDATA%\CrashDumps
 
         @param:
             - tar - the target path to copy to (default to "C:\WinDumps")
-        '''
+        """
 
         dst = tar
         files1, files2 = BenchmarkAutomation.detectCrashDumps()
