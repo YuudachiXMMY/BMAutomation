@@ -115,7 +115,7 @@ class Logger:
     }
 
     @staticmethod
-    def WriteProgress(counts: int, total: int, log: str = "", width: int = 50, unit: str = "", consoleColor: int = ConsoleColor.Default):
+    def WriteProgress(counts: int, total: int, log: str = "", width: int = 50, unit: str = "", consoleColor: int = ConsoleColor.Default) -> None:
         """
         Write a progress bar with the given counts of total.
 
@@ -185,7 +185,7 @@ class Logger:
         sys.stdout.flush()
 
     @staticmethod
-    def CountProgress(total: int, log: str = "Progressing", step: int = 1, width: int = 50, consoleColor: int = ConsoleColor.Default):
+    def CountProgress(total: int, log: str = "Progressing", step: int = 1, width: int = 50, consoleColor: int = ConsoleColor.Default) -> None:
         """
         Write a progress bar counting down in seconds
 
@@ -669,12 +669,15 @@ class Benchmarking:
     _WIDTH = 50
 
     @staticmethod
-    def NormalTest(duration) -> None:
+    def NormalTest(duration: int) -> None:
         """
         Perform a normal Benchmarking. No actions would be made.
 
-        @param:
-            - duration: duration to perform the normal benchmarking
+        Parameters
+        ----------
+        duration : integer.
+            Time to perform the normal benchmarking.
+
         """
         Logger.CountProgress(duration, width=Benchmarking._WIDTH)
         # time.sleep(duration)
@@ -684,8 +687,11 @@ class Benchmarking:
         """
         Perform a random Character Control for games.
 
-        @param:
-            - duration: duration to perform the random character control
+        Parameters
+        ----------
+        duration : integer.
+            Time to perform the random character control
+
         """
         waitTime = 0
         tmp = Benchmarking._RANDOM_KEY_LIST.copy()
@@ -725,12 +731,15 @@ class Benchmarking:
                 counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
-    def RandomInputTest(duration, ) -> None:
+    def RandomInputTest(duration: int) -> None:
         """
         Perform a random Typing Words for Office.
 
-        @param:
-            - duration: duration to perform the random typing
+        Parameters
+        ----------
+        duration : integer.
+            Time to perform the random typing
+
         """
         waitTime = 0
 
@@ -765,15 +774,17 @@ class Benchmarking:
                 counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
-    def RandomRotateTest(duration) -> None:
+    def RandomRotateTest(duration: int) -> None:
         """
-        Perform a random screen rotating
+        Perform a random screen rotating.
 
-        @param:
-            - duration: duration to perform the random screen rotating
+        Parameters
+        ----------
+        duration : integer.
+            Time to perform the random screen rotating
+
         """
         waitTime = 0
-        altTabTime = 0
 
         total = duration
         counts = 0
@@ -795,12 +806,15 @@ class Benchmarking:
         Benchmarking.changeDisplayDirection(0, 0)
 
     @staticmethod
-    def StressTest(duration) -> None:
+    def StressTest(duration: int) -> None:
         """
         Perform a stressed Benchmarking. Randomly performing an ALT+TAB action.
 
-        @param:
-            - duration: duration to perform the stressed benchmarking
+        Parameters
+        ----------
+        duration : integer.
+            Time to perform the stressed benchmarking
+
         """
         waitTime = 0
         keyTime = 0
@@ -836,15 +850,20 @@ class Benchmarking:
                 counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
-    def mouseCharacterControl(action, keyTime) -> None:
+    def mouseCharacterControl(action: str, keyTime: int) -> None:
         """
         A method called by randomCharacterControl() to perform mouse control for characters.
 
-        @param:
-            - action: action to perform
-            - keyTime: duration to perform the key time
+        Parameters
+        ----------
+        action : string.
+            Action to be perform. Action should in the following list:
+                ["view_upward", "view_downward", "view_leftward",
+                 "view_rightward", "left_click", "right_click"]
+        keyTime: integer.
+            duration to perform the key time
+
         """
-        res = keyTime
         if action == "view_upward":
             Input.moveTo(960, 1000, keyTime)
         if action == "view_downward":
@@ -863,9 +882,17 @@ class Benchmarking:
         """
         A method called by randomCharacterControl() to perform keyboard control for characters.
 
-        @param:
-            - action: action to perform
-            - keyTime: duration to perform the key time
+        Parameters
+        ----------
+        action : string.
+            Action to be perform. Action should in the following list:
+                ["view_upward", "view_downward", "view_leftward",
+                 "view_rightward", "left_click", "right_click"]
+        keyTime: integer.
+            duration to perform the key time
+        WriteProgress : bool, optional.
+            True to show a console progress bar (default : True).
+
         """
         # utils.input.key_input(action, keyTime)
         Input.callTinyTask('tinytask/'+action)
