@@ -58,7 +58,7 @@ class ConsoleScreenBufferInfo(ctypes.Structure):
 def SetConsoleColor(color: int) -> bool:
     """
     Change the text color on console window.
-    color: int, a value in class `ConsoleColor`.
+    color: integer, a value in class `ConsoleColor`.
     Return bool, True if succeed otherwise False.
     """
     global _ConsoleOutputHandle
@@ -121,18 +121,18 @@ class Logger:
 
         Parameters
         ----------
-        counts : integer
+        counts : integer.
             Current counts of a progress.
-        total : int
+        total : integer.
             Total counts of a progress.
         log : string, optional.
             Log message before the progress bar (default: ""). Usually passing 'Waiting' or 'Progressing'.
-        width : int, optional
+        width : integer, optional.
             The width in letters of the progress bar (default: 50).
         unit : string, optional.
             Unit of the counts (default: ""). Ususally passing a time unit like 's' and 'min'.
             For example, by passing 's' will have an output '1 s / 10 s  10%'; otherwise, '1 / 10  10%'
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
 
         Notes
@@ -162,7 +162,6 @@ class Logger:
         >>>     Logger.WriteProgress(counts, total) # Updating the progress bar on console
 
         """
-        log = str(log) + ' '
         isValidColor = (
             consoleColor >= ConsoleColor.Black and consoleColor <= ConsoleColor.White)
         if isValidColor:
@@ -191,15 +190,15 @@ class Logger:
 
         Parameters
         ----------
-        total : int
+        total : integer.
             Total counts of a progress.
         log : string, optional.
             Log message before the progress bar (default: "Progressing"). Usually passing 'Waiting' or 'Progressing'.
-        step : int, optional.
+        step : integer, optional.
             Steps or period to update the progress bar in seconds (default: 1).
-        width : int, optional
+        width : integer, optional
             The width in letters of the progress bar (default: 50).
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
 
         Examples
@@ -222,12 +221,20 @@ class Logger:
 
         """
         for counts in range(0, total+1, step):
-            Logger.WriteProgress(counts, total, log, step,
-                                 width, "s", consoleColor)
+            Logger.WriteProgress(counts, total, log, width, "s", consoleColor)
             time.sleep(step)
 
     @staticmethod
     def SetLogFile(path: str) -> None:
+        """
+        Set Log file
+
+        Parameters
+        ----------
+        path : string.
+            Log file to be used.
+
+        """
         Logger.FileName = path
 
     @staticmethod
@@ -239,7 +246,7 @@ class Logger:
         ----------
         log : Any type. A string is preferred.
             Logs text
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
         writeToFile : bool, optional.
             True to write logs into a file (default: True).
@@ -247,7 +254,7 @@ class Logger:
             True to print to standard output (default: True).
         logFile : str, optional.
             Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
-        printTruncateLen : int, optional.
+        printTruncateLen : integer, optional.
             If <= 0, log is not truncated when print.
 
         Notes
@@ -255,7 +262,7 @@ class Logger:
         'ConsoleColor' (or Logger.ColorNames) currently has supported the following colors:
 
         ============  ===========
-            Color         int
+            Color       integer
         ============  ===========
         Default       -1
         Black         0
@@ -337,7 +344,7 @@ class Logger:
         ----------
         log : Any type. A string is preferred.
             Logs text
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
         writeToFile : bool, optional.
             True to write logs into a file (default: True).
@@ -345,13 +352,13 @@ class Logger:
             True to print to standard output (default: True).
         logFile : str, optional.
             Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
-        printTruncateLen : int, optional.
+        printTruncateLen : integer, optional.
             If <= 0, log is not truncated when print.
 
         Notes
         -----
         * This function utilize Logger.Write(), please see more details in Logger.Write().
-        * Parameters of this functions must follow in Logger.Write() specification.
+        * Parameters of this functions must fully satisfy Logger.Write() specification.
 
         Examples
         --------
@@ -388,7 +395,7 @@ class Logger:
         ----------
         log : Any type. A string is preferred.
             Logs text
-        consoleColor : int, optional.  A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional.  A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
         writeToFile : bool, optional.
             True to write logs into a file (default: True).
@@ -396,13 +403,13 @@ class Logger:
             True to print to standard output (default: True).
         logFile : str, optional.
             Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
-        printTruncateLen : int, optional.
+        printTruncateLen : integer, optional.
             If <= 0, log is not truncated when print.
 
         Notes
         -----
         * This function utilize Logger.Write(), please see more details in Logger.Write().
-        * Parameters of this functions must follow in Logger.Write() specification.
+        * Parameters of this functions must fully satisfy Logger.Write() specification.
 
         Examples
         --------
@@ -437,7 +444,7 @@ class Logger:
         ----------
         log : Sting
             Logs text
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
         writeToFile : bool, optional.
             True to write logs into a file (default: True).
@@ -445,12 +452,12 @@ class Logger:
             True to print to standard output (default: True).
         logFile : str, optional.
             Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
-        printTruncateLen : int, optional.
+        printTruncateLen : integer, optional.
             If <= 0, log is not truncated when print.
 
         Notes
         -----
-        * Parameters of this functions must follow in Logger.Write() specification.
+        * Parameters of this functions must fully satisfy Logger.Write() specification.
 
         Examples
         --------
@@ -494,7 +501,7 @@ class Logger:
         ----------
         log : Sting
             Logs text
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
         writeToFile : bool, optional.
             True to write logs into a file (default: True).
@@ -502,13 +509,13 @@ class Logger:
             True to print to standard output (default: True).
         logFile : str, optional.
             Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
-        printTruncateLen : int, optional.
+        printTruncateLen : integer, optional.
             If <= 0, log is not truncated when print.
 
         Notes
         -----
         * This function utilize Logger.ColorfulWrite(), please see more details in Logger.ColorfulWrite().
-        * Parameters of this functions must follow in Logger.Write() specification.
+        * Parameters of this functions must fully satisfy Logger.Write() specification.
 
         Examples
         --------
@@ -529,7 +536,7 @@ class Logger:
 
         """
         Logger.ColorfulWrite(log + '\n', consoleColor,
-                               writeToFile, printToStdout, logFile)
+                             writeToFile, printToStdout, logFile)
 
     @staticmethod
     def Log(log: Any = '', consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
@@ -540,7 +547,7 @@ class Logger:
         ----------
         log : Any type. A string is preferred.
             Logs text
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
         writeToFile : bool, optional.
             True to write logs into a file (default: True).
@@ -548,12 +555,12 @@ class Logger:
             True to print to standard output (default: True).
         logFile : str, optional.
             Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
-        printTruncateLen : int, optional.
+        printTruncateLen : integer, optional.
             If <= 0, log is not truncated when print.
 
         Notes
         -----
-        * Parameters of this functions must follow in Logger.Write() specification.
+        * Parameters of this functions must fully satisfy Logger.Write() specification.
 
         Examples
         --------
@@ -583,7 +590,7 @@ class Logger:
         ----------
         log : Any type. A string is preferred.
             Logs text
-        consoleColor : int, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
+        consoleColor : integer, optional. A value in class 'ConsoleColor' is preferred, such as `ConsoleColor.DarkGreen`.
             Text's color on console (default: ConsoleColor.White).
         writeToFile : bool, optional.
             True to write logs into a file (default: True).
@@ -591,12 +598,12 @@ class Logger:
             True to print to standard output (default: True).
         logFile : str, optional.
             Logs file name (default: None). None to write to default log file '@AutomationLog.txt'
-        printTruncateLen : int, optional.
+        printTruncateLen : integer, optional.
             If <= 0, log is not truncated when print.
 
         Notes
         -----
-        * Parameters of this functions must follow in Logger.Write() specification.
+        * Parameters of this functions must fully satisfy Logger.Write() specification.
 
         Examples
         --------
@@ -669,13 +676,13 @@ class Benchmarking:
     _WIDTH = 50
 
     @staticmethod
-    def NormalTest(duration: int) -> None:
+    def NormalTest(duration: float) -> None:
         """
         Perform a normal Benchmarking. No actions would be made.
 
         Parameters
         ----------
-        duration : integer.
+        duration : float.
             Time to perform the normal benchmarking.
 
         """
@@ -683,13 +690,13 @@ class Benchmarking:
         # time.sleep(duration)
 
     @staticmethod
-    def RandomControlTest(duration: int) -> None:
+    def RandomControlTest(duration: float) -> None:
         """
         Perform a random Character Control for games.
 
         Parameters
         ----------
-        duration : integer.
+        duration : float.
             Time to perform the random character control
 
         """
@@ -731,13 +738,13 @@ class Benchmarking:
                 counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
-    def RandomInputTest(duration: int) -> None:
+    def RandomInputTest(duration: float) -> None:
         """
         Perform a random Typing Words for Office.
 
         Parameters
         ----------
-        duration : integer.
+        duration : float.
             Time to perform the random typing
 
         """
@@ -774,13 +781,13 @@ class Benchmarking:
                 counts, total, width=Benchmarking._WIDTH, unit="s")
 
     @staticmethod
-    def RandomRotateTest(duration: int) -> None:
+    def RandomRotateTest(duration: float) -> None:
         """
         Perform a random screen rotating.
 
         Parameters
         ----------
-        duration : integer.
+        duration : float.
             Time to perform the random screen rotating
 
         """
@@ -806,13 +813,13 @@ class Benchmarking:
         Benchmarking.changeDisplayDirection(0, 0)
 
     @staticmethod
-    def StressTest(duration: int) -> None:
+    def StressTest(duration: float) -> None:
         """
         Perform a stressed Benchmarking. Randomly performing an ALT+TAB action.
 
         Parameters
         ----------
-        duration : integer.
+        duration : float.
             Time to perform the stressed benchmarking
 
         """
@@ -878,7 +885,7 @@ class Benchmarking:
             Input.clickRight(None, None, keyTime)
 
     @staticmethod
-    def keyCharacterControl(action, keyTime, WriteProgress: bool = False) -> None:
+    def keyCharacterControl(action: str, keyTime: float, WriteProgress: bool = False) -> None:
         """
         A method called by randomCharacterControl() to perform keyboard control for characters.
 
@@ -895,7 +902,7 @@ class Benchmarking:
 
         """
         # utils.input.key_input(action, keyTime)
-        Input.callTinyTask('tinytask/'+action)
+        Input.callTinyTask(action)
         if WriteProgress:
             Logger.CountProgress(
                 0, keyTime, width=Benchmarking._WIDTH)
@@ -903,7 +910,7 @@ class Benchmarking:
             time.sleep(keyTime)
 
     @staticmethod
-    def changeDisplayDirection(deviceIndex, angle) -> bool:
+    def changeDisplayDirection(deviceIndex: int, angle: int) -> bool:
         """
         Rotate the Display Screen's Direction
 
@@ -956,7 +963,7 @@ class Benchmarking:
 ################################## VK_Code #################################
 ############################################################################
 class VK_CODE():
-    """Uses Two Dict to represent VK_CODE"""
+    """VK Codes for Input operation by Win32"""
 
     _VK_CODE1 = {
         'backspace': 0x08,
@@ -1159,18 +1166,26 @@ class VK_CODE():
     @staticmethod
     def getVK_CODE1() -> Dict[str, str]:
         """
-        Return the first type of representation of VK_CODE
+        Get the first VK Code list of original Keys.
 
-        @RETURN: The first type of representation of VK_CODE
+        Returns
+        -------
+        getVK_CODE1 : Dict[str, str]
+            The original representation of VK_CODE.
+
         """
         return dict(VK_CODE._VK_CODE1)
 
     @staticmethod
     def getVK_CODE2() -> Dict[str, str]:
         """
-        Return the second type of representation of VK_CODE
+        Get the second VK Code list of upper-cased Keys.
 
-        @RETURN: The second type of representation of VK_CODE
+        Returns
+        -------
+        getVK_CODE1 : Dict[str, str]
+            The Upper-cased representation of VK_CODE.
+
         """
         return dict(VK_CODE._VK_CODE2)
 
@@ -1184,20 +1199,20 @@ _RANDOM_WORD_LIST = list(_RANDOM_WORD_LIST.keys())
 #################################### Input #####################################
 ################################################################################
 class Input:
-    """Assisting Input Methods"""
+    """Input Method for Input operations."""
 
     @staticmethod
-    def key_input(key, t=0.05):
+    def key_input(key: str, t: float = 0.05) -> None:
         """
         Perform a key pressdown and pressup.
 
-        @param:
-            - key - a key to be pressed.
-            - t - time period in second between pressdown and pressup (default to 0.05).
+        Parameters
+        ----------
+        key : string.
+            A key to be pressed.
+        t : float, optional.
+            A time period in second between pressdown and pressup (default: 0.05).
 
-        @RETURN:
-            - 1 - succeed in performing a key pressing process.
-            - 0 - failed to perform a key pressing process.
         """
         if key in VK_CODE._VK_CODE2:
             key = VK_CODE._VK_CODE2[key]
@@ -1213,32 +1228,39 @@ class Input:
         return 0
 
     @staticmethod
-    def key_inputs(str_input='', t=0.05) -> Literal[0, 1]:
+    def key_inputs(str_input: str, t: float = 0.05, duration: float = 0.5) -> Literal[0, 1]:
         """
         Perform a serious of key pressdowns and pressups.
 
-        @param:
-            - string of keys - a string of keys to be pressed (default to '').
-            - t - time period in second between each key to be pressed (default to 0.05).
+        Parameters
+        ----------
+        key : string.
+            String of keys to be pressed.
+        t : float, optional.
+            A time period in second between pressdown and pressup (default: 0.05).
+        duration : float, optional.
+            A time period in second between each string of keys (default: 0.5).
 
-        @RETURN:
-            - 1 - succeed in performing a key pressing process.
-            - 0 - failed to perform a key pressing process.
+        Notes
+        -----
+        * This function utilize Input.key_input(), please see more details in Input.key_input().
+        * Parameter, `str_input` and `t`, must fully satisfy Input.key_input() specification.
+
         """
         for k in str_input:
-            keyInputStatusCode = Input.key_input(k)
-            if not keyInputStatusCode:
-                return keyInputStatusCode
-            time.sleep(t)
-        return keyInputStatusCode
+            Input.key_input(k, t)
+            time.sleep(duration)
 
     @staticmethod
     def key_alt_tab(t=0.5) -> None:
         """
         Perform a key action of ALT + TAB.
 
-        @param:
-            - t - time period in second between pressdown and pressup (default to 0.05).
+        Parameters
+        ----------
+        t : float, optional.
+            A time period in second between pressdown and pressup (default: 0.5).
+
         """
         win32api.keybd_event(VK_CODE._VK_CODE1["alt"], 0, 0, 0)
         win32api.keybd_event(VK_CODE._VK_CODE1["tab"], 0, 0, 0)
@@ -1249,12 +1271,15 @@ class Input:
             VK_CODE._VK_CODE1["alt"], 0, win32con.KEYEVENTF_KEYUP, 0)
 
     @staticmethod
-    def key_alt_f4(t=0.6) -> None:
+    def key_alt_f4(t: float = 0.6) -> None:
         """
         Perform a key action of ALT + F4.
 
-        @param:
-            - t - time period in second between pressdown and pressup (default to 0.05).
+        Parameters
+        ----------
+        t : float, optional.
+            A time period in second between pressdown and pressup (default: 0.6).
+
         """
         duration = float('%.1f' % (t / 3))
         win32api.keybd_event(VK_CODE._VK_CODE1["alt"], 0, 0, 0)
@@ -1268,53 +1293,93 @@ class Input:
             VK_CODE._VK_CODE1["alt"], 0, win32con.KEYEVENTF_KEYUP, 0)
 
     @staticmethod
-    def clickLeft(x=None, y=None, duration=0) -> Tuple:
+    def clickLeft(x: int = None, y: int = None, t: float = 0) -> Tuple[int, int]:
         """
-        Perform a mouse action of left clicking on screen position at (x, y).
+        Left click on screen position (x, y).
 
-        @param:
-            - x - horizontal position to be clicked.
-            - y - vertical position to be clicked.
+        Parameters
+        ----------
+        x : integer, optional.
+            Horizontal position to be clicked (default: None).
+            If None, use the current horizontal position.
+        y : integer, optional.
+            Vertical position to be clicked (default: None).
+            If None, use the current vertical position.
+        t : float, optional.
+            A time period in second between pressdown and pressup (default: 0).
+
+        Returns
+        -------
+        clickLeft : Tuple[int, int]
+            A tuple (x, y) representing the clicked position.
+
         """
         if x == None and y == None:
             x, y = win32api.GetCursorPos()
         # win32api.SetCursorPos((x, y))
         # time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, x, y, 0, 0)
-        time.sleep(duration)
+        time.sleep(t)
         win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x, y, 0, 0)
         return x, y
 
     @staticmethod
-    def clickRight(x=None, y=None, duration=0) -> Tuple:
+    def clickRight(x: int = None, y: int = None, t: float = 0) -> Tuple[int, int]:
         """
-        Perform a mouse action of right clicking on screen position at (x, y).
+        Right click on screen position (x, y).
 
-        @param:
-            - x - horizontal position to be clicked.
-            - y - vertical position to be clicked.
+        Parameters
+        ----------
+        x : integer, optional.
+            Horizontal position to be clicked (default: None).
+            If None, use the current horizontal position.
+        y : integer, optional.
+            Vertical position to be clicked (default: None).
+            If None, use the current vertical position.
+        t : float, optional.
+            A time period in second between pressdown and pressup (default: 0).
+
+        Returns
+        -------
+        clickRight : Tuple[int, int]
+            A tuple (x, y) representing the clicked position.
+
         """
         if x == None and y == None:
             x, y = win32api.GetCursorPos()
         # win32api.SetCursorPos((x, y))
         # time.sleep(0.1)
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTDOWN, x, y, 0, 0)
-        time.sleep(duration)
+        time.sleep(t)
         win32api.mouse_event(win32con.MOUSEEVENTF_RIGHTUP, x, y, 0, 0)
         return x, y
 
     @staticmethod
-    def move(dest_x, dest_y, start_x=None, start_y=None, duration=0) -> Tuple:
+    def move(dest_x: int, dest_y: int, start_x: int = None, start_y: int = None, duration: float = 0) -> Tuple[int, int]:
         """
-        Perform a mouse action to Input.move the mouse
-        from (start_x, start_y) to (dest_x, dest_y) in duration time.
+        Move the mouse from (start_x, start_y) to (dest_x, dest_y) in duration time.
 
+        Parameters
+        ----------
         @param:
-            - dest_x - horizontal position to end
-            - dest_y - vertical position to end
-            - start_x - horizontal position to start
-            - start_y - vertical position to start
-            - duration - action's duration in seconds
+        dest_x : integer.
+            Horizontal position to move to.
+        dest_y : integer.
+            Vertical position to move to.
+        start_x : integer, optional.
+            Horizontal position to move from (default: None).
+            If None, use the current horizontal position.
+        start_y : integer, optional.
+            Horizontal position to move from (default: None).
+            If None, use the current horizontal position.
+        duration : float, optional.
+            A time period in second between pressdown and pressup (default: 0.5).
+
+        Returns
+        -------
+        move : Tuple[int, int]
+            A tuple (x, y) representing the final mouse position.
+
         """
         if start_x == None:
             start_x = win32api.GetCursorPos()[0]
@@ -1325,51 +1390,94 @@ class Input:
         return dest_x, dest_y
 
     @staticmethod
-    def moveTo(dest_x, dest_y, duration=0) -> None:
+    def moveTo(dest_x: int, dest_y: int, duration: float = 0) -> Tuple[int, int]:
         """
-        Perform a mouse action of clicking on screen position at (x, y).
+        Move the mouse from current position to (dest_x, dest_y) in duration time.
 
+        Parameters
+        ----------
         @param:
-            - x - horizontal position to be clicked.
-            - y - vertical position to be clicked.
+        dest_x : integer.
+            Horizontal position to move to.
+        dest_y : integer.
+            Vertical position to move to.
+        duration : float, optional.
+            A time period in second between pressdown and pressup (default: 0.5).
+
+        Notes
+        -----
+        * This function utilize Input.Move(), please see more details in Input.Move().
+        * Parameters of this functions must fully satisfy Input.Move() specification.
+
+        Returns
+        -------
+        move : Tuple[int, int]
+            A tuple (x, y) representing the final mouse position.
+
         """
         start_x, start_y = win32api.GetCursorPos()
-        Input.move(start_x, start_y, dest_x, dest_y, duration)
+        return Input.move(start_x, start_y, dest_x, dest_y, duration)
 
     @staticmethod
-    def getMouse(t=0) -> None:
+    def getMouse(t: float = 0.5) -> None:
         """
-        Get the mouse position and print in the console
+        Get the mouse position and print in the console.
 
-        @param:
-            - t - period to get the mouse position
+        Parameters
+        ----------
+        t : float, optional.
+            A time period in second to get the mouse position (default: 0.5).
 
-        @RETURN:
-            - (x, y) - a tuple which x represent the x-position of the mouse and y represent the y-position of the mouse.
+        Notes
+        -----
+        To end this function, please press Ctrl+C.
+
+        Examples
+        --------
+        The output format would be the following:
+
+        >>> Input.logMouse()
+        Press Ctrl-C to end
+        Screen Size: (2560, 1440);  Mouse Position: (114, 514)
+
         """
         try:
             while True:
                 print("Press Ctrl-C to end")
                 screenWidth, screenHeight = pag.size()  # 获取屏幕的尺寸
                 x, y = pag.position()  # 返回鼠标的坐标
-                print("Screen size: (%s %s),  Position : (%s, %s)\n" %
+                print("Screen Size: (%s, %s);  Mouse Position: (%s, %s)\n" %
                       (screenWidth, screenHeight, x, y))  # 打印坐标
 
                 time.sleep(t)  # 每个1s中打印一次 , 并执行清屏
                 os.system('cls')  # 执行系统清屏指令
+
         except KeyboardInterrupt:
             print('end')
 
     @staticmethod
-    def logMouse(t=0) -> None:
+    def logMouse(t: float = 0, clear: bool = True) -> None:
         """
-        Get the mouse position and print in the console only when the mouse position changes
+        Get the mouse position and print in the console only when the mouse position changes.
 
-        @param:
-            - t - period to get the mouse position
+        Parameters
+        ----------
+        t : float, optional.
+            A time period in second to get the mouse position (default: 0).
+        clear : bool, optional.
+            If True, the console will be cleared when the program is ended (default: True).
 
-        @RETURN:
-            - (x, y) - a tuple which x represent the x-position of the mouse and y represent the y-position of the mouse.
+        Notes
+        -----
+        To end this function, please press Ctrl+C.
+
+        Examples
+        --------
+        The output format would be the following:
+
+        >>> Input.logMouse()
+        Screen Size: (2560, 1440);  Mouse Position: (114, 514)
+
         """
         try:
             x, y = pag.position()  # 返回鼠标的坐标
@@ -1377,25 +1485,40 @@ class Input:
                 screenWidth, screenHeight = pag.size()  # 获取屏幕的尺寸
                 xNew, yNew = pag.position()  # 返回鼠标的坐标
                 if xNew != x and yNew != y:
-                    print("Screen size: (%s %s),  Position : (%s, %s)\n" %
+                    print("Screen Size: (%s, %s);  Mouse Position :(%s, %s)\n" %
                           (screenWidth, screenHeight, x, y))  # 打印坐标
                     x, y = (xNew, yNew)
 
         except KeyboardInterrupt:
-            os.system('cls')  # 执行系统清屏指令
+            if clear:
+                os.system('cls')  # 执行系统清屏指令
             print('end')
 
     @staticmethod
-    def callTinyTask(file) -> Any:
+    def callTinyTask(file: str) -> int:
         """
-        Calling the .exe file made by TinyTask
+        Calling the .exe file made by TinyTask under the current working directory.
 
-        @param:
-            - file: a TinyTask File Name to be performed
+        Parameters
+        ----------
+        file : string.
+            A TinyTask File Name to be performed
 
-        @RETURN:
-            - 0 - failed
-            - 1 - succeed
+        Returns
+        -------
+        callTinyTask : integer.
+            If 0, something went wrong in calling TinyTask file; otherwise, succeed with a non-0 code.
+
+        Examples
+        --------
+        Directly calling a TinyTask file under the current working directory.
+
+        >>> Input.callTinyTask("Test.exe")
+
+        Calling a TinyTask file in a folder under the current working directory.
+
+        >>> Input.callTinyTask("foo/Test.exe")
+
         """
         return win32api.ShellExecute(1, 'open', os.path.join(os.getcwd(), file), '', '', 1)
 
@@ -1404,40 +1527,129 @@ class Input:
 ##################################### Game #####################################
 ################################################################################
 class Game:
-    """a Game Object to Save Game Automation Info"""
+    """Game Object save Game Automation Info"""
 
     def __init__(self, gameName: str = "",
                  steamDirectory: str = "", documentDirectory: str = "", benchDirectory: str = "",
                  exe: str = "", relativePath: str = "", absolutePath: str = "",
-                 loopTimes: int = 1, mode: Literal[0, 1, 2, 3, 4] = 0) -> None:
-        """
-        mode:
-            0- norm
-            1- alt-tab
-            2- randomControl
-            3- randomInput
-            4- randomRotate
+                 loopTimes: int = 1, mode: Literal[0, 1, 2, 3, 4] = 0, dev: bool = False) -> None:
+        r"""
+        Construct a Game Object with game name, several directories, paths, automation loop times and mode.
+
+        Parameters
+        ----------
+        gameName : string, optional.
+            Name of the game (default: "").
+        steamDirectory : string, optional.
+            An absolute directory representing Steam directory (default: "").
+            Used for games on Steam. The path should and must follow this format:
+                {Disk_Letter}:\\{Steam_Directory}\\steamapps\\common
+        documentDirectory : string, optional.
+            An absolute directory representing local Document directory (default: "").
+            The path is usually in this format:
+                C:\Users\{User_Name}\Documents
+            TODO: Used for special demand.
+        benchDirectory : string, optional.
+            An absolute directory representing game's Benchmark directory (default: "").
+            TODO: Used for special demand.
+        exe : string, optional.
+            The executor name of the game (default: "").
+        relativePath : string, optional.
+            The path name of the Game (default: "").
+            Used for games on Steam. Value should be the folder name under the Steam directory.
+            This path must include the game's executor.
+        absolutePath : string, optional.
+            The absolute path of the Game (default: "").
+            Used for independent games. This path must include the game's executor.
+        loopTimes : integer, optional.
+            Times to run the automation (default: 1).
+        mode : Literal[0, 1, 2, 3, 4], optional.
+            This represents the mode of automation test for this game:
+                0 - Normal Test, without any actions.\n
+                1 - Stress Test, performing random Alt+Tab actions.\n
+                2 - Random Control Test, performing random character controls.\n
+                3 - Random Input Test, performing random keyboard inputs, is supposed to be used for Office word.\n
+                4 - Random Rotate Test, performing random screen rotating.
+        dev : bool, optional.
+            Construct the object in develop mode. The console will output warning messages.
+
+        Notes
+        -----
+        * Game() is supposed to save each game's automation info, and be added to the BMAutomation().
+        * A Game() Object is finished and ready to run only if Game.Check() return True.
+
+        Examples
+        --------
+        Game() can be constructed without any parameters
+
+        >>> game = Game()
+
+        If you construct without any parameters in develop mode, you will see some warning message:
+
+        >>> game = Game(dev=True)
+        GAME() WARNING : BMAutomation is not initialized with a valid steamDirectory.
+        GAME() WARNING : BMAutomation is not initialized with a valid documentDirectory.
+        GAME() WARNING : BMAutomation is not initialized with a valid benchDirectory.
+        GAME() WARNING : BMAutomation is not initialized with a valid relativePath.
+        GAME() WARNING : BMAutomation is not initialized with a valid absolutePath.
+
+        A demo code in my favor is to run the following demo codes for Fallout 4:
+
+        >>> f4 = ba.Game('Fallout 4', steamDirectory=app.getSteamDirectory(),
+                         documentDirectory=app.getDocumentDirectory(), exe="Fallout4Launcher.exe")
+        >>> f4.setExecutorPath("s/Fallout 4") # "s/Fallout 4" stands for {steam_dir}/Fallout 4, you will understand it in specification for this vital function.
+        >>> f4.setLauncherMode(1)
+        >>> f4.setLauncher(waitTime=5,
+        >>>                uiAppControlType="WindowControl", uiAppName='Fallout 4',
+        >>>                uiStartControlType="ImageControl", uiStartIndex=4, uiStartName='')
+        >>> f4.setStartActions([
+        >>>     ["w", "wait", 20],
+        >>>     ["cl", (960, 540), 1],
+        >>>     ["cl", (960, 540), 1],
+        >>>     ["cl", (960, 540), 1],
+        >>>     ["cl", (960, 540), 1],
+        >>>     ["w", "wait", 5],
+        >>>     ["t", "tinytask//enter.exe", 1],
+        >>>     ["t", "tinytask//enter.exe", 1],
+        >>>     ["w", "wait", 30]
+        >>> ])
+        >>> f4.setQuitActions([
+        >>>     ["s", "key_alt_f4", 0.6]
+        >>> ])
+        >>> f4.setBenchmarkingMode(2) # Random Control Test
+        >>> checkCode = f4.check()
+        >>> print(checkCode)
+        True
+
+        The final suggestion is that you should have those variables setted up either at the time Game() is constructed
+        or using set functions, such as Game.setExecutorPath() / Game.setLauncherMode() / Game.setStartActions(), etc.
+
+        Finally, once you are done, please feel free to use Game.check() to see whether something is missed :)
+
         """
         self.gameName = gameName
 
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine(
-                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid steamDirectory.' % gameName, ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'GAME() WARNING %s: BMAutomation is not initialized with a valid steamDirectory.' % gameName, ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine(
-                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid documentDirectory.' % gameName, ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'GAME() WARNING %s: BMAutomation is not initialized with a valid documentDirectory.' % gameName, ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
         if not benchDirectory is None and not os.path.isdir(benchDirectory):
             self.benchDirectory = None
-            Logger.WriteLine(
-                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid benchDirectory.' % gameName, ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'GAME() WARNING %s: BMAutomation is not initialized with a valid benchDirectory.' % gameName, ConsoleColor.Yellow)
         else:
             self.benchDirectory = benchDirectory
 
@@ -1445,15 +1657,17 @@ class Game:
 
         if not relativePath is None and not os.path.isdir(relativePath):
             self.relativePath = None
-            Logger.WriteLine(
-                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid relativePath.' % gameName, ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'GAME() WARNING %s: BMAutomation is not initialized with a valid relativePath.' % gameName, ConsoleColor.Yellow)
         else:
             self.relativePath = relativePath
 
         if not absolutePath is None and not os.path.isdir(absolutePath) and not os.path.isabs(absolutePath):
             self.absolutePath = None
-            Logger.WriteLine(
-                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid absolutePath.' % gameName, ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'GAME() WARNING %s: BMAutomation is not initialized with a valid absolutePath.' % gameName, ConsoleColor.Yellow)
         else:
             self.absolutePath = absolutePath
 
@@ -1462,8 +1676,9 @@ class Game:
         if mode >= 0 and mode <= 4:
             self.mode = mode
         else:
-            Logger.WriteLine(
-                'GAME() WARNING %s: BenchmarkAutomation is not initialized with a valid mode.' % gameName, ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'GAME() WARNING %s: BMAutomation is not initialized with a valid mode.' % gameName, ConsoleColor.Yellow)
 
         self.exePath = ""
         self.launcherMode = -1
@@ -1476,72 +1691,194 @@ class Game:
     ################################ Base Info #################################
     def setGameName(self, name: str) -> None:
         """
+        Set the Game Name
+
+        Parameters
+        ----------
+        name : string.
+            Game Name to be setted.
+
         """
         self.gameName = name
 
     def getGameName(self) -> str:
         """
+        Get the Game Name
+
+        Returns
+        -------
+        getGameName : string
+            The Game Name
+
         """
         return self.gameName
 
     def setSteamDirectory(self, dir: str) -> None:
         """
+        Set the Steam directory
+
+        Parameters
+        ----------
+        dir : string.
+            Steam directory to be setted.
+
         """
         self.steamDirectory = dir
 
     def getSteamDirectory(self) -> str:
         """
+        Get the Steam directory
+
+        Returns
+        -------
+        getSteamDirectory : string
+            The Steam directory
+
         """
         return self.steamDirectory
 
     def setDocumentDirectory(self, dir: str) -> None:
         """
+        Set the Document directory
+
+        Parameters
+        ----------
+        dir : string.
+            Document directory to be setted.
+
         """
         self.documentDirectory = dir
 
     def getDocumentDirectory(self) -> str:
         """
+        Get the Document directory
+
+        Returns
+        -------
+        getDocumentDirectory : string
+            The Document directory
+
         """
         return self.documentDirectory
 
     def setBenchDirectory(self, dir: str) -> None:
         """
+        Set the Benchmark directory
+
+        Parameters
+        ----------
+        dir : string.
+            Benchmark directory to be setted.
+
         """
         self.benchDirectory = dir
 
     def getBenchDirectory(self) -> str:
         """
+        Get the Benchmark directory
+
+        Returns
+        -------
+        getBenchmarkDirectory : string
+            The Benchmark directory
+
         """
         return self.benchDirectory
 
     def setRelativePath(self, dir: str) -> None:
         """
+        Set the Relative Path
+
+        Parameters
+        ----------
+        dir : string.
+            Relative Path to be setted.
+
         """
         self.relativePath = dir
 
     def getRelativePath(self) -> str:
         """
+        Get the Relative Path
+
+        Returns
+        -------
+        getRelativePath : string
+            The Relative Path
+
         """
         return self.relativePath
 
     def setAbsolutePath(self, dir: str) -> None:
         """
+        Set the Absolute Path
+
+        Parameters
+        ----------
+        dir : string.
+            Absolute Path to be setted.
+
         """
         self.absolutePath = dir
 
     def getAbsolutePath(self) -> str:
         """
+        Get the Absolute Path
+
+        Returns
+        -------
+        getAbsolutePath : string
+            The Absolute Path
+
         """
         return self.absolutePath
+
+    def setLoopTimes(self, t: int) -> None:
+        """
+        Set the Loop Times
+
+        Parameters
+        ----------
+        t : string.
+            Loop Times to be setted.
+
+        """
+        self.loopTimes = t
+
+    def getLoopTimes(self) -> int:
+        """
+        Get the Loop Times
+
+        Returns
+        -------
+        getLoopTimes : integer
+            The Loop Times
+
+        """
+        return self.loopTimes
 
     ################################# Executor #################################
     def setExecutor(self, exe: str) -> None:
         """
+        Set the Executor
+
+        Parameters
+        ----------
+        exe : string.
+            Executor Name to be setted.
+
         """
         self.exe = exe
 
     def getExecutor(self) -> str:
         """
+        Get the Executor
+
+        Returns
+        -------
+        getExecutor : string
+            The Executor Name
+
         """
         return self.exe
 
@@ -1604,7 +1941,7 @@ class Game:
         """
         return self.launcherMode
 
-    def setLauncher(self, waitTime: int = 20,
+    def setLauncher(self, waitTime: float = 20,
                     uiAppControlType: str = None, uiAppName: str = None,
                     uiStartControlType: str = None, uiStartIndex: int = None, uiStartName: str = None,
                     clickPos: tuple = None,
@@ -1645,166 +1982,6 @@ class Game:
         """
         """
         return self.getLauncherMode() > 0 and self.getLauncherMode() <= 3
-
-    ################################# Actions ##################################
-    def setStartActions(self, actions: List[List[Any]]):
-        """
-        """
-        self._START_ACTIONS = actions
-
-    def getStartActions(self):
-        """
-        """
-        return self._START_ACTIONS
-
-    def setQuitActions(self, actions: List[List[Any]]):
-        """
-        """
-        self._QUIT_ACTIONS = actions
-
-    def getQuitActions(self):
-        """
-        """
-        return self._QUIT_ACTIONS
-
-    def startActions(self, actions: List[List[Any]]) -> int:
-        """
-        [["w", "wait", duration],
-         ["k", key, duration],
-         ["ks", keys, duration],
-         ["cl", (x, y), duration],
-         ["cr", (x, y), duration],
-         ["mv", (x, y), duration],
-         ["t", "TinyTaskName", duration],
-         ["s", "key_alt_tab | key_alt_f4", duration]]
-        """
-        try:
-            num = 0
-            for action in actions:
-                if not isinstance(action, List):
-                    Logger.WriteLine(
-                        'GAME() ERROR %s: Actions() actions Type error' % self.getGameName(), ConsoleColor.Red)
-                    return 0
-
-                ActionType, tar, duration = action
-
-                Logger.WriteFlush('Performing Action %s %s : At %s in %s seconds' % (
-                    num, ActionType, tar, duration), ConsoleColor.DarkGray)
-                num += 1
-
-                ActionType = str.lower(ActionType)
-                if not ActionType in ["w", "k", "ks", "cl", "cr", "mv", "t", "s"]:
-                    Logger.WriteLine('GAME() ERROR %s: Invalid ActionType %s' % (
-                        self.getGameName(), ActionType), ConsoleColor.Red)
-                    return 0
-                if not isinstance(duration, int) and not isinstance(duration, float):
-                    Logger.WriteLine('GAME() ERROR %s: Invalid Duration %s' % (
-                        self.getGameName(), duration), ConsoleColor.Red)
-                    return 0
-                if ActionType == "w":
-                    # time.sleep(duration)
-                    Logger.CountProgress(
-                        duration, log="Waiting", consoleColor=ConsoleColor.DarkGray)
-                    resCode = duration
-
-                if not isinstance(tar, str) and not isinstance(tar, Tuple):
-                    Logger.WriteLine('GAME() ERROR %s: Invalid TargetType %s' % (
-                        self.getGameName(), tar), ConsoleColor.Red)
-                    return 0
-
-                # k - Single key
-                if ActionType == "k":
-                    resCode = Input.key_input(tar, duration)
-
-                # ks - Multiple Keys
-                if ActionType == "ks":
-                    resCode = Input.key_inputs(tar, duration)
-
-                # cl - Left-Click
-                if ActionType == "cl":
-                    x, y = tar
-                    resCode = sum(Input.clickLeft(x, y, duration))
-
-                # cr - Right-Click
-                if ActionType == "cr":
-                    x, y = tar
-                    resCode = sum(Input.clickRight(x, y, duration))
-
-                # mv - Move mouse position
-                if ActionType == "mv":
-                    x, y = tar
-                    resCode = sum(Input.moveTo(x, y, duration))
-
-                # t - Call TinyTask
-                if ActionType == "t":
-                    resCode = Input.callTinyTask(tar)
-                    time.sleep(duration)
-
-                # s - Special Function in Input Class
-                if ActionType == "s":
-                    if tar == "key_alt_tab":
-                        Input.key_alt_tab(duration)
-                    if tar == "key_alt_f4":
-                        Input.key_alt_f4(duration)
-                    resCode = duration
-
-                if not resCode:
-                    Logger.WriteLine(
-                        'GAME() ERROR %s: Action %s Failed in Actions()' % (self.getGameName(), action), ConsoleColor.Red)
-        except Exception as e:
-            Logger.WriteLine(
-                'GAME() ERROR %s: %s' % (self.getGameName(), e), ConsoleColor.Red)
-        else:
-            return resCode
-
-    def start(self):
-        """
-        """
-        return self.startActions(self.getStartActions())
-
-    def quit(self):
-        """
-        """
-        return self.startActions(self.getQuitActions())
-
-    ############################### Benchmarking ###############################
-    def setBenchmarkingMode(self, mode: int) -> None:
-        """
-        """
-        self.mode = mode
-
-    def getBenchmarkingMode(self) -> int:
-        """
-        """
-        return self.mode
-
-    def startBenchMarking(self, duration: int = 300) -> None:
-        """
-        mode:
-            0- norm
-            1- alt-tab
-            2- randomControl
-            3- randomInput
-            4- randomRotate
-        """
-        # Normal Benchmarking
-        if self.getBenchmarkingMode() == 0:
-            Benchmarking.NormalTest(duration)
-        # Alt-Tab Benchmarking
-        elif self.getBenchmarkingMode() == 1:
-            Benchmarking.StressTest(duration)
-        # Random-Control Benchmarking
-        elif self.getBenchmarkingMode() == 2:
-            Benchmarking.RandomControlTest(duration)
-        # Random-Input Benchmarking
-        elif self.getBenchmarkingMode() == 3:
-            Benchmarking.RandomInputTest(duration)
-        # Random-Rotate Benchmarking
-        elif self.getBenchmarkingMode() == 4:
-            Benchmarking.RandomRotateTest(duration)
-        else:
-            Logger.WriteLine("GAME() ERROR %s: Benchmarking Mode %s is not valid" %
-                             (self.getGameName(), self.getBenchmarkingMode()), ConsoleColor.Red)
 
     ################################## Launch ##################################
     def checkLaunch(self) -> bool:
@@ -1870,14 +2047,15 @@ class Game:
         """
         startGame: int = 0
 
-        self.checkLaunch()
+        if not self.checkLaunch():
+            return 0
 
         # Open Game
         exe = os.path.join(self.getExecutorPath(), self.getExecutor())
         try:
             startGame = win32api.ShellExecute(1, 'open', exe, '', '', 1)
 
-            if self.hasLauncher:
+            if self.hasLauncher():
                 Logger.WriteLine(
                     'waiting %s seconds for launcher to start......' % self.LauncherWaitTime, ConsoleColor.Gray)
                 Logger.CountProgress(self.LauncherWaitTime)
@@ -1944,29 +2122,246 @@ class Game:
 
         return startGame
 
+    ################################# Actions ##################################
+    def checkActions(self, actionList: list) -> bool:
+        """
+        """
+        try:
+            for action in actionList:
+                if not isinstance(action, List):
+                    Logger.WriteLine(
+                        'GAME() ERROR %s: %s Invalid Action %s' % (self.getGameName(), actionList, action), ConsoleColor.Red)
+
+                ActionType, tar, duration = action
+                if not ActionType in ["w", "k", "ks", "cl", "cr", "mv", "t", "s"]:
+                    Logger.WriteLine('GAME() ERROR %s: %s Invalid ActionType %s' % (
+                        self.getGameName(), actionList, ActionType), ConsoleColor.Red)
+                    return False
+                if not isinstance(duration, int) and not isinstance(duration, float):
+                    Logger.WriteLine('GAME() ERROR %s: %s Invalid Duration %s' % (
+                        self.getGameName(), actionList, duration), ConsoleColor.Red)
+                    return False
+                if not isinstance(tar, str) and not isinstance(tar, Tuple):
+                    Logger.WriteLine('GAME() ERROR %s: %s Invalid TargetType %s' % (
+                        self.getGameName(), actionList, tar), ConsoleColor.Red)
+                    return False
+        except Exception as e:
+            Logger.WriteLine(
+                'GAME() ERROR %s: CheckActions() %s Error %s' % (self.getGameName(), actionList, e), ConsoleColor.Red)
+            return False
+        else:
+            return True
+
+    def setStartActions(self, actions: List[List[Any]]):
+        """
+        [["w", "wait", duration],
+         ["k", key, duration],
+         ["ks", keys, duration],
+         ["cl", (x, y), duration],
+         ["cr", (x, y), duration],
+         ["mv", (x, y), duration],
+         ["t", "TinyTaskName", duration],
+         ["s", "key_alt_tab | key_alt_f4", duration]]
+        """
+        self._START_ACTIONS = actions
+
+    def checkStartActions(self) -> bool:
+        """
+        """
+        return self.checkActions(self._START_ACTIONS)
+
+    def getStartActions(self):
+        """
+        """
+        return self._START_ACTIONS
+
+    def setQuitActions(self, actions: List[List[Any]]):
+        """
+        [["w", "wait", duration],
+         ["k", key, duration],
+         ["ks", keys, duration],
+         ["cl", (x, y), duration],
+         ["cr", (x, y), duration],
+         ["mv", (x, y), duration],
+         ["t", "TinyTaskName", duration],
+         ["s", "key_alt_tab | key_alt_f4", duration]]
+        """
+        self._QUIT_ACTIONS = actions
+
+    def checkQuitActions(self) -> bool:
+        """
+        """
+        return self.checkActions(self._QUIT_ACTIONS)
+
+    def getQuitActions(self):
+        """
+        """
+        return self._QUIT_ACTIONS
+
+    def startActions(self, actions: List[List[Any]]) -> int:
+        """
+        [["w", "wait", duration],
+         ["k", key, duration],
+         ["ks", keys, duration],
+         ["cl", (x, y), duration],
+         ["cr", (x, y), duration],
+         ["mv", (x, y), duration],
+         ["t", "TinyTaskName", duration],
+         ["s", "key_alt_tab | key_alt_f4", duration]]
+        """
+        try:
+            num = 0
+            for action in actions:
+
+                ActionType, tar, duration = action
+
+                Logger.WriteFlush('Performing Action %s %s : At %s in %s seconds' % (
+                    num, ActionType, tar, duration), ConsoleColor.DarkGray)
+                num += 1
+
+                ActionType = str.lower(ActionType)
+
+                if ActionType == "w":
+                    # time.sleep(duration)
+                    Logger.CountProgress(
+                        duration, log="Waiting", consoleColor=ConsoleColor.DarkGray)
+                    resCode = duration
+
+                # k - Single key
+                if ActionType == "k":
+                    resCode = Input.key_input(tar, duration)
+
+                # ks - Multiple Keys
+                if ActionType == "ks":
+                    resCode = Input.key_inputs(tar, duration)
+
+                # cl - Left-Click
+                if ActionType == "cl":
+                    x, y = tar
+                    resCode = sum(Input.clickLeft(x, y, duration))
+
+                # cr - Right-Click
+                if ActionType == "cr":
+                    x, y = tar
+                    resCode = sum(Input.clickRight(x, y, duration))
+
+                # mv - Move mouse position
+                if ActionType == "mv":
+                    x, y = tar
+                    resCode = sum(Input.moveTo(x, y, duration))
+
+                # t - Call TinyTask
+                if ActionType == "t":
+                    resCode = Input.callTinyTask(tar)
+                    time.sleep(duration)
+
+                # s - Special Function in Input Class
+                if ActionType == "s":
+                    if tar == "key_alt_tab":
+                        Input.key_alt_tab(duration)
+                    if tar == "key_alt_f4":
+                        Input.key_alt_f4(duration)
+                    resCode = duration
+
+                if not resCode:
+                    Logger.WriteLine(
+                        'GAME() ERROR %s: Action %s Failed in Actions()' % (self.getGameName(), action), ConsoleColor.Red)
+        except Exception as e:
+            Logger.WriteLine(
+                'GAME() ERROR %s: %s' % (self.getGameName(), e), ConsoleColor.Red)
+        else:
+            return resCode
+
+    def start(self) -> int:
+        """
+        """
+        if not self.checkStartActions():
+            return 0
+        return self.startActions(self.getStartActions())
+
+    def quit(self):
+        """
+        """
+        if not self.checkQuitActions():
+            return 0
+        return self.startActions(self.getQuitActions())
+
+    ############################### Benchmarking ###############################
+    def setBenchmarkingMode(self, mode: int) -> None:
+        """
+        """
+        self.mode = mode
+
+    def getBenchmarkingMode(self) -> int:
+        """
+        """
+        return self.mode
+
+    def startBenchMarking(self, duration: float = 300) -> None:
+        """
+        mode:
+            0- norm
+            1- alt-tab
+            2- randomControl
+            3- randomInput
+            4- randomRotate
+        """
+        # Normal Benchmarking
+        if self.getBenchmarkingMode() == 0:
+            Benchmarking.NormalTest(duration)
+        # Alt-Tab Benchmarking
+        elif self.getBenchmarkingMode() == 1:
+            Benchmarking.StressTest(duration)
+        # Random-Control Benchmarking
+        elif self.getBenchmarkingMode() == 2:
+            Benchmarking.RandomControlTest(duration)
+        # Random-Input Benchmarking
+        elif self.getBenchmarkingMode() == 3:
+            Benchmarking.RandomInputTest(duration)
+        # Random-Rotate Benchmarking
+        elif self.checkLaunch() == 4:
+            Benchmarking.RandomRotateTest(duration)
+        else:
+            Logger.WriteLine("GAME() ERROR %s: Benchmarking Mode %s is not valid" %
+                             (self.getGameName(), self.getBenchmarkingMode()), ConsoleColor.Red)
+
+    ############################### Benchmarking ###############################
+    def check(self) -> bool:
+        """
+        """
+        if not self.checkLaunch():
+            return False
+        if not self.checkStartActions():
+            return False
+        if not self.checkQuitActions():
+            return False
+        return True
+
 
 ################################################################################
-############################# BenchmarkAutomation ##############################
+################################# BMAutomation #################################
 ################################################################################
-class BenchmarkAutomation:
+class BMAutomation:
     """
     """
 
     def __init__(self, steamDirectory: str = "", documentDirectory: str = "",
-                 OverallLoopTimes: int = 1, GameLoopTimes: int = -1, BenchmarkingTime: int = 600) -> None:
+                 OverallLoopTimes: int = 1, GameLoopTimes: int = -1, BenchmarkingTime: int = 600, dev: bool = False) -> None:
         """
         """
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
             self.steamDirectory = None
-            Logger.WriteLine(
-                'BA() WARNING: BenchmarkAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'BA() WARNING: BMAutomation is not initialized with a valid steamDirectory.', ConsoleColor.Yellow)
         else:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
             self.documentDirectory = None
-            Logger.WriteLine(
-                'BA() WARNING: BenchmarkAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
+            if dev:
+                Logger.WriteLine(
+                    'BA() WARNING: BMAutomation is not initialized with a valid documentDirectory.', ConsoleColor.Yellow)
         else:
             self.documentDirectory = documentDirectory
 
@@ -2088,25 +2483,20 @@ class BenchmarkAutomation:
                 'BA() INFO: GameLoopTimes is negative. Game will only run once regarding success or failure. Use setGameLoopTimes() to modify.', ConsoleColor.White)
 
         if self.getBenchmarkTime() < 60:
-            Logger.WriteLine(
-                'BA() WARNING: BenchmarkTime is less than 1 min. Use setBenchmarkTime() to modify.', ConsoleColor.Yellow)
+            if self.dev:
+                Logger.WriteLine(
+                    'BA() WARNING: BenchmarkTime is less than 1 min. Use setBenchmarkTime() to modify.', ConsoleColor.Yellow)
 
     def start(self) -> int:
         """
         """
         try:
             res = dict()
-            for game in self.getGameList():
-                if not game in res:
-                    res[game] = []
+            for i in range(self.getOverallLoopTimes()):
+                for game in self.getGameList():
+                    if not game in res:
+                        res[game] = []
 
-                if self.getGameLoopTimes() < 1:
-                    startCode, quitCode = self._start(game)
-                    res[game].append((startCode, quitCode))
-                    Logger.WriteLine("BA() FINISHED %s: Start Code %s and Quit Code %s" % (
-                        game, startCode, quitCode))
-                    continue
-                for i in range(self.getGameLoopTimes()):
                     startCode, quitCode = self._start(game)
                     res[game].append((startCode, quitCode))
                     Logger.WriteLine("BA() FINISHED %s: Start Code %s and Quit Code %s" % (
@@ -2120,10 +2510,22 @@ class BenchmarkAutomation:
     def _start(self, game: str) -> Tuple[int, int]:
         """
         """
-        startCode = self.gameList[game].launch(GameWaitTime=30)
-        startCode = self.gameList[game].start()
-        self.gameList[game].startBenchMarking(self.getBenchmarkTime())
-        quitCode = self.gameList[game].quit()
+        tar: Game = self.gameList[game]
+        times = 0
+        startCode, quitCode = (0, 0)
+        while times < tar.getLoopTimes():
+            print(0)
+            startCode = tar.launch()
+            print(1)
+            startCode = tar.start()
+            print(2)
+            print(self.getBenchmarkTime())
+            print(3)
+            tar.startBenchMarking(self.getBenchmarkTime())
+            print(4)
+            quitCode = tar.quit()
+            print(5)
+            times += 1
         return startCode, quitCode
 
     ############################## Helper Methods ##############################
@@ -2243,7 +2645,7 @@ class BenchmarkAutomation:
         # path = "%LOCALAPPDATA%\CrashDumps"
         src1 = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
         src2 = os.path.expandvars(r'C:\Windows')
-        return BenchmarkAutomation.searchFile(src1, tar), BenchmarkAutomation.searchFile(src2, "MEMORY.DMP")
+        return BMAutomation.searchFile(src1, tar), BMAutomation.searchFile(src2, "MEMORY.DMP")
 
     @staticmethod
     def dealCrashDumps(tar="C:\\WinDumps") -> None:
@@ -2255,7 +2657,7 @@ class BenchmarkAutomation:
         """
 
         dst = tar
-        files1, files2 = BenchmarkAutomation.detectCrashDumps()
+        files1, files2 = BMAutomation.detectCrashDumps()
         while files1 + files2:
 
             ####################################################################
@@ -2271,7 +2673,7 @@ class BenchmarkAutomation:
                 if os.path.isfile(src_name):
                     exe = 'copy ' + src_name + ' %s' % dst_name
                     os.system(exe)
-                    if BenchmarkAutomation.searchFile(src, files):
+                    if BMAutomation.searchFile(src, files):
                         os.system('del '+src_name)
                 else:
                     print("TAR is not a file!")
@@ -2284,11 +2686,11 @@ class BenchmarkAutomation:
                 if os.path.isfile(src_name):
                     exe = 'copy ' + src_name + ' %s' % dst_name
                     os.system(exe)
-                    if BenchmarkAutomation.searchFile(src, "MEMORY.DMP"):
+                    if BMAutomation.searchFile(src, "MEMORY.DMP"):
                         os.system('del '+src_name)
 
             # TODO optional: cmd command=> xcopy /s/e "D:\A_FOLDER" "E:\B_FOLDER\"
-            files1, files2 = BenchmarkAutomation.detectCrashDumps()
+            files1, files2 = BMAutomation.detectCrashDumps()
 
         ########################################################################
         # Past Code

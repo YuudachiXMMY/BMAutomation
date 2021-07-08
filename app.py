@@ -7,8 +7,7 @@ import BMAutomation as ba
 steamDir = "F:\\SteamLibrary\\steamapps\\common"
 docDir = "C:\\Users\\Navi\\Documents"
 
-app = ba.BenchmarkAutomation(steamDir, docDir)
-ba.Logger.Log("hi")
+app = ba.BMAutomation(steamDir, docDir)
 
 def Fallout4():
     try:
@@ -28,8 +27,8 @@ def Fallout4():
             ["cl", (960, 540), 1],
             ["cl", (960, 540), 1],
             ["w", "wait", 5],
-            ["t", "tinytask/enter.exe", 1],
-            ["t", "tinytask/enter.exe", 1],
+            ["t", "tinytask//enter.exe", 1],
+            ["t", "tinytask//enter.exe", 1],
             ["w", "wait", 30]
         ])
         f4.setQuitActions([
