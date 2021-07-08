@@ -1,7 +1,7 @@
 import sys
 
 # To Install BMAutomation, use the following Command in Windows CMD:
-# py -m pip install --index-url https://test.pypi.org/simple/ your-package
+# py -m pip install --index-url https://test.pypi.org/simple/ BMAutomation
 import BMAutomation as ba
 
 steamDir = "F:\\SteamLibrary\\steamapps\\common"
@@ -36,7 +36,7 @@ def Fallout4():
         ])
         f4.setBenchmarkingMode(2)
 
-        checkCode = f4.checkLaunch()
+        checkCode = f4.check()
         if checkCode:
             app.addGameList('Fallout 4', f4)
         return checkCode
@@ -47,7 +47,6 @@ def Fallout4():
 
 
 def main():
-
     checkCode = Fallout4()
 
     if not checkCode:
@@ -60,6 +59,7 @@ def main():
 if __name__ == "__main__":
     try:
         exit(main())
+
     except KeyboardInterrupt:
         ba.Logger.WriteLine(
             "\n"+"*"*10+' Ctrl+C key input detected. Program Stopped! '+"*"*10)

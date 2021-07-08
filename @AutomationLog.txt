@@ -1,292 +1,3 @@
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 20 seconds for Game to start......
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 20 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 20 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 20 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 20 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: s at key_alt_f4 with 0.6 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 20 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: w at wait with 20 secondsPerforming Action: s at key_alt_f4 with 0.6 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: w at wait with 10 secondsPerforming Action: s at key_alt_tab with 0.6 secondsPerforming Action: w at wait with 20 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 5 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: w at wait with 20 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-2021-07-05 14:08:59.682 BenchmarkAutomation.py[1533] start -> Find Control Timeout: {Name: 'Fallout 4', ControlType: WindowControl}
-ERROR: Unknown Error Occurred for Fallout 4
-Performing Action: w at wait with 10 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: w at wait with 10 secondsPerforming Action: s at key_alt_tab with 0.6 secondsPerforming Action: w at wait with 20 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 5 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: w at wait with 20 secondsWARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-ERROR: Unknown Error addGameList()
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-BA() ERROR: Unknown Error startGameList()
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-BA() ERROR: 'dict' object has no attribute 'has_key'
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-2021-07-06 11:38:37.615 BenchmarkAutomation.py[1569] launch -> Find Control Timeout: {Name: 'Fallout 4', ControlType: WindowControl}
-BA() ERROR: must be real number, not LookupError
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action: w at wait with 10 secondsPerforming Action: s at key_alt_tab with 0.6 secondsPerforming Action: w at wait with 20 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: cl at (960, 540) with 1 secondsPerforming Action: w at wait with 5 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: t at tinytask/enter.exe with 1 secondsPerforming Action: w at wait with 20 secondsPerforming Action: s at key_alt_f4 with 0.6 secondsBA() FINISHED GAME: Fallout 4 with Start Code 20 and Quit Code 0.6
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING: BenchmarkAutomation is not initialized with a valid absolutePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-waiting 30 seconds for Game to start......
-Performing Action 0 w : At wait in 20 secondsPerforming Action 1 cl : At (960, 540) in 1 secondsPerforming Action 2 cl : At (960, 540) in 1 secondsPerforming Action 3 cl : At (960, 540) in 1 secondsPerforming Action 4 cl : At (960, 540) in 1 secondsPerforming Action 5 w : At wait in 5 secondsPerforming Action 6 t : At tinytask/enter.exe in 1 secondsPerforming Action 7 t : At tinytask/enter.exe in 1 secondsPerforming Action 8 w : At wait in 30 secondsGAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-
-***** Ctrl+C key input detected. Program Stopped! *****
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-
-********** Ctrl+C key input detected. Program Stopped! **********
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-
-********** Ctrl+C key input detected. Program Stopped! **********
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-
-********** Ctrl+C key input detected. Program Stopped! **********
-2021-07-07 14:56:24.345 app.py[11] <module> -> hi
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid relativePath.
-GAME() WARNING Fallout 4: BenchmarkAutomation is not initialized with a valid absolutePath.
-waiting 5 seconds for launcher to start......
-
-********** Ctrl+C key input detected. Program Stopped! **********
-2021-07-08 13:36:58.291 app.py[11] <module> -> hi
-BA() ERROR: getLoopTimes() missing 1 required positional argument: 'tar'
-2021-07-08 13:37:10.983 app.py[11] <module> -> hi
-BA() ERROR: getLoopTimes() missing 1 required positional argument: 'tar'
-GAME() WARNING : BMAutomation is not initialized with a valid steamDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid documentDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid benchDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid relativePath.
-GAME() WARNING : BMAutomation is not initialized with a valid absolutePath.
-GAME() WARNING : BMAutomation is not initialized with a valid steamDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid documentDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid steamDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid documentDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid steamDirectory.
-GAME() WARNING : BMAutomation is not initialized with a valid documentDirectory.
-2021-07-08 13:47:59.841 app.py[11] <module> -> hi
-BA() ERROR: getLoopTimes() missing 1 required positional argument: 'tar'
-2021-07-08 13:48:24.361 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:49:50.432 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:50:18.297 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:50:48.578 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:51:00.941 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:51:16.980 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:51:39.629 app.py[11] <module> -> hi
-BA() FINISHED Fallout 4: Start Code 0 and Quit Code 1
-2021-07-08 13:51:57.671 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:52:16.597 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:52:29.709 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:52:41.941 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:53:04.748 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:53:29.078 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() FINISHED Fallout 4: Start Code 0 and Quit Code 0
-2021-07-08 13:53:40.651 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() FINISHED Fallout 4: Start Code 0 and Quit Code 0
-2021-07-08 13:54:28.932 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:54:40.785 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:55:07.169 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:55:17.139 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-2021-07-08 13:56:01.296 app.py[11] <module> -> hi
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-waiting 60 seconds for Game to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-BA() ERROR: must be real number, not TypeError
-waiting 5 seconds for launcher to start......
-2021-07-08 14:02:36.803 BMAutomation.py[1965] launch -> Find Control Timeout: {Name: 'Fallout 4', ControlType: WindowControl}
-BA() ERROR: must be real number, not LookupError
 waiting 5 seconds for launcher to start......
 
 ********** Ctrl+C key input detected. Program Stopped! **********
