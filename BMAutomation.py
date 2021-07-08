@@ -1691,155 +1691,177 @@ class Game:
     ################################ Base Info #################################
     def setGameName(self, name: str) -> None:
         """
-        Set the Game Name
+        Set the Game Name.
 
         Parameters
         ----------
         name : string.
             Game Name to be setted.
 
+        Notes
+        -----
+        This name is only used for you own reference.
+
         """
         self.gameName = name
 
     def getGameName(self) -> str:
         """
-        Get the Game Name
+        Get the Game Name.
 
         Returns
         -------
-        getGameName : string
-            The Game Name
+        getGameName : string.
+            The Game Name (default: "").
+
+        Notes
+        -----
+        This name is only used for you own reference.
 
         """
         return self.gameName
 
     def setSteamDirectory(self, dir: str) -> None:
         """
-        Set the Steam directory
+        Set the Steam directory.
 
         Parameters
         ----------
         dir : string.
-            Steam directory to be setted.
+            Steam directory to be setted. This should be an absolute directory.
+            Used for games on Steam. The path should and must follow this format:
+                {Disk_Letter}:\\{Steam_Directory}\\steamapps\\common
 
         """
         self.steamDirectory = dir
 
     def getSteamDirectory(self) -> str:
         """
-        Get the Steam directory
+        Get the Steam directory.
 
         Returns
         -------
-        getSteamDirectory : string
-            The Steam directory
+        getSteamDirectory : string.
+            The Steam directory (default: ""). This is an absolute directory.
+            The path is usually this format:
+                {Disk_Letter}:\\{Steam_Directory}\\steamapps\\common
 
         """
         return self.steamDirectory
 
     def setDocumentDirectory(self, dir: str) -> None:
         """
-        Set the Document directory
+        Set the Document directory.
 
         Parameters
         ----------
         dir : string.
-            Document directory to be setted.
+            Document directory to be setted. This should be an absolute directory.
+            The path is usually in this format:
+                C:\Users\{User_Name}\Documents
+            TODO: Used for special demand.
 
         """
         self.documentDirectory = dir
 
     def getDocumentDirectory(self) -> str:
         """
-        Get the Document directory
+        Get the Document directory.
 
         Returns
         -------
-        getDocumentDirectory : string
-            The Document directory
+        getDocumentDirectory : string.
+            The Document directory (default: ""). This is an absolute directory.
+            The path is usually in this format:
+                C:\Users\{User_Name}\Documents
 
         """
         return self.documentDirectory
 
     def setBenchDirectory(self, dir: str) -> None:
         """
-        Set the Benchmark directory
+        Set the Benchmark directory.
 
         Parameters
         ----------
         dir : string.
-            Benchmark directory to be setted.
+            Benchmark directory to be setted. This should be an absolute directory.
 
         """
         self.benchDirectory = dir
 
     def getBenchDirectory(self) -> str:
         """
-        Get the Benchmark directory
+        Get the Benchmark directory.
 
         Returns
         -------
-        getBenchmarkDirectory : string
-            The Benchmark directory
+        getBenchmarkDirectory : string.
+            The Benchmark directory (default: ""). This is an absolute directory.
 
         """
         return self.benchDirectory
 
     def setRelativePath(self, dir: str) -> None:
         """
-        Set the Relative Path
+        Set the Relative Path represent the game folder name under the Steam directory.
 
         Parameters
         ----------
         dir : string.
-            Relative Path to be setted.
+            Relative Path to be setted. This path represent the game folder name under the Steam directory.
+            This path is used for games on steam and must include the game's executor.
 
         """
         self.relativePath = dir
 
     def getRelativePath(self) -> str:
         """
-        Get the Relative Path
+        Get the Relative Path represent the game folder name under the Steam directory.
 
         Returns
         -------
-        getRelativePath : string
-            The Relative Path
+        getRelativePath : string.
+            The Relative Path (default: ""). This path represent the game folder name
+            under the Steam directory.
+            This path is used for games on steam and must include the game's executor.
 
         """
         return self.relativePath
 
     def setAbsolutePath(self, dir: str) -> None:
         """
-        Set the Absolute Path
+        Set the Absolute Path used for independent games.
 
         Parameters
         ----------
         dir : string.
-            Absolute Path to be setted.
+            Absolute Path to be setted. This path is used for independent games.
+            This path must include the game's executor.
 
         """
         self.absolutePath = dir
 
     def getAbsolutePath(self) -> str:
         """
-        Get the Absolute Path
+        Get the Absolute Path.
 
         Returns
         -------
-        getAbsolutePath : string
-            The Absolute Path
+        getAbsolutePath : string.
+            The Absolute Path (default: ""). This path is used for independent games and
+            must include the game's executor.
 
         """
         return self.absolutePath
 
     def setLoopTimes(self, t: int) -> None:
         """
-        Set the Loop Times
+        Set the Loop Times.
 
         Parameters
         ----------
-        t : string.
+        t : integer.
             Loop Times to be setted.
 
         """
@@ -1847,12 +1869,12 @@ class Game:
 
     def getLoopTimes(self) -> int:
         """
-        Get the Loop Times
+        Get the Loop Times.
 
         Returns
         -------
-        getLoopTimes : integer
-            The Loop Times
+        getLoopTimes : integer.
+            The Loop Times (default: 1).
 
         """
         return self.loopTimes
@@ -1860,7 +1882,7 @@ class Game:
     ################################# Executor #################################
     def setExecutor(self, exe: str) -> None:
         """
-        Set the Executor
+        Set the Executor.
 
         Parameters
         ----------
@@ -1877,18 +1899,45 @@ class Game:
         Returns
         -------
         getExecutor : string
-            The Executor Name
+            The Executor Name (default: "").
 
         """
         return self.exe
 
     def setExecutorPath(self, exePath: str) -> None:
         """
-        exePath:
-        S/s- Steam
-        R/r- Relative
-        A/a- Abolute
-        Other- Directly add to full .exe path
+        Set the Executor Path.
+
+        Parameters
+        ----------
+        exePath : string.
+            A string representation of the executor path, where
+            each of the following letter can have special representation:
+                S / s - Steam Directory
+                B / b - Benchmark Directory
+                D / d - Document Directory
+                R / r - Relative Path
+                A / a - Abolute Path
+                Other - Directly add to full .exe path
+            see more in Examples sections.
+
+        Examples
+        --------
+        Supposed I'm working on a game on Steam, and has already setted the Steam Directory and relative path
+        For example,
+            Game.getSteamDirectory() returns:
+                F:\\SteamLibrary\\steamapps\\common\\
+            Game.getRelativePath() returns:
+                Fallout 4
+        And the game executor's path is:
+            F:\\SteamLibrary\\steamapps\\common\\Fallout 4\\
+
+        Now, I can simply set this game (Fallout 4) executer with the following code:
+
+        >>> Game.setExecutorPath("s/Fallout 4")
+
+        where '/' is essential for seperating those paths.
+
         """
         paths = exePath.split("/")
 
@@ -1900,6 +1949,18 @@ class Game:
                         "GAME() ERROR %s: try to join None Steam Directory." % self.getGameName(), ConsoleColor.Red)
                     return 0
                 full_exe = os.path.join(full_exe, self.getSteamDirectory())
+            elif str.lower(p) == "b":
+                if self.getBenchDirectory() is None:
+                    Logger.WriteLine(
+                        "GAME() ERROR %s: try to join None Benchmark Directory." % self.getGameName(), ConsoleColor.Red)
+                    return 0
+                full_exe = os.path.join(full_exe, self.getBenchDirectory())
+            elif str.lower(p) == "d":
+                if self.getDocumentDirectory() is None:
+                    Logger.WriteLine(
+                        "GAME() ERROR %s: try to join None Document Directory." % self.getGameName(), ConsoleColor.Red)
+                    return 0
+                full_exe = os.path.join(full_exe, self.getDocumentDirectory())
             elif str.lower(p) == "r":
                 if self.getRelativePath() is None:
                     Logger.WriteLine(
@@ -1919,6 +1980,13 @@ class Game:
 
     def getExecutorPath(self) -> str:
         """
+        Get the Executor Path.
+
+        Returns
+        -------
+        getExecutorPath - string.
+            The Executor Path. This is an absolute directory.
+
         """
         return self.exePath
 
