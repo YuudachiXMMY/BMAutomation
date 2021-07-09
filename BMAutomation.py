@@ -1202,7 +1202,7 @@ class Input:
     """Input Method for Input operations."""
 
     @staticmethod
-    def key_input(key: str, t: float = 0.05) -> None:
+    def key_input(key: str, t: float = 0.05) -> Literal[0, 1]:
         """
         Perform a key pressdown and pressup.
 
@@ -1213,6 +1213,11 @@ class Input:
         t : float, optional.
             A time period in second between pressdown and pressup (default: 0.05).
 
+
+        Returns
+        -------
+        key_input : Literal[0, 1]
+            Return 1, if succeed to input the key; otherwise, return 0.
         """
         if key in VK_CODE._VK_CODE2:
             key = VK_CODE._VK_CODE2[key]
@@ -1228,7 +1233,7 @@ class Input:
         return 0
 
     @staticmethod
-    def key_inputs(str_input: str, t: float = 0.05, duration: float = 0.5) -> Literal[0, 1]:
+    def key_inputs(str_input: str, t: float = 0.05, duration: float = 0.5) -> None:
         """
         Perform a serious of key pressdowns and pressups.
 
@@ -1993,10 +1998,51 @@ class Game:
     ################################# Launcher #################################
     def setLauncherMode(self, mode: Literal[0, 1, 2, 3]) -> None:
         """
-        0- No launcher
-        1- UIAutomation
-        2- Click on given position
-        3- call TinyTask
+        Set the Launcher Operation Mode.
+
+        Parameters
+        ----------
+        mod : Literal[0, 1, 2, 3]
+            Set the Launcher Operation Mode, where:
+                0 - There is no launcher.\n
+                1 - There is a launcher, and UIAutomation is supported.
+                Game.setLauncher() is required (see more in Notes section).\n
+                2 - There is a launcher, and just left-click on the given position.
+                Game.setLauncher() is required (see more in Notes section).\n
+                3 - There is a launcher, and TinyTask can be utilized.
+                Game.setLauncher() is required (see more in Notes section).\n
+
+        Notes
+        -----
+        For mode 0, UIAutomation:
+            When there is no launcher, which means the game will directly start,
+            we can just leave this function, or use Game.setLauncherMode(0).
+            Also, there is no need to use Game.setLauncher().
+
+        For mode 1, UIAutomation:
+            When there is a launcher, and the launcher utilizes Windows UIAutomation API.
+            Then, we can use UIAutomation, or Accessibility Insights for Windows (recommended),
+            to find the START button on the launcher. Game.setLauncher() MUST be called.
+            Please read more documentation for Accessibility Insights for Windows: https://accessibilityinsights.io/docs/en/windows/overview/
+
+        For mode 2, Directly do a left-click:
+            When there is a launcher, and the START button on the launcher is always at the
+            same position. Then, you can easily use this mode. Suggestion / Caution:
+                If your screen resolution is always same, and there won't be any other window
+                before the launcher when it just started, then you can feel free to use this mode;
+                otherwise, it may fail to click on the START button.
+            Game.setLauncher() MUST be called.
+
+        For mode 3, TinyTask:
+            When there is a launcher, and the START button on the launcher is always at the
+            same position. Then, you can easily use this mode. TinTask can also support keyboard
+            inputs, due to some game launcher can be directly handled by an ENTER key input.
+            In addition, it has the same risk as mode 2. Suggestion / Caution:
+                If your screen resolution is always same, and there won't be any other window
+                before the launcher when it just started, then you can feel free to use this mode;
+                otherwise, it may fail to click on the START button.
+            Game.setLauncher() MUST be called.
+
         """
         self.launcherMode = mode
 
