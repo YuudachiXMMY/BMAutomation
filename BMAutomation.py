@@ -1632,10 +1632,10 @@ class Game:
         Finally, once you are done, please feel free to use Game.check() to see whether something is missed :)
 
         """
-        self.gameName = gameName
+        self.gameName: str = gameName
 
         if not steamDirectory is None and not os.path.isdir(steamDirectory):
-            self.steamDirectory = None
+            self.steamDirectory: str = None
             if dev:
                 Logger.WriteLine(
                     'GAME() WARNING %s: BMAutomation is not initialized with a valid steamDirectory.' % gameName, ConsoleColor.Yellow)
@@ -1643,52 +1643,52 @@ class Game:
             self.steamDirectory = steamDirectory
 
         if not documentDirectory is None and not os.path.isdir(documentDirectory):
-            self.documentDirectory = None
+            self.documentDirectory: str = None
             if dev:
                 Logger.WriteLine(
                     'GAME() WARNING %s: BMAutomation is not initialized with a valid documentDirectory.' % gameName, ConsoleColor.Yellow)
         else:
-            self.documentDirectory = documentDirectory
+            self.documentDirectory: str = documentDirectory
 
         if not benchDirectory is None and not os.path.isdir(benchDirectory):
-            self.benchDirectory = None
+            self.benchDirectory: str = None
             if dev:
                 Logger.WriteLine(
                     'GAME() WARNING %s: BMAutomation is not initialized with a valid benchDirectory.' % gameName, ConsoleColor.Yellow)
         else:
-            self.benchDirectory = benchDirectory
+            self.benchDirectory: str = benchDirectory
 
-        self.exe = exe
+        self.exe: str = exe
 
         if not relativePath is None and not os.path.isdir(relativePath):
-            self.relativePath = None
+            self.relativePath: str = None
             if dev:
                 Logger.WriteLine(
                     'GAME() WARNING %s: BMAutomation is not initialized with a valid relativePath.' % gameName, ConsoleColor.Yellow)
         else:
-            self.relativePath = relativePath
+            self.relativePath: str = relativePath
 
         if not absolutePath is None and not os.path.isdir(absolutePath) and not os.path.isabs(absolutePath):
-            self.absolutePath = None
+            self.absolutePath: str = None
             if dev:
                 Logger.WriteLine(
                     'GAME() WARNING %s: BMAutomation is not initialized with a valid absolutePath.' % gameName, ConsoleColor.Yellow)
         else:
-            self.absolutePath = absolutePath
+            self.absolutePath: str = absolutePath
 
-        self.loopTimes = loopTimes
+        self.loopTimes: int = loopTimes
 
         if mode >= 0 and mode <= 4:
-            self.mode = mode
+            self.mode: int = mode
         else:
             if dev:
                 Logger.WriteLine(
                     'GAME() WARNING %s: BMAutomation is not initialized with a valid mode.' % gameName, ConsoleColor.Yellow)
 
-        self.exePath = ""
-        self.launcherMode = -1
+        self.exePath: str = ""
+        self.launcherMode: int = -1
 
-        self.LauncherWaitTime = 15
+        self.LauncherWaitTime: float = 15
 
         self._START_ACTIONS = None
         self._QUIT_ACTIONS = None
@@ -1946,7 +1946,7 @@ class Game:
         """
         paths = exePath.split("/")
 
-        full_exe = ""
+        full_exe: str = ""
         for p in paths:
             if str.lower(p) == "s":
                 if self.getSteamDirectory() is None:
@@ -2048,22 +2048,121 @@ class Game:
 
     def getLauncherMode(self) -> Literal[0, 1, 2, 3]:
         """
-        0- No launcher
-        1- UIAutomation
-        2- Click on given position
-        3- call TinyTask
+        Get the Launcher Operation Mode.
+
+        Returns
+        -------
+        getLauncherMode : Literal[0, 1, 2, 3].
+            An integer representing the Launcher Operation Mode, where:
+                0 - There is no launcher.\n
+                1 - There is a launcher, and UIAutomation is supported.
+                Game.setLauncher() is required (see more in Notes section).\n
+                2 - There is a launcher, and just left-click on the given position.
+                Game.setLauncher() is required (see more in Notes section).\n
+                3 - There is a launcher, and TinyTask can be utilized.
+                Game.setLauncher() is required (see more in Notes section).\n
+
+        Notes
+        -----
+        For mode 0, UIAutomation:
+            When there is no launcher, which means the game will directly start,
+            we can just leave this function, or use Game.setLauncherMode(0).
+            Also, there is no need to use Game.setLauncher().
+
+        For mode 1, UIAutomation:
+            When there is a launcher, and the launcher utilizes Windows UIAutomation API.
+            Then, we can use UIAutomation, or Accessibility Insights for Windows (recommended),
+            to find the START button on the launcher. Game.setLauncher() MUST be called.
+            Please read more documentation for Accessibility Insights for Windows: https://accessibilityinsights.io/docs/en/windows/overview/
+
+        For mode 2, Directly do a left-click:
+            When there is a launcher, and the START button on the launcher is always at the
+            same position. Then, you can easily use this mode. Suggestion / Caution:
+                If your screen resolution is always same, and there won't be any other window
+                before the launcher when it just started, then you can feel free to use this mode;
+                otherwise, it may fail to click on the START button.
+            Game.setLauncher() MUST be called.
+
+        For mode 3, TinyTask:
+            When there is a launcher, and the START button on the launcher is always at the
+            same position. Then, you can easily use this mode. TinTask can also support keyboard
+            inputs, due to some game launcher can be directly handled by an ENTER key input.
+            In addition, it has the same risk as mode 2. Suggestion / Caution:
+                If your screen resolution is always same, and there won't be any other window
+                before the launcher when it just started, then you can feel free to use this mode;
+                otherwise, it may fail to click on the START button.
+            Game.setLauncher() MUST be called.
+
         """
         return self.launcherMode
 
     def setLauncher(self, waitTime: float = 20,
-                    uiAppControlType: str = None, uiAppName: str = None,
-                    uiStartControlType: str = None, uiStartIndex: int = None, uiStartName: str = None,
+                    uiAppControlType: Literal["PaneControl", "WindowControl", "ImageControl", "ButtonControl"] = None, uiAppName: str = '',
+                    uiStartControlType: Literal["PaneControl", "WindowControl", "ImageControl", "ButtonControl"] = None, uiStartIndex: int = None, uiStartName: str = '',
                     clickPos: tuple = None,
                     TinyTaskName: str = None) -> None:
         """
+        Set the Launcher Operation.
+
+        Parameters
+        ----------
+        waitTime : float, optional.
+            Time to wait for the launcher to be fully started (default: 20).
+        uiAppControlType : ["PaneControl", "WindowControl", "ImageControl", "ButtonControl"], optional.
+            The ControlType of the Launcher Window (default: None).
+            Must be setted if in Launcher Mode 1.
+        uiAppName : string, optional.
+            The Name of the Launcher Window (default: ''). Is used to help find the Launcher Window.
+            Only effective in Launcher Mode 1.
+        uiStartControlType : ["PaneControl", "WindowControl", "ImageControl", "ButtonControl"], optional.
+            The ControlType of the Start Button (default: None).
+            Must be setted if in Launcher Mode 1.
+        uiStartIndex : integer, optional.
+            The Index of the Start Button (default: None). Is used to help find the Start Button.
+            Must be setted if in Launcher Mode 1.
+        uiStartName : string, optional.
+            The Name of the Start Button (default: ''). Is used to help find the Start Button.
+            Only effective in Launcher Mode 1.
+        clickPos : tuple, optional.
+            A tuple representing the (x, y) position to click (default: None).
+            Must be setted if in Launcher Mode 2.
+        TinyTaskName : string, optional.
+            A TinyTask File Name to be performed (default: None).
+            Must be setted if in Launcher Mode 3.
+
+        Examples
+        --------
+        For Launcher Mode 1 (Game.getLauncherMode() returns 1):
+
+        We can set the UIAutomation for Fallout 4 with the following code:
+
+        >>> f4.setLauncher(waitTime=5,
+        >>>     uiAppControlType="WindowControl", uiAppName='Fallout 4',
+        >>>     uiStartControlType="ImageControl", uiStartIndex=4, uiStartName='')
+
+        Where the operation will wait for 5 second.
+        And the launcher window name is 'Fallout 4' with control type "WindowControl";
+        the start button name is '' with index 4 and control type "ImageControl".
+
+        For Launcher Mode 2 (Game.getLauncherMode() returns 2):
+
+        We can directly click on the button located at (114, 514) with the following code:
+
+        >>> f4.setLauncher(waitTime=20, clickPos=(114, 514))
+
+        Where the operation will wait for 20 second. Then, click at (114, 514).
+
+        For Launcher Mode 3 (Game.getLauncherMode() returns 3):
+
+        We can directly call a TinyTask with the following code:
+
+        >>> f4.setLauncher(waitTime=60, TinyTaskName="tinytask/test.exe")
+
+        Where the operation will wait for 60 second. Then, call the tiny task test.exe under folder "tinytask".
+
         """
         self.LauncherWaitTime = waitTime
-        if not self.hasLauncher():
+        if not self.optional.hasLauncher():
             Logger.WriteLine(
                 'GAME() WARNING %s: Launcher Mode is not enabled.' % self.getGameName(), ConsoleColor.Yellow)
             return
@@ -2094,12 +2193,27 @@ class Game:
 
     def hasLauncher(self) -> bool:
         """
+        Check whether this Game has a Launcher
+
+        Returns
+        -------
+        hasLauncher : bool.
+            Return True if this Game has a launcher; otherwise, return False.
+
         """
         return self.getLauncherMode() > 0 and self.getLauncherMode() <= 3
 
     ################################## Launch ##################################
     def checkLaunch(self) -> bool:
         """
+        Check whether the launcher start-up operation is setted successfully.
+
+        Returns
+        -------
+        checkLaunch : bool.
+            Return True if this Game launcher start-up operation is setted successfully;
+            otherwise, return False.
+
         """
         if self.getExecutor() is None:
             Logger.WriteLine(
@@ -2158,6 +2272,15 @@ class Game:
 
     def launch(self, GameWaitTime: int = 60) -> int:
         """
+        Launch the game. If there is a game launcher, will automatically keep launching the game
+        by doing pre-setted launcher operation (setted by Game.setLauncher()).
+
+        Returns
+        -------
+        launch : integer.
+            return 0 if the game failed to start;
+            otherwise, the game's app id.
+
         """
         startGame: int = 0
 
@@ -2239,6 +2362,14 @@ class Game:
     ################################# Actions ##################################
     def checkActions(self, actionList: list) -> bool:
         """
+        Check whether this Game start-up and quit operations are setted successfully.
+
+        Returns
+        -------
+        checkActions : bool
+            Return True if this Game start-up and quit operations are setted successfully;
+            otherwise, return False.
+
         """
         try:
             for action in actionList:
@@ -2266,7 +2397,7 @@ class Game:
         else:
             return True
 
-    def setStartActions(self, actions: List[List[Any]]):
+    def setStartActions(self, actions: List[List[Any]]) -> None:
         """
         [["w", "wait", duration],
          ["k", key, duration],
@@ -2281,11 +2412,26 @@ class Game:
 
     def checkStartActions(self) -> bool:
         """
+        Check whether this Game start-up operation is setted successfully.
+
+        Returns
+        -------
+        checkStartActions : bool
+            Return True if this Game start-up operation is setted successfully;
+            otherwise, return False.
+
         """
         return self.checkActions(self._START_ACTIONS)
 
-    def getStartActions(self):
+    def getStartActions(self) -> List:
         """
+        Get the start-up actions.
+
+        Returns
+        -------
+        getStartActions : List.
+            A list representing the start-up actions.
+
         """
         return self._START_ACTIONS
 
@@ -2304,11 +2450,26 @@ class Game:
 
     def checkQuitActions(self) -> bool:
         """
+        Check whether this Game quit operation is setted successfully.
+
+        Returns
+        -------
+        checkQuitActions : bool
+            Return True if this Game quit operation is setted successfully;
+            otherwise, return False.
+
         """
         return self.checkActions(self._QUIT_ACTIONS)
 
-    def getQuitActions(self):
+    def getQuitActions(self) -> List:
         """
+        Get the quit actions.
+
+        Returns
+        -------
+        getStartActions : List.
+            A list representing the quit actions.
+
         """
         return self._QUIT_ACTIONS
 
@@ -2388,6 +2549,20 @@ class Game:
 
     def start(self) -> int:
         """
+        Perform start-up actions once the Game is launched.
+
+        Returns
+        -------
+        start : integer.
+            return 0 if Game.checkStartActions() return 0;
+            otherwise, non-0 result code returned by Game.startActions(self.getStartActions())
+
+        Notes
+        -----
+        This function should be called only after setted the start actions by using Game.setStartActions().
+
+        In client side, this function is usually called right after Game.launch()
+
         """
         if not self.checkStartActions():
             return 0
@@ -2395,6 +2570,20 @@ class Game:
 
     def quit(self):
         """
+        Perform quit actions once the Game finish benchmarking.
+
+        Returns
+        -------
+        start : integer.
+            return 0 if Game.checkQuitActions() return 0;
+            otherwise, non-0 result code returned by Game.startActions(self.getQuitActions())
+
+        Notes
+        -----
+        This function should be called only after setted the quit actions by using Game.setQuitActions().
+
+        In client side, this function is usually called after Game.startBenchMarking() is finished
+
         """
         if not self.checkQuitActions():
             return 0
@@ -2442,6 +2631,19 @@ class Game:
     ############################### Benchmarking ###############################
     def check(self) -> bool:
         """
+        Check whether the whole Game is ready to do the automation.
+
+        Returns
+        -------
+        check : bool.
+            Return True if the whole Game is ready to do the automation;
+            otherwise, return False.
+
+        Notes
+        -----
+        This function checks the Launch, Start Actions, and Quit Actions, by using
+        Game.checkLaunch(), Game.checkStartActions(), Game.checkQuitActions()
+
         """
         if not self.checkLaunch():
             return False
@@ -2628,17 +2830,10 @@ class BMAutomation:
         times = 0
         startCode, quitCode = (0, 0)
         while times < tar.getLoopTimes():
-            print(0)
             startCode = tar.launch()
-            print(1)
             startCode = tar.start()
-            print(2)
-            print(self.getBenchmarkTime())
-            print(3)
             tar.startBenchMarking(self.getBenchmarkTime())
-            print(4)
             quitCode = tar.quit()
-            print(5)
             times += 1
         return startCode, quitCode
 
