@@ -6,3 +6,6 @@ unsupported operand type(s) for +: 'AttributeError' and 'str': Exception Detecte
 waiting 5 seconds for launcher to start......
 
 ********** Ctrl+C key input detected. Program Stopped! **********
+waiting 5 seconds for launcher to start......
+waiting 60 seconds for Game to start......
+Performing Action 0 w : At wait in 20 secondsPerforming Action 1 cl : At (960, 540) in 1 secondsPerforming Action 2 cl : At (960, 540) in 1 secondsPerforming Action 3 cl : At (960, 540) in 1 secondsPerforming Action 4 cl : At (960, 540) in 1 secondsPerforming Action 5 w : At wait in 5 secondsPerforming Action 6 t : At tinytask//enter.exe in 1 secondsPerforming Action 7 t : At tinytask//enter.exe in 1 secondsPerforming Action 8 w : At wait in 30 secondsBA() ERROR: (2, 'ShellExecute', 'The system cannot find the file specified.')
