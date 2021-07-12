@@ -2162,7 +2162,7 @@ class Game:
 
         """
         self.LauncherWaitTime = waitTime
-        if not self.optional.hasLauncher():
+        if not self.hasLauncher():
             Logger.WriteLine(
                 'GAME() WARNING %s: Launcher Mode is not enabled.' % self.getGameName(), ConsoleColor.Yellow)
             return
@@ -2853,7 +2853,7 @@ class BMAutomation:
 
     def __init__(self, steamDirectory: str = "", documentDirectory: str = "",
                  OverallLoopTimes: int = 1, GameLoopTimes: int = 1, BenchmarkingTime: float = 600, dev: bool = False) -> None:
-        """
+        r"""
         Construct a BMAutoamtion with several directories, paths, automation loop times and benchmarking time.
 
         Parameters
@@ -3006,7 +3006,7 @@ class BMAutomation:
         return self.steamDirectory
 
     def setDocumentDirectory(self, dir: str) -> None:
-        """
+        r"""
         Set the Document directory.
 
         Parameters
@@ -3021,7 +3021,7 @@ class BMAutomation:
         self.documentDirectory = dir
 
     def getDocumentDirectory(self) -> str:
-        """
+        r"""
         Get the Document directory.
 
         Returns

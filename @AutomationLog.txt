@@ -1,3 +1,8 @@
 waiting 5 seconds for launcher to start......
 
 ********** Ctrl+C key input detected. Program Stopped! **********
+unsupported operand type(s) for +: 'AttributeError' and 'str': Exception Detected!
+'Game' object has no attribute 'optional': Exception Detected!
+waiting 5 seconds for launcher to start......
+
+********** Ctrl+C key input detected. Program Stopped! **********
