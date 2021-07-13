@@ -6,6 +6,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# My Log Files
+@AutomationLog.txt
+.vscode/
+
 # C extensions
 *.so
 

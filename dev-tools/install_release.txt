@@ -1,1 +1,13 @@
-py -m pip install --index-url https://test.pypi.org/simple/ BMAutomation
+# For Released Package
+## Install for the first Time
+python -m pip install BMAutomation
+
+## Upgrading Released Package
+python -m pip install --upgrade BMAutomation
+
+# For Test Package
+## Install for the first Time
+pip install -i https://test.pypi.org/simple/ BMAutomation
+
+## Upgrading Test Package
+pip install --upgrade -i https://test.pypi.org/simple/ BMAutomation

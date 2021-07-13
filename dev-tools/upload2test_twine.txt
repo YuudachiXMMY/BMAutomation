@@ -1,1 +1,5 @@
+# PyPI package
+py -m twine upload dist/BMAutomation-0.1.2-py3-none-any.whl dist/BMAutomation-0.1.2.tar.gz
+
+# TestPyPI package
 py -m twine upload --repository testpypi dist/*
