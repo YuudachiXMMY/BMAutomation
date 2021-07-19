@@ -1,13 +1,13 @@
 # For Released Package
 ## Install for the first Time
-python -m pip install BMAutomation
+python -m pip install bmautomation
 
 ## Upgrading Released Package
-python -m pip install --upgrade BMAutomation
+python -m pip install --upgrade bmautomation
 
 # For Test Package
 ## Install for the first Time
-pip install -i https://test.pypi.org/simple/ BMAutomation
+pip install -i https://test.pypi.org/simple/ bmautomation
 
 ## Upgrading Test Package
-pip install --upgrade -i https://test.pypi.org/simple/ BMAutomation
+pip install --upgrade -i https://test.pypi.org/simple/ bmautomation

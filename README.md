@@ -10,5 +10,5 @@ Please check test packages on TestPyPI [here](https://test.pypi.org/project/BMAu
 
 If you are interested in using a test package, install the test package using
 ```
-pip install -i https://test.pypi.org/simple/ BMAutomation
+pip install -i https://test.pypi.org/simple/ bmautomation
 ```

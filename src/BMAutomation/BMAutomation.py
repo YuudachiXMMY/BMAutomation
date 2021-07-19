@@ -1,3 +1,18 @@
+#!python3
+# -*- coding: utf-8 -*-
+"""
+BMAutomation for python3
+Author: hwu9@uw.edu
+Source: https://github.com/YuudachiXMMY/BMAutomation
+
+This module is for Benchmark Automation on Windows(Windows XP with SP3 and Windows 7/8/8.1/10).
+It supports launching applications, clicking on buttons and performing keyboard inputs.
+Run 'bmautomation.py -h' for help.
+
+BMAutomation is shared under the MIT License.
+This means that you can do almost anything they want with the code,
+like making and distributing closed source versions.
+"""
 import ctypes
 import ctypes.wintypes
 import datetime
@@ -1689,6 +1704,7 @@ class Game:
         self.launcherMode: int = -1
 
         self.LauncherWaitTime: float = 15
+        self.launchParam: str = ""
 
         self._START_ACTIONS = None
         self._QUIT_ACTIONS = None
@@ -2097,8 +2113,8 @@ class Game:
         return self.launcherMode
 
     def setLauncher(self, waitTime: float = 20,
-                    uiAppControlType: Literal["PaneControl", "WindowControl", "ImageControl", "ButtonControl"] = None, uiAppName: str = '',
-                    uiStartControlType: Literal["PaneControl", "WindowControl", "ImageControl", "ButtonControl"] = None, uiStartIndex: int = None, uiStartName: str = '',
+                    uiAppControlType: Literal["PaneControl", "WindowControl", "ImageControl", "ButtonControl", "CustomControl"] = None, uiAppName: str = '',
+                    uiStartControlType: Literal["PaneControl", "WindowControl", "ImageControl", "ButtonControl", "CustomControl"] = None, uiStartIndex: int = None, uiStartName: str = '',
                     clickPos: tuple = None,
                     TinyTaskName: str = None) -> None:
         """
@@ -2108,13 +2124,13 @@ class Game:
         ----------
         waitTime : float, optional.
             Time to wait for the launcher to be fully started (default: 20).
-        uiAppControlType : ["PaneControl", "WindowControl", "ImageControl", "ButtonControl"], optional.
+        uiAppControlType : ["PaneControl", "WindowControl", "ImageControl", "ButtonControl", "CustomControl"], optional.
             The ControlType of the Launcher Window (default: None).
             Must be setted if in Launcher Mode 1.
         uiAppName : string, optional.
             The Name of the Launcher Window (default: ''). Is used to help find the Launcher Window.
             Only effective in Launcher Mode 1.
-        uiStartControlType : ["PaneControl", "WindowControl", "ImageControl", "ButtonControl"], optional.
+        uiStartControlType : ["PaneControl", "WindowControl", "ImageControl", "ButtonControl", "CustomControl"], optional.
             The ControlType of the Start Button (default: None).
             Must be setted if in Launcher Mode 1.
         uiStartIndex : integer, optional.
@@ -2270,6 +2286,18 @@ class Game:
 
         return True
 
+    def setLaunchParam(self, param: str = "") -> None:
+        """
+        Set the Launching Parameter for the Game that can be recognized by Command Line.
+
+        Parameters
+        ----------
+        param : string.
+            A Launching Parameter for the Game that can be recognized by Command Line (Default: "").
+
+        """
+        self.launchParam = param
+
     def launch(self, GameWaitTime: int = 60) -> int:
         """
         Launch the game. If there is a game launcher, will automatically keep launching the game
@@ -2290,7 +2318,7 @@ class Game:
         # Open Game
         exe = os.path.join(self.getExecutorPath(), self.getExecutor())
         try:
-            startGame = win32api.ShellExecute(1, 'open', exe, '', '', 1)
+            startGame = win32api.ShellExecute(1, 'open', exe, self.launchParam, '', 1)
 
             if self.hasLauncher():
                 Logger.WriteLine(
@@ -2312,6 +2340,9 @@ class Game:
                     elif self.uiAppControlType == "ButtonControl":
                         app = auto.ButtonControl(
                             searchDepth=1, Name=self.uiAppName)
+                    elif self.uiAppControlType == "CustomControl":
+                        app = auto.CustomControl(
+                            searchDepth=1, Name=self.uiAppName)
                     else:
                         Logger.WriteLine(
                             "GAME() ERROR %s: %s is not recognized as a ControlType. Please check again or report this issue." % (self.getGameName(), self.uiAppControlType), ConsoleColor.Red)
@@ -2332,6 +2363,9 @@ class Game:
                             foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     elif self.uiStartControlType == "ButtonControl":
                         auto.ButtonControl(
+                            foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
+                    elif self.uiStartControlType == "CustomControl":
+                        auto.CustomControl(
                             foundIndex=self.uiStartIndex, Name=self.uiStartName).Click()
                     else:
                         Logger.WriteLine(
@@ -2372,6 +2406,8 @@ class Game:
 
         """
         try:
+            if actionList is None:
+                return False
             for action in actionList:
                 if not isinstance(action, List):
                     Logger.WriteLine(
@@ -2467,7 +2503,7 @@ class Game:
             otherwise, return False.
 
         """
-        return self.checkActions(self._START_ACTIONS)
+        return self.checkActions(self.getStartActions())
 
     def getStartActions(self) -> List[List[Any]]:
         """
@@ -2546,7 +2582,7 @@ class Game:
             otherwise, return False.
 
         """
-        return self.checkActions(self._QUIT_ACTIONS)
+        return self.checkActions(self.getQuitActions())
 
     def getQuitActions(self) -> List[List[Any]]:
         """
@@ -2643,6 +2679,7 @@ class Game:
 
         """
         try:
+            resCode = 0
             num = 0
             for action in actions:
 
@@ -2838,9 +2875,9 @@ class Game:
         """
         if not self.checkLaunch():
             return False
-        if not self.checkStartActions():
+        if not self.getStartActions() is None and not self.checkStartActions():
             return False
-        if not self.checkQuitActions():
+        if not self.getQuitActions() is None and not self.checkQuitActions():
             return False
         return True
 
@@ -2852,7 +2889,7 @@ class BMAutomation:
     """Main Object of BMAutomation"""
 
     def __init__(self, steamDirectory: str = "", documentDirectory: str = "",
-                 OverallLoopTimes: int = 1, GameLoopTimes: int = 1, BenchmarkingTime: float = 600, dev: bool = False) -> None:
+                 OverallLoopTimes: int = 1, GameLoopTimes: int = 1, BenchmarkingTime: float = 600, dealCrashDump: bool = False, dev: bool = False) -> None:
         r"""
         Construct a BMAutoamtion with several directories, paths, automation loop times and benchmarking time.
 
@@ -2873,6 +2910,8 @@ class BMAutomation:
             Times to run the automation for each game (default: 1).
         BenchmarkingTime : float, optional.
             Time to perform benchmarking (default: 600).
+        dealCrashDump : bool, optional.
+            True to detect and move crash dump into given folder.
         dev : bool, optional.
             Construct the object in develop mode (default: False). The console will output warning messages.
 
@@ -2899,6 +2938,11 @@ class BMAutomation:
         self.GameLoopTimes: int = GameLoopTimes
 
         self.BenchmarkingTime: float = BenchmarkingTime
+
+        self.dealCrashDump = dealCrashDump
+        self.CrashDumpDir = "C:\\WinDumps"
+
+        self.dev = dev
 
     ################################ Base Info #################################
     def addGameList(self, gameName: str, gameObj: Game = None,
@@ -3106,6 +3150,40 @@ class BMAutomation:
         """
         return self.BenchmarkingTime
 
+    def setDealCrashDump(self, dealCrashDump: bool, targetDir: str = "C:\\WinDumps") -> None:
+        """
+        Set to deal crash dump
+
+        Paremeters
+        ----------
+        dealCrashDump : bool.
+            True to detect and move crashDump
+        targetDir : string, optional.
+            An absolute path to move the crash dump to (Default: C:\\WinDumps).
+
+        """
+        self.dealCrashDump = dealCrashDump
+        if targetDir != "C:\\WinDumps":
+            if os.path.exists(targetDir):
+                self.CrashDumpDir = targetDir
+            else:
+                Logger.WriteLine(
+                    'BA() ERROR: setDealCrashDump() parameter targetDir is not a valid absolute directory.', ConsoleColor.Red)
+
+    def getDealCrashDump(self) -> Tuple[bool, str]:
+        """
+        Get deal crash dump settings
+
+        Paremeters
+        ----------
+        getDealCrashDump : Tuple[bool, str].
+            A tuple where the first entry is a boolean with True value to deal crash dump and
+            false to ignore crash dump; second entry is a string representing an absolute directory
+            to move the crash dump to.
+
+        """
+        return self.dealCrashDump, self.CrashDumpDir
+
     ################################## Start ###################################
     def checkStart(self) -> bool:
         """
@@ -3167,6 +3245,8 @@ class BMAutomation:
             res = dict()
             for i in range(self.getOverallLoopTimes()):
                 for game in self.getGameList():
+                    if self.dealCrashDump and self.detectCrashDumps():
+                        self.dealCrashDumps(self.CrashDumpDir)
                     if not game in res:
                         res[game] = []
 
@@ -3311,14 +3391,18 @@ class BMAutomation:
     @staticmethod
     def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
         """
-        Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps
+        Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps.
 
-        @param:
-            - tar - the target path to copy to (default to "C:\WinDumps")
+        Parameters
+        ----------
+        tar : string, optional.
+            Targer .DMP file name (Default: "MEMORY.DMP").
 
-        @RETURN:
-            - True - The dump file is detected
-            - False - otherwise, the file is not detected
+        Returns
+        -------
+        detectCrashDumps : Tuple[list, list]
+            A tuple where the first entry are all user mode crash dumps;
+            the second entry are dump files under C:\Windows.
 
         """
         # path = "%LOCALAPPDATA%\CrashDumps"
@@ -3329,10 +3413,12 @@ class BMAutomation:
     @staticmethod
     def dealCrashDumps(tar="C:\\WinDumps") -> None:
         """
-        Copy the Windows dump file to the desired location and remove the dump files under %LOCALAPPDATA%\CrashDumps
+        Copy the Windows dump file to the desired location and remove the dump files.
 
-        @param:
-            - tar - the target path to copy to (default to "C:\WinDumps")
+        Parameters
+        ----------
+        tar : string, optional.
+            The target path to copy to (Default: "C:\WinDumps").
 
         """
 
