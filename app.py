@@ -37,6 +37,7 @@ GenshinImpactDir: str = "G:\\Genshin Impact"
 app: ba.BMAutomation = ba.BMAutomation(steamDir, docDir)
 # app.setDealCrashDump(True, "C:\\WinDumps")
 
+app.setOverallLoopTimes(999)
 app.setBenchmarkTime(300)
 
 
@@ -45,6 +46,8 @@ def SniperEliteV2():
         game_name: str = "SniperEliteV2"
         game: ba.Game = ba.Game(game_name, benchDirectory=SniperEliteV2Dir,
                                 exe="SniperEliteV2.exe")
+
+        game.setBenchmarkTime(60)
 
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
@@ -73,6 +76,8 @@ def AvP():
         game: ba.Game = ba.Game(game_name, benchDirectory=AvPDir,
                                 exe="AvP_D3D11_Benchmark.exe")
 
+        game.setBenchmarkTime(60)
+
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
@@ -99,6 +104,8 @@ def UnigineHeaven():
         game_name: str = "UnigineHeaven"
         game: ba.Game = ba.Game(game_name, benchDirectory=UnigineHeavenDir,
                                 exe="Heaven.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
 
         game.setLaunchParam(UnigineHeavenArgs)
 
@@ -128,6 +135,8 @@ def UnigineSanctuary():
         game: ba.Game = ba.Game(game_name, benchDirectory=UnigineSanctuaryDir,
                                 exe="Sanctuary.exe")
 
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
         game.setLaunchParam(UnigineSanctuaryArgs)
 
         game.setExecutorPath("b/")
@@ -155,6 +164,8 @@ def DOOMEternal():
         game_name: str = "DOOMEternal"
         game: ba.Game = ba.Game(game_name, benchDirectory=DOOMEternalDir,
                                 exe="DOOMEternalx64vk.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
 
         game.setLaunchParam(DOOMEternalArgs)
 
@@ -184,6 +195,8 @@ def SidMeiersCivilizationVI():
         game: ba.Game = ba.Game(game_name, benchDirectory=SidMeiersCivilizationVIDir,
                                 exe="CivilizationVI_DX12.exe")
 
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
         game.setLaunchParam(SidMeiersCivilizationVIArgs)
 
         game.setExecutorPath("b/")
@@ -211,6 +224,8 @@ def FFXIV_ARR_Bench():
         game_name: str = "FFXIV_ARR_Bench"
         game: ba.Game = ba.Game(game_name, benchDirectory=FFXIV_ARR_BenchDir,
                                 exe="ffxiv-arr-bench-character.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
 
         game.setExecutorPath("b/")
         game.setLauncherMode(1)
@@ -243,6 +258,8 @@ def FFXIVBenchmark():
         game: ba.Game = ba.Game(game_name, benchDirectory=FFXIVBenchmarkDir,
                                 exe="FFXIVBenchmark.exe")
 
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
@@ -274,6 +291,8 @@ def FFXIV_Endwalker_Bench():
         game: ba.Game = ba.Game(game_name, benchDirectory=FFXIV_Endwalker_benchDir,
                                 exe="ffxiv-endwalker-bench.exe")
 
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
         game.setExecutorPath("b/")
         game.setLauncherMode(1)
         game.setLauncher(waitTime=5,
@@ -304,6 +323,8 @@ def FFXIV_Heavensward_Bench():
         game_name: str = "FFXIV_Heavensward_Bench"
         game: ba.Game = ba.Game(game_name, benchDirectory=FFXIV_Heavensward_BenchDir,
                                 exe="ffxiv-heavensward-bench.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
 
         game.setExecutorPath("b/")
         game.setLauncherMode(1)
@@ -337,6 +358,8 @@ def FFXIV_Shadowbringers_Bench():
         game: ba.Game = ba.Game(game_name, benchDirectory=FFXIV_Shadowbringers_BenchDir,
                                 exe="ffxiv-shadowbringers-bench.exe")
 
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
         game.setExecutorPath("b/")
         game.setLauncherMode(1)
         game.setLauncher(waitTime=5,
@@ -367,6 +390,8 @@ def FFXIV_Stormblood_Bench():
         game_name: str = "FFXIV_Stormblood_Bench"
         game: ba.Game = ba.Game(game_name, benchDirectory=FFXIV_Stormblood_BenchDir,
                                 exe="ffxiv-stormblood-bench.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
 
         game.setExecutorPath("b/")
         game.setLauncherMode(1)
@@ -400,6 +425,8 @@ def GenshinImpact():
         game: ba.Game = ba.Game(game_name, benchDirectory=GenshinImpactDir,
                                 exe="launcher.exe")
 
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
         game.setExecutorPath("b/")
         game.setLauncherMode(2)
 
@@ -422,6 +449,8 @@ def Fallout4():
         game_name: str = "Fallout 4"
         game: ba.Game = ba.Game(game_name, steamDirectory=app.getSteamDirectory(),
                                 exe="Fallout4Launcher.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
 
         game.setExecutorPath("s/Fallout 4")
         game.setLauncherMode(1)
@@ -482,12 +511,12 @@ def main():
 if __name__ == "__main__":
     try:
         code = main()
-        exit(code)
+        input("Press ENTER to quite:")
 
     except KeyboardInterrupt:
         ba.Logger.WriteLine(
             "\n"+"*"*10+' Ctrl+C key input detected. Program Stopped! '+"*"*10)
-        exit(1)
+        input("Press ENTER to quite:")
     except Exception as e:
         ba.Logger.WriteLine("%s: Exception Detected!" % e)
-        exit(0)
+        input("Press ENTER to quite:")
