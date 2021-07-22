@@ -1,5 +1,33 @@
 import sys
+import json
 
+################################################################################
+def read_json(file):
+    '''
+    Read a .json file and return a json type.
+
+    @param:
+        - file - a filename to be read as .json data.
+
+    @RETURN:
+        - A Python's Data Object representing the data in the .json file.
+        - None - EXCEPTION occurred.
+    '''
+    try:
+        with open(file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        if data == None:
+            data = dict()
+        return data
+    except Exception:
+        return None
+
+
+config = read_json("config.json")
+RunList = config["RunList"]
+
+
+################################################################################
 # To Install BMAutomation, use the following Command in Windows CMD:
 # Released Package:
 # py -m pip install bmautomation
@@ -22,6 +50,10 @@ DOOMEternalDir: str = "G:\\DOOMEternal"
 DOOMEternalArgs: str = "+com_skipKeyPressOnLoadScreens 1 +LoadDevMenuOption devmenuoption/sp 5 0 +g_runCmdOnMapGameplay God +g_runCmdOnMapGameplay `'chainBookmarks -t 0 -i 10`'"
 SidMeiersCivilizationVIDir: str = "G:\\SidMeiersCivilizationVI\\Base\\Binaries\\Win64EOS"
 SidMeiersCivilizationVIArgs: str = "-benchmark"
+Rainbow6Dir: str = "G:\\Rainbow6"
+Rainbow6Args: str = "/test:GameTestEngineTest_PerfTest"
+Borderlands3Dir: str = "G:\\CatnipStaging2\\OakGame\\Binaries\\Win64"
+Borderlands3Args: str = "-nomcp -dx12 -GbxBenchmarkMap -GbxBenchmarkIterations=10"
 
 FFXIV_ARR_BenchDir: str = "G:\\FFXIV-ARR-Bench-Character"
 FFXIVBenchmarkDir: str = "G:\\FFXIVBenchmark"
@@ -41,6 +73,7 @@ app.setOverallLoopTimes(999)
 app.setBenchmarkTime(300)
 
 
+################################################################################
 def SniperEliteV2():
     try:
         game_name: str = "SniperEliteV2"
@@ -172,7 +205,9 @@ def DOOMEternal():
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["s", "key_alt_tab", 1.0]
+        ])
         game.setQuitActions([
             ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
@@ -202,7 +237,9 @@ def SidMeiersCivilizationVI():
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["s", "key_alt_tab", 1.0]
+        ])
         game.setQuitActions([
             ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
@@ -218,6 +255,69 @@ def SidMeiersCivilizationVI():
         sys.stdout.write(e.__class__.__name__ +
                          ': %s caused an Error.' % game_name)
 
+
+def Rainbow6():
+    try:
+        game_name: str = "Rainbow6"
+        game: ba.Game = ba.Game(game_name, benchDirectory=Rainbow6Dir,
+                                exe="RainbowSix.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
+        game.setLaunchParam(Rainbow6Args)
+
+        game.setExecutorPath("b/")
+        game.setLauncherMode(0)
+
+        game.setStartActions([
+            ["s", "key_alt_tab", 1.0]
+        ])
+        game.setQuitActions([
+            ["s", "key_alt_f4", 0.6],
+            ["w", "wait", 30]
+        ])
+        game.setBenchmarkingMode(0)
+
+        checkCode = game.check()
+        if checkCode:
+            app.addGameList(game_name, game)
+        return checkCode
+
+    except Exception as e:
+        sys.stdout.write(e.__class__.__name__ +
+                         ': %s caused an Error.' % game_name)
+
+
+def Borderlands3():
+    try:
+        game_name: str = "Borderlands3"
+        game: ba.Game = ba.Game(game_name, benchDirectory=Borderlands3Dir,
+                                exe="OakGame-Win64-Test.exe")
+
+        game.setBenchmarkTime(app.getBenchmarkTime())
+
+        game.setLaunchParam(Borderlands3Args)
+
+        game.setExecutorPath("b/")
+        game.setLauncherMode(0)
+
+        game.setStartActions([
+            ["s", "key_alt_tab", 1.0]
+        ])
+        game.setQuitActions([
+            ["s", "key_alt_f4", 0.6],
+            ["w", "wait", 30]
+        ])
+        game.setBenchmarkingMode(0)
+
+        checkCode = game.check()
+        if checkCode:
+            app.addGameList(game_name, game)
+        return checkCode
+
+    except Exception as e:
+        sys.stdout.write(e.__class__.__name__ +
+                         ': %s caused an Error.' % game_name)
 
 def FFXIV_ARR_Bench():
     try:
@@ -488,18 +588,36 @@ def Fallout4():
 def main():
     checkCode = 1
 
-    # Fallout4()
-    SniperEliteV2()
-    AvP()
-    UnigineHeaven()
-    UnigineSanctuary()
-    FFXIV_ARR_Bench()
-    FFXIVBenchmark()
-    FFXIV_Endwalker_Bench()
-    FFXIV_Shadowbringers_Bench()
-    FFXIV_Stormblood_Bench()
-
-    # GenshinImpact()
+    if "Fallout4":
+        Fallout4()
+    if "GenshinImpact":
+        GenshinImpact()
+    if "DOOMEternal":
+        DOOMEternal()
+    if "SidMeiersCivilizationVI":
+        SidMeiersCivilizationVI()
+    if "Rainbow6":
+        Rainbow6()
+    if "Borderlands3":
+        Borderlands3()
+    if "UnigineHeaven":
+        UnigineHeaven()
+    if "UnigineSanctuary":
+        UnigineSanctuary()
+    if "FFXIV_ARR_Bench":
+        FFXIV_ARR_Bench()
+    if "FFXIVBenchmark":
+        FFXIVBenchmark()
+    if "FFXIV_Endwalker_Bench":
+        FFXIV_Endwalker_Bench()
+    if "FFXIV_Shadowbringers_Bench":
+        FFXIV_Shadowbringers_Bench()
+    if "FFXIV_Stormblood_Bench":
+        FFXIV_Stormblood_Bench()
+    if "SniperEliteV2":
+        SniperEliteV2()
+    if "AvP":
+        AvP()
 
     if not checkCode:
         return checkCode
@@ -511,12 +629,12 @@ def main():
 if __name__ == "__main__":
     try:
         code = main()
-        input("Press ENTER to quite:")
+        input("Press ENTER to quit:")
 
     except KeyboardInterrupt:
         ba.Logger.WriteLine(
             "\n"+"*"*10+' Ctrl+C key input detected. Program Stopped! '+"*"*10)
-        input("Press ENTER to quite:")
+        input("Press ENTER to quit:")
     except Exception as e:
         ba.Logger.WriteLine("%s: Exception Detected!" % e)
-        input("Press ENTER to quite:")
+        input("Press ENTER to quit:")
