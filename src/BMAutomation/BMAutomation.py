@@ -1552,7 +1552,8 @@ class Game:
     def __init__(self, gameName: str = "",
                  steamDirectory: str = "", documentDirectory: str = "", benchDirectory: str = "",
                  exe: str = "", relativePath: str = "", absolutePath: str = "",
-                 loopTimes: int = 1, mode: Literal[0, 1, 2, 3, 4] = 0, dev: bool = False) -> None:
+                 loopTimes: int = 1, mode: Literal[0, 1, 2, 3, 4] = 0,
+                 BenchmarkingTime: float = 600, dev: bool = False) -> None:
         r"""
         Construct a Game Object with game name, several directories, paths, automation loop times and mode.
 
@@ -1590,6 +1591,8 @@ class Game:
                 2 - Random Control Test, performing random character controls.\n
                 3 - Random Input Test, performing random keyboard inputs, is supposed to be used for Office word.\n
                 4 - Random Rotate Test, performing random screen rotating.
+        BenchmarkingTime : float, optional
+            Time to do benchmarking (default: 600).
         dev : bool, optional.
             Construct the object in develop mode (default: False). The console will output warning messages.
 
@@ -1709,6 +1712,8 @@ class Game:
         self._START_ACTIONS = None
         self._QUIT_ACTIONS = None
 
+        self.BenchmarkingTime = BenchmarkingTime
+
     ################################ Base Info #################################
     def setGameName(self, name: str) -> None:
         """
@@ -1741,6 +1746,30 @@ class Game:
 
         """
         return self.gameName
+
+    def setBenchmarkTime(self, tar: float) -> None:
+        """
+        Set Benchmarking Time
+
+        Paremeters
+        ----------
+        tar : float.
+            Time to perform benchmarking.
+
+        """
+        self.BenchmarkingTime = tar
+
+    def getBenchmarkTime(self) -> float:
+        """
+        Get Benchmarking Time
+
+        Paremeters
+        ----------
+        getBenchmarkTime : float.
+            Time to perform benchmarking.
+
+        """
+        return self.BenchmarkingTime
 
     def setSteamDirectory(self, dir: str) -> None:
         """
@@ -2827,31 +2856,26 @@ class Game:
         """
         return self.mode
 
-    def startBenchMarking(self, duration: float = 600) -> None:
+    def startBenchMarking(self) -> None:
         """
         Start Benchmarking once the game is fully launched and entered.
-
-        Paremeters
-        ----------
-        duration : float, optional.
-            Time to perform benchmarking (default: 600).
 
         """
         # Normal Benchmarking
         if self.getBenchmarkingMode() == 0:
-            Benchmarking.NormalTest(duration)
+            Benchmarking.NormalTest(self.getBenchmarkTime())
         # Alt-Tab Benchmarking
         elif self.getBenchmarkingMode() == 1:
-            Benchmarking.StressTest(duration)
+            Benchmarking.StressTest(self.getBenchmarkTime())
         # Random-Control Benchmarking
         elif self.getBenchmarkingMode() == 2:
-            Benchmarking.RandomControlTest(duration)
+            Benchmarking.RandomControlTest(self.getBenchmarkTime())
         # Random-Input Benchmarking
         elif self.getBenchmarkingMode() == 3:
-            Benchmarking.RandomInputTest(duration)
+            Benchmarking.RandomInputTest(self.getBenchmarkTime())
         # Random-Rotate Benchmarking
         elif self.checkLaunch() == 4:
-            Benchmarking.RandomRotateTest(duration)
+            Benchmarking.RandomRotateTest(self.getBenchmarkTime())
         else:
             Logger.WriteLine("GAME() ERROR %s: Benchmarking Mode %s is not valid" %
                              (self.getGameName(), self.getBenchmarkingMode()), ConsoleColor.Red)
@@ -2873,6 +2897,11 @@ class Game:
         `Game.checkLaunch()`, `Game.checkStartActions()`, `Game.checkQuitActions()`
 
         """
+        if self.getBenchmarkTime() < 20:
+            Logger.WriteLine(
+                'BA() ERROR: BenchmarkTime is less than 20 seconds. Use setBenchmarkTime() to modify.', ConsoleColor.Red)
+            return False
+
         if not self.checkLaunch():
             return False
         if not self.getStartActions() is None and not self.checkStartActions():
@@ -3049,6 +3078,30 @@ class BMAutomation:
         """
         return self.steamDirectory
 
+    def setBenchmarkTime(self, tar: float) -> None:
+        """
+        Set Benchmarking Time
+
+        Paremeters
+        ----------
+        tar : float.
+            Time to perform benchmarking.
+
+        """
+        self.BenchmarkingTime = tar
+
+    def getBenchmarkTime(self) -> float:
+        """
+        Get Benchmarking Time
+
+        Paremeters
+        ----------
+        getBenchmarkTime : float.
+            Time to perform benchmarking.
+
+        """
+        return self.BenchmarkingTime
+
     def setDocumentDirectory(self, dir: str) -> None:
         r"""
         Set the Document directory.
@@ -3126,30 +3179,6 @@ class BMAutomation:
         """
         return self.GameLoopTimes
 
-    def setBenchmarkTime(self, tar: float) -> None:
-        """
-        Set Benchmarking Time
-
-        Paremeters
-        ----------
-        tar : float.
-            Time to perform benchmarking.
-
-        """
-        self.BenchmarkingTime = tar
-
-    def getBenchmarkTime(self) -> float:
-        """
-        Get Benchmarking Time
-
-        Paremeters
-        ----------
-        getBenchmarkTime : float.
-            Time to perform benchmarking.
-
-        """
-        return self.BenchmarkingTime
-
     def setDealCrashDump(self, dealCrashDump: bool, targetDir: str = "C:\\WinDumps") -> None:
         """
         Set to deal crash dump
@@ -3206,11 +3235,6 @@ class BMAutomation:
                 'BA() ERROR: OverallLoopTimes is less than 1. Please use setOverallLoopTimes() to reset first.', ConsoleColor.Red)
             return False
 
-        if self.getBenchmarkTime() < 10:
-            Logger.WriteLine(
-                'BA() ERROR: BenchmarkTime is less than 10 seconds. Use setBenchmarkTime() to modify.', ConsoleColor.Red)
-            return False
-
         if self.getGameList() is None:
             Logger.WriteLine(
                 'BA() ERROR: GameList is None. Please use addGameList() to initialize first.', ConsoleColor.Red)
@@ -3226,10 +3250,10 @@ class BMAutomation:
             Logger.WriteLine(
                 'BA() INFO: GameLoopTimes is negative. Game will only run once regarding success or failure. Use setGameLoopTimes() to modify.', ConsoleColor.White)
 
-        if self.getBenchmarkTime() < 60:
+        if self.getBenchmarkTime() < 20:
             if self.dev:
                 Logger.WriteLine(
-                    'BA() WARNING: BenchmarkTime is less than 1 min. Use setBenchmarkTime() to modify.', ConsoleColor.Yellow)
+                    'BA() WARNING: BenchmarkTime is less than 20 seconds. Use setBenchmarkTime() to modify.', ConsoleColor.Yellow)
 
     def start(self) -> List:
         """
@@ -3274,9 +3298,9 @@ class BMAutomation:
         times = 0
         startCode, quitCode = (0, 0)
         while times < tar.getLoopTimes():
-            startCode = tar.launch()
+            startCode = tar.launch(30)
             startCode = tar.start()
-            tar.startBenchMarking(self.getBenchmarkTime())
+            tar.startBenchMarking()
             quitCode = tar.quit()
             times += 1
         return startCode, quitCode
