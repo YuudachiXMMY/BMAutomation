@@ -23,9 +23,10 @@ def read_json(file):
         return None
 
 
+        # "Fallout4",
+        # "GenshinImpact",
 config = read_json("config.json")
 RunList = config["RunList"]
-
 
 ################################################################################
 # To Install BMAutomation, use the following Command in Windows CMD:
@@ -38,7 +39,6 @@ import bmautomation as ba
 
 # Directories
 steamDir: str = "F:\\SteamLibrary\\steamapps\\common"
-docDir: str = "C:\\Users\\Navi\\Documents"
 
 SniperEliteV2Dir: str = "C:\\Program Files (x86)\\Rebellion\\SniperEliteV2 Benchmark\\bin"
 AvPDir: str = "C:\\Program Files (x86)\\Rebellion\\AvP D3D11 Benchmark"
@@ -66,7 +66,7 @@ GenshinImpactDir: str = "G:\\Genshin Impact"
 
 
 # Init BMAutomation
-app: ba.BMAutomation = ba.BMAutomation(steamDir, docDir)
+app: ba.BMAutomation = ba.BMAutomation(steamDir)
 # app.setDealCrashDump(True, "C:\\WinDumps")
 
 app.setOverallLoopTimes(999)
@@ -588,35 +588,35 @@ def Fallout4():
 def main():
     checkCode = 1
 
-    if "Fallout4":
+    if "Fallout4" in RunList:
         Fallout4()
-    if "GenshinImpact":
+    if "GenshinImpact" in RunList:
         GenshinImpact()
-    if "DOOMEternal":
+    if "DOOMEternal" in RunList:
         DOOMEternal()
-    if "SidMeiersCivilizationVI":
+    if "SidMeiersCivilizationVI" in RunList:
         SidMeiersCivilizationVI()
-    if "Rainbow6":
+    if "Rainbow6" in RunList:
         Rainbow6()
-    if "Borderlands3":
+    if "Borderlands3" in RunList:
         Borderlands3()
-    if "UnigineHeaven":
+    if "UnigineHeaven" in RunList:
         UnigineHeaven()
-    if "UnigineSanctuary":
+    if "UnigineSanctuary" in RunList:
         UnigineSanctuary()
-    if "FFXIV_ARR_Bench":
+    if "FFXIV_ARR_Bench" in RunList:
         FFXIV_ARR_Bench()
-    if "FFXIVBenchmark":
+    if "FFXIVBenchmark" in RunList:
         FFXIVBenchmark()
-    if "FFXIV_Endwalker_Bench":
+    if "FFXIV_Endwalker_Bench" in RunList:
         FFXIV_Endwalker_Bench()
-    if "FFXIV_Shadowbringers_Bench":
+    if "FFXIV_Shadowbringers_Bench" in RunList:
         FFXIV_Shadowbringers_Bench()
-    if "FFXIV_Stormblood_Bench":
+    if "FFXIV_Stormblood_Bench" in RunList:
         FFXIV_Stormblood_Bench()
-    if "SniperEliteV2":
+    if "SniperEliteV2" in RunList:
         SniperEliteV2()
-    if "AvP":
+    if "AvP" in RunList:
         AvP()
 
     if not checkCode:
