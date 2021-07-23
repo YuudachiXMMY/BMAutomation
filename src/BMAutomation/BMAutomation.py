@@ -201,7 +201,7 @@ class Logger:
     @staticmethod
     def CountProgress(total: int, log: str = "Progressing", step: int = 1, width: int = 50, consoleColor: int = ConsoleColor.Default) -> None:
         """
-        Write a progress bar counting down in seconds
+        Write a progress bar counting down in seconds.
 
         Parameters
         ----------
@@ -242,7 +242,7 @@ class Logger:
     @staticmethod
     def SetLogFile(path: str) -> None:
         """
-        Set Log file
+        Set Log file.
 
         Parameters
         ----------
@@ -255,7 +255,7 @@ class Logger:
     @staticmethod
     def Write(log: Any, consoleColor: int = ConsoleColor.Default, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None, printTruncateLen: int = 0) -> None:
         """
-        Write logs to Console
+        Write logs to Console.
 
         Parameters
         ----------
@@ -353,7 +353,7 @@ class Logger:
     @staticmethod
     def WriteLine(log: Any, consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
         """
-        Write logs to Console with a new line
+        Write logs to Console with a new line.
 
         Parameters
         ----------
@@ -556,7 +556,7 @@ class Logger:
     @staticmethod
     def Log(log: Any = '', consoleColor: int = -1, writeToFile: bool = True, printToStdout: bool = True, logFile: str = None) -> None:
         """
-        Write logs to Console with current time information
+        Write logs to Console with current time information.
 
         Parameters
         ----------
@@ -712,7 +712,7 @@ class Benchmarking:
         Parameters
         ----------
         duration : float.
-            Time to perform the random character control
+            Time to perform the random character control.
 
         """
         waitTime = 0
@@ -760,7 +760,7 @@ class Benchmarking:
         Parameters
         ----------
         duration : float.
-            Time to perform the random typing
+            Time to perform the random typing.
 
         """
         waitTime = 0
@@ -803,7 +803,7 @@ class Benchmarking:
         Parameters
         ----------
         duration : float.
-            Time to perform the random screen rotating
+            Time to perform the random screen rotating.
 
         """
         waitTime = 0
@@ -835,7 +835,7 @@ class Benchmarking:
         Parameters
         ----------
         duration : float.
-            Time to perform the stressed benchmarking
+            Time to perform the stressed benchmarking.
 
         """
         waitTime = 0
@@ -883,7 +883,7 @@ class Benchmarking:
                 ["view_upward", "view_downward", "view_leftward",
                  "view_rightward", "left_click", "right_click"]
         keyTime: integer.
-            duration to perform the key time
+            duration to perform the key time.
 
         """
         if action == "view_upward":
@@ -927,11 +927,11 @@ class Benchmarking:
     @staticmethod
     def changeDisplayDirection(deviceIndex: int, angle: int) -> bool:
         """
-        Rotate the Display Screen's Direction
+        Rotate the Display Screen's Direction.
 
         @param:
-            - deviceIndex - display device index
-            - angle - angle to be rotated
+            - deviceIndex - display device index.
+            - angle - angle to be rotated.
 
         @RETURN:
             - True - succeed in rotating the screen.
@@ -1522,7 +1522,7 @@ class Input:
         Parameters
         ----------
         file : string.
-            A TinyTask File Name to be performed
+            A TinyTask File Name to be performed.
 
         Returns
         -------
@@ -1749,7 +1749,7 @@ class Game:
 
     def setBenchmarkTime(self, tar: float) -> None:
         """
-        Set Benchmarking Time
+        Set Benchmarking Time.
 
         Paremeters
         ----------
@@ -1761,7 +1761,7 @@ class Game:
 
     def getBenchmarkTime(self) -> float:
         """
-        Get Benchmarking Time
+        Get Benchmarking Time.
 
         Paremeters
         ----------
@@ -1944,7 +1944,7 @@ class Game:
 
     def getExecutor(self) -> str:
         """
-        Get the Executor
+        Get the Executor.
 
         Returns
         -------
@@ -2238,7 +2238,7 @@ class Game:
 
     def hasLauncher(self) -> bool:
         """
-        Check whether this Game has a Launcher
+        Check whether this Game has a Launcher.
 
         Returns
         -------
@@ -2464,7 +2464,7 @@ class Game:
 
     def setStartActions(self, actions: List[List[Any]]) -> None:
         """
-        Set the start-up actions after game is launched
+        Set the start-up actions after game is launched.
 
         Parameters
         ----------
@@ -2548,7 +2548,7 @@ class Game:
 
     def setQuitActions(self, actions: List[List[Any]]):
         """
-        Set the quit actions after game is launched
+        Set the quit actions after game is launched.
 
         Parameters
         ----------
@@ -3080,7 +3080,7 @@ class BMAutomation:
 
     def setBenchmarkTime(self, tar: float) -> None:
         """
-        Set Benchmarking Time
+        Set Benchmarking Time.
 
         Paremeters
         ----------
@@ -3092,7 +3092,7 @@ class BMAutomation:
 
     def getBenchmarkTime(self) -> float:
         """
-        Get Benchmarking Time
+        Get Benchmarking Time.
 
         Paremeters
         ----------
@@ -3181,12 +3181,12 @@ class BMAutomation:
 
     def setDealCrashDump(self, dealCrashDump: bool, targetDir: str = "C:\\WinDumps") -> None:
         """
-        Set to deal crash dump
+        Set to deal crash dump.
 
         Paremeters
         ----------
         dealCrashDump : bool.
-            True to detect and move crashDump
+            True to detect and move crashDump.
         targetDir : string, optional.
             An absolute path to move the crash dump to (Default: C:\\WinDumps).
 
@@ -3201,7 +3201,7 @@ class BMAutomation:
 
     def getDealCrashDump(self) -> Tuple[bool, str]:
         """
-        Get deal crash dump settings
+        Get deal crash dump settings.
 
         Paremeters
         ----------
@@ -3257,7 +3257,7 @@ class BMAutomation:
 
     def start(self) -> List:
         """
-        Start BMAutomation
+        Start BMAutomation.
 
         Returns
         -------
@@ -3286,7 +3286,7 @@ class BMAutomation:
 
     def _start(self, game: str) -> Tuple[int, int]:
         """
-        A private method for start to start Games
+        A private method for start to start Games.
 
         Returns
         -------
@@ -3402,7 +3402,7 @@ class BMAutomation:
     @staticmethod
     def printAll(data):
         """
-        Print everything in the data Object
+        Print everything in the data Object.
 
         """
         if type(data) == type(str()):
