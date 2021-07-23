@@ -1,6 +1,6 @@
 <!-- vscode-markdown-toc -->
 * 1. [Setup for Automation](#SetupforAutomation)
-* 2. [<span id="Drivers">Drivers</span>](#spanidDriversDriversspan)
+* 2. [Drivers](#spanidDriversDriversspan)
 	* 2.1. [Steps](#Steps)
 * 3. [Automation Scripts](#AutomationScripts)
 * 4. [<span id="Installation">Installation Setup</span>](#spanidInstallationInstallationSetupspan)
