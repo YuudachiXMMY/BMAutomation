@@ -8,7 +8,8 @@ __pycache__/
 
 # My Log Files
 @AutomationLog.txt
-.vscode/*
+vscode/
+.vscode/
 
 # C extensions
 *.so
