@@ -1,34 +1,9 @@
+################################################################################
+################################### Imports ####################################
+################################################################################
 import sys
 import json
 
-################################################################################
-def read_json(file):
-    '''
-    Read a .json file and return a json type.
-
-    @param:
-        - file - a filename to be read as .json data.
-
-    @RETURN:
-        - A Python's Data Object representing the data in the .json file.
-        - None - EXCEPTION occurred.
-    '''
-    try:
-        with open(file, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        if data == None:
-            data = dict()
-        return data
-    except Exception:
-        return None
-
-
-        # "Fallout4",
-        # "GenshinImpact",
-config = read_json("config.json")
-RunList = config["RunList"]
-
-################################################################################
 # To Install BMAutomation, use the following Command in Windows CMD:
 # Released Package:
 # py -m pip install bmautomation
@@ -37,7 +12,17 @@ RunList = config["RunList"]
 import bmautomation as ba
 
 
-# Directories
+################################################################################
+#################################### Config ####################################
+################################################################################
+config = ba.read_json("config.json")
+RunList = config["RunList"]
+
+
+
+################################################################################
+################################# Directories ##################################
+################################################################################
 steamDir: str = "F:\\SteamLibrary\\steamapps\\common"
 
 SniperEliteV2Dir: str = "C:\\Program Files (x86)\\Rebellion\\SniperEliteV2 Benchmark\\bin"
@@ -73,6 +58,8 @@ app.setOverallLoopTimes(999)
 app.setBenchmarkTime(300)
 
 
+################################################################################
+################################# Game Scripts #################################
 ################################################################################
 def SniperEliteV2():
     try:
@@ -318,6 +305,7 @@ def Borderlands3():
     except Exception as e:
         sys.stdout.write(e.__class__.__name__ +
                          ': %s caused an Error.' % game_name)
+
 
 def FFXIV_ARR_Bench():
     try:
@@ -584,7 +572,9 @@ def Fallout4():
                          ': %s caused an Error.' % game_name)
         return False
 
-
+################################################################################
+##################################### Main #####################################
+################################################################################
 def main():
     checkCode = 1
 
@@ -629,7 +619,7 @@ def main():
 if __name__ == "__main__":
     try:
         code = main()
-        input("Press ENTER to quit:")
+        input("Press ENTER to quit: ")
 
     except KeyboardInterrupt:
         ba.Logger.WriteLine(

@@ -2,7 +2,6 @@
     "MachineName" : "",
 
     "RunList" : [
-        "DOOMEternal",
         "SidMeiersCivilizationVI",
         "Rainbow6",
         "Borderlands3",
@@ -15,5 +14,11 @@
         "FFXIV_Stormblood_Bench",
         "SniperEliteV2",
         "AvP"
+    ],
+
+    "NotRunning" :  [
+        "Fallout4",
+        "GenshinImpact",
+        "DOOMEternal"
     ]
 }
