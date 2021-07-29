@@ -20,9 +20,9 @@ import bmautomation as bm
 
 ### Utils
 
-#### `read_json`
+#### `bmautomation.read_json()`
 
-It is recommened to utilize the `read_json()` function to help developing. So far, the `app.py` uses a `config.json` to make the development easlier.
+It is recommened to utilize the `bmautomation.read_json()` function to help developing. So far, the `app.py` uses a `config.json` to make the development easlier.
 
 In the `config.json`, you can define the machine name (which can be used for later development of analyzing) and a game run list (where you can add or remove those unnecessary games. Some may not be ready to do the automation, some may be new game.)
 
@@ -54,12 +54,12 @@ app.setBenchmarkTime(300)
 
 There is a list that you can play with [BMAutomation]((https://pypi.org/project/bmautomation/)):
 
-- `setSteamDirectory()` : Set the Steam directory.
-- `setBenchmarkTime()` : Set Benchmarking Time.
-- `setDocumentDirectory()` : Set the Document directory.
-- `setOverallLoopTimes()` : Set the BMAutomation Loop Times.
-- `setGameLoopTimes()` : Set each game Loop Times.
-- `setDealCrashDump()` : Set to deal crash dump.
+- `bmautomation.BMAutomation().setSteamDirectory()` : Set the Steam directory.
+- `bmautomation.BMAutomation().setBenchmarkTime()` : Set Benchmarking Time.
+- `bmautomation.BMAutomation().setDocumentDirectory()` : Set the Document directory.
+- `bmautomation.BMAutomation().setOverallLoopTimes()` : Set the BMAutomation Loop Times.
+- `bmautomation.BMAutomation().setGameLoopTimes()` : Set each game Loop Times.
+- `bmautomation.setDealCrashDump()` : Set to deal crash dump.
 
 ## To add a new game
 
@@ -88,32 +88,32 @@ game: ba.Game = ba.Game(game_name, benchDirectory = FFXIV_Endwalker_benchDir,
 
 To finish the initialization of `bmautomation.Game()` object, here's a **TODO** list:
 
-- [ ] `game.setExecutorPath()` : Set the Executor Path.
-- [ ] `game.setLauncherMode()` : Set the Launcher Operation Mode.
-- [ ] `game.setLauncher()` : Set the Launcher Operation _(Must do this if not game.setLauncherMode(0))_.
-- [ ] `game.setStartActions()` : Set the start-up actions after game is launched.
-- [ ] `game.setQuitActions()` : Set the quit actions after game is launched.
-- [ ] `game.setBenchmarkingMode()` : Set the Benchmarking Mode.
+- [ ] `bmautomation.Game().setExecutorPath()` : Set the Executor Path.
+- [ ] `bmautomation.Game().setLauncherMode()` : Set the Launcher Operation Mode.
+- [ ] `bmautomation.Game().setLauncher()` : Set the Launcher Operation _(Must do this if not game.setLauncherMode(0))_.
+- [ ] `bmautomation.Game().setStartActions()` : Set the start-up actions after game is launched.
+- [ ] `bmautomation.Game().setQuitActions()` : Set the quit actions after game is launched.
+- [ ] `bmautomation.Game().setBenchmarkingMode()` : Set the Benchmarking Mode.
 
 There is a full list of all config settings for the `bmautomation.Game()` object:
 
-- `setGameName()` : Set the Game Name.
-- `setBenchmarkTime()` : Set Benchmarking Time.
-- `setSteamDirectory()` : Set the Steam directory.
-- `setDocumentDirectory()` : Set the Document directory.
-- `setBenchDirectory()` : Set the Benchmark directory.
-- `setRelativePath()` : Set the Relative Path represent the game folder name under the Steam directory.
-- `setAbsolutePath()` : Set the Absolute Path used for independent games.
-- `setLoopTimes()` : Set the Loop Times.
-- `getLoopTimes()` : Get the Loop Times.
-- `setExecutor()` : Set the Executor.
-- `setExecutorPath()` : Set the Executor Path.
-- `setLauncherMode()` : Set the Launcher Operation Mode.
-- `setLauncher()` : Set the Launcher Operation.
-- `setLaunchParam()` : Set the Launching Parameter for the Game that can be recognized by Command Line.
-- `setStartActions()` : Set the start-up actions after game is launched.
-- `setQuitActions()` : Set the quit actions after game is launched.
-- `setBenchmarkingMode()` : Set the Benchmarking Mode.
+- `bmautomation.Game().setGameName()` : Set the Game Name.
+- `bmautomation.Game().setBenchmarkTime()` : Set Benchmarking Time.
+- `bmautomation.Game().setSteamDirectory()` : Set the Steam directory.
+- `bmautomation.Game().setDocumentDirectory()` : Set the Document directory.
+- `bmautomation.Game().setBenchDirectory()` : Set the Benchmark directory.
+- `bmautomation.Game().setRelativePath()` : Set the Relative Path represent the game folder name under the Steam directory.
+- `bmautomation.Game().setAbsolutePath()` : Set the Absolute Path used for independent games.
+- `bmautomation.Game().setLoopTimes()` : Set the Loop Times.
+- `bmautomation.Game().getLoopTimes()` : Get the Loop Times.
+- `bmautomation.Game().setExecutor()` : Set the Executor.
+- `bmautomation.Game().setExecutorPath()` : Set the Executor Path.
+- `bmautomation.Game().setLauncherMode()` : Set the Launcher Operation Mode.
+- `bmautomation.Game().setLauncher()` : Set the Launcher Operation.
+- `bmautomation.Game().setLaunchParam()` : Set the Launching Parameter for the Game that can be recognized by Command Line.
+- `bmautomation.Game().setStartActions()` : Set the start-up actions after game is launched.
+- `bmautomation.Game().setQuitActions()` : Set the quit actions after game is launched.
+- `bmautomation.Game().setBenchmarkingMode()` : Set the Benchmarking Mode.
 
 Last but not least, before you add it to the `app` run list, you should always use **check** function to check whether it is well-setted to do the automation:
 
@@ -127,9 +127,9 @@ if checkCode:
 
 You can also utilize other check functions to see each status of config settings for debugging ('cause `bmautomation.Game().check()` utilizes these check functions to do an overall check):
 
-- `checkStartActions()` : Check whether this Game start-up operation is setted successfully.
-- `checkQuitActions()` : Check whether this Game quit operation is setted successfully.
-- `checkLaunch()` : Check whether the launcher start-up operation is setted successfully.
+- `bmautomation.Game().checkStartActions()` : Check whether this Game start-up operation is setted successfully.
+- `bmautomation.Game().checkQuitActions()` : Check whether this Game quit operation is setted successfully.
+- `bmautomation.Game().checkLaunch()` : Check whether the launcher start-up operation is setted successfully.
 
 ### Demo codes
 

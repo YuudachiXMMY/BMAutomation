@@ -2347,7 +2347,8 @@ class Game:
         # Open Game
         exe = os.path.join(self.getExecutorPath(), self.getExecutor())
         try:
-            startGame = win32api.ShellExecute(1, 'open', exe, self.launchParam, '', 1)
+            startGame = win32api.ShellExecute(
+                1, 'open', exe, self.launchParam, '', 1)
 
             if self.hasLauncher():
                 Logger.WriteLine(
@@ -3307,7 +3308,8 @@ class BMAutomation:
 
 ################################ Helper Methods ################################
 ##################################### WIN ######################################
-@staticmethod
+
+
 def searchFile(pathname, filename):
     """
     Return all matched files under a specific path.
@@ -3328,7 +3330,7 @@ def searchFile(pathname, filename):
                 matchedFile.append(file_name)
     return matchedFile
 
-@staticmethod
+
 def killProgress(process):
     """
     A function call a terminal and utilize CMD command to kill a progress.
@@ -3353,7 +3355,8 @@ def killProgress(process):
         return statusCode
 
 ################################### Json ###################################
-@staticmethod
+
+
 def read_json(file) -> Dict:
     """
     Read a .json file and return a json type.
@@ -3366,17 +3369,17 @@ def read_json(file) -> Dict:
 
     """
     try:
+        data = None
         with open(file, 'r', encoding='utf-8') as f:
             data = json.load(f)
         if data == None:
             data = dict()
         return data
     except Exception:
-        Logger.WriteLine('ERROR: Unable to read %s' %
-                            (data, file), ConsoleColor.Red)
+        Logger.WriteLine('ERROR: Unable to read %s' % file, ConsoleColor.Red)
         return None
 
-@staticmethod
+
 def write_json(file, data) -> bool:
     """
     Over-write the .json file with input data.
@@ -3396,10 +3399,10 @@ def write_json(file, data) -> bool:
         return True
     except Exception:
         Logger.WriteLine('ERROR: Unable to write %s in %s' %
-                            (data, file), ConsoleColor.Red)
+                         (data, file), ConsoleColor.Red)
         return False
 
-@staticmethod
+
 def printAll(data):
     """
     Print everything in the data Object.
@@ -3412,7 +3415,8 @@ def printAll(data):
             print(d)
 
 ############################### Crash Dumps ################################
-@staticmethod
+
+
 def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
     """
     Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps.
@@ -3434,7 +3438,7 @@ def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
     src2 = os.path.expandvars(r'C:\Windows')
     return searchFile(src1, tar), searchFile(src2, "MEMORY.DMP")
 
-@staticmethod
+
 def dealCrashDumps(tar="C:\\WinDumps") -> None:
     """
     Copy the Windows dump file to the desired location and remove the dump files.
