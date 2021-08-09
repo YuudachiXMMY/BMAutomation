@@ -2347,7 +2347,8 @@ class Game:
         # Open Game
         exe = os.path.join(self.getExecutorPath(), self.getExecutor())
         try:
-            startGame = win32api.ShellExecute(1, 'open', exe, self.launchParam, '', 1)
+            startGame = win32api.ShellExecute(
+                1, 'open', exe, self.launchParam, '', 1)
 
             if self.hasLauncher():
                 Logger.WriteLine(
@@ -3269,8 +3270,8 @@ class BMAutomation:
             res = dict()
             for i in range(self.getOverallLoopTimes()):
                 for game in self.getGameList():
-                    if self.dealCrashDump and self.detectCrashDumps():
-                        self.dealCrashDumps(self.CrashDumpDir)
+                    if self.dealCrashDump and detectCrashDumps():
+                        dealCrashDumps(self.CrashDumpDir)
                     if not game in res:
                         res[game] = []
 
@@ -3305,194 +3306,197 @@ class BMAutomation:
             times += 1
         return startCode, quitCode
 
-    ############################## Helper Methods ##############################
-    ################################### WIN ####################################
-    @staticmethod
-    def searchFile(pathname, filename):
-        """
-        Return all matched files under a specific path.
+################################ Helper Methods ################################
+##################################### WIN ######################################
 
-        @param:
-            - pathname - a specific path to search for.
-            - filename - a filename to search for (Regular Expression can be used).
 
-        @RETURN:
-            - A list of sting representing all matched file names
+def searchFile(pathname, filename):
+    """
+    Return all matched files under a specific path.
 
-        """
-        matchedFile = []
-        for root, dirs, files in os.walk(pathname):
-            for file in files:
-                if re.match(filename, file):
-                    file_name = os.path.abspath(os.path.join(root, file))
-                    matchedFile.append(file_name)
-        return matchedFile
+    @param:
+        - pathname - a specific path to search for.
+        - filename - a filename to search for (Regular Expression can be used).
 
-    @staticmethod
-    def killProgress(process):
-        """
-        A function call a terminal and utilize CMD command to kill a progress.
+    @RETURN:
+        - A list of sting representing all matched file names
 
-        @param:
-            - process - a process to be forced to kill.
+    """
+    matchedFile = []
+    for root, dirs, files in os.walk(pathname):
+        for file in files:
+            if re.match(filename, file):
+                file_name = os.path.abspath(os.path.join(root, file))
+                matchedFile.append(file_name)
+    return matchedFile
 
-        @RETURN:
-            - non-Zero - succeed to call the terminal for killing the process.
-            - 0 - failed to open the terminal.
-            - -1 - EXCEPTION occurred.
 
-        """
-        # return os.system('taskkill /F /IM %s'%name) # An alternative way to kill a process.
-        statusCode = 0
-        try:
-            statusCode = subprocess.Popen(
-                'taskkill /F /IM %s' % process, close_fds=True)
-        except Exception:
-            return 0
-        else:
-            return statusCode
+def killProgress(process):
+    """
+    A function call a terminal and utilize CMD command to kill a progress.
 
-    ################################### Json ###################################
-    @staticmethod
-    def read_json(file) -> Dict:
-        """
-        Read a .json file and return a json type.
+    @param:
+        - process - a process to be forced to kill.
 
-        @param:
-            - file - a filename to be read as .json data.
+    @RETURN:
+        - non-Zero - succeed to call the terminal for killing the process.
+        - 0 - failed to open the terminal.
+        - -1 - EXCEPTION occurred.
 
-        @RETURN:
-            - A Python's Data Object representing the data in the .json file.
+    """
+    # return os.system('taskkill /F /IM %s'%name) # An alternative way to kill a process.
+    statusCode = 0
+    try:
+        statusCode = subprocess.Popen(
+            'taskkill /F /IM %s' % process, close_fds=True)
+    except Exception:
+        return 0
+    else:
+        return statusCode
 
-        """
-        try:
-            with open(file, 'r', encoding='utf-8') as f:
-                data = json.load(f)
-            if data == None:
-                data = dict()
-            return data
-        except Exception:
-            Logger.WriteLine('ERROR: Unable to read %s' %
-                             (data, file), ConsoleColor.Red)
-            return None
+################################### Json ###################################
 
-    @staticmethod
-    def write_json(file, data) -> bool:
-        """
-        Over-write the .json file with input data.
 
-        @param:
-            - file - a filename to be write.
-            - data - data to write in the .json file
+def read_json(file) -> Dict:
+    """
+    Read a .json file and return a json type.
 
-        @RETURN:
-            - True - Succeed to Write data in json
-            - False - Exception occurred
+    @param:
+        - file - a filename to be read as .json data.
 
-        """
-        try:
-            with open(file, 'w', encoding='utf-8') as f:
-                json.dump(data, f)
-            return True
-        except Exception:
-            Logger.WriteLine('ERROR: Unable to write %s in %s' %
-                             (data, file), ConsoleColor.Red)
-            return False
+    @RETURN:
+        - A Python's Data Object representing the data in the .json file.
 
-    @staticmethod
-    def printAll(data):
-        """
-        Print everything in the data Object.
+    """
+    try:
+        data = None
+        with open(file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        if data == None:
+            data = dict()
+        return data
+    except Exception:
+        Logger.WriteLine('ERROR: Unable to read %s' % file, ConsoleColor.Red)
+        return None
 
-        """
-        if type(data) == type(str()):
-            print(data)
-        else:
-            for d in data:
-                print(d)
 
-    ############################### Crash Dumps ################################
-    @staticmethod
-    def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
-        """
-        Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps.
+def write_json(file, data) -> bool:
+    """
+    Over-write the .json file with input data.
 
-        Parameters
-        ----------
-        tar : string, optional.
-            Targer .DMP file name (Default: "MEMORY.DMP").
+    @param:
+        - file - a filename to be write.
+        - data - data to write in the .json file
 
-        Returns
-        -------
-        detectCrashDumps : Tuple[list, list]
-            A tuple where the first entry are all user mode crash dumps;
-            the second entry are dump files under C:\Windows.
+    @RETURN:
+        - True - Succeed to Write data in json
+        - False - Exception occurred
 
-        """
-        # path = "%LOCALAPPDATA%\CrashDumps"
-        src1 = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
-        src2 = os.path.expandvars(r'C:\Windows')
-        return BMAutomation.searchFile(src1, tar), BMAutomation.searchFile(src2, "MEMORY.DMP")
+    """
+    try:
+        with open(file, 'w', encoding='utf-8') as f:
+            json.dump(data, f)
+        return True
+    except Exception:
+        Logger.WriteLine('ERROR: Unable to write %s in %s' %
+                         (data, file), ConsoleColor.Red)
+        return False
 
-    @staticmethod
-    def dealCrashDumps(tar="C:\\WinDumps") -> None:
-        """
-        Copy the Windows dump file to the desired location and remove the dump files.
 
-        Parameters
-        ----------
-        tar : string, optional.
-            The target path to copy to (Default: "C:\WinDumps").
+def printAll(data):
+    """
+    Print everything in the data Object.
 
-        """
+    """
+    if type(data) == type(str()):
+        print(data)
+    else:
+        for d in data:
+            print(d)
 
-        dst = tar
-        files1, files2 = BMAutomation.detectCrashDumps()
-        while files1 + files2:
+############################### Crash Dumps ################################
 
-            ####################################################################
-            # New Code
-            src = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
-            for files in os.listdir(src):
-                if files == "MEMORY.DMP":
-                    dst_name = os.path.join(
-                        dst, "MEMORY_%s.DMP" % datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
-                else:
-                    dst_name = os.path.join(dst, files)
-                src_name = os.path.join(src, files)
-                if os.path.isfile(src_name):
-                    exe = 'copy ' + src_name + ' %s' % dst_name
-                    os.system(exe)
-                    if BMAutomation.searchFile(src, files):
-                        os.system('del '+src_name)
-                else:
-                    print("TAR is not a file!")
 
-            src = "C:\\Windows"
-            for files in files2:
+def detectCrashDumps(tar="MEMORY.DMP") -> Tuple[list, list]:
+    """
+    Detect whether the window's dump is generated under %LOCALAPPDATA%\CrashDumps.
+
+    Parameters
+    ----------
+    tar : string, optional.
+        Targer .DMP file name (Default: "MEMORY.DMP").
+
+    Returns
+    -------
+    detectCrashDumps : Tuple[list, list]
+        A tuple where the first entry are all user mode crash dumps;
+        the second entry are dump files under C:\Windows.
+
+    """
+    # path = "%LOCALAPPDATA%\CrashDumps"
+    src1 = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
+    src2 = os.path.expandvars(r'C:\Windows')
+    return searchFile(src1, tar), searchFile(src2, "MEMORY.DMP")
+
+
+def dealCrashDumps(tar="C:\\WinDumps") -> None:
+    """
+    Copy the Windows dump file to the desired location and remove the dump files.
+
+    Parameters
+    ----------
+    tar : string, optional.
+        The target path to copy to (Default: "C:\WinDumps").
+
+    """
+
+    dst = tar
+    files1, files2 = detectCrashDumps()
+    while files1 + files2:
+
+        ####################################################################
+        # New Code
+        src = os.path.expandvars(r'%LOCALAPPDATA%\CrashDumps')
+        for files in os.listdir(src):
+            if files == "MEMORY.DMP":
                 dst_name = os.path.join(
-                    dst, "[Windows]MEMORY_%s.DMP" % datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
-                src_name = files
-                if os.path.isfile(src_name):
-                    exe = 'copy ' + src_name + ' %s' % dst_name
-                    os.system(exe)
-                    if BMAutomation.searchFile(src, "MEMORY.DMP"):
-                        os.system('del '+src_name)
+                    dst, "MEMORY_%s.DMP" % datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
+            else:
+                dst_name = os.path.join(dst, files)
+            src_name = os.path.join(src, files)
+            if os.path.isfile(src_name):
+                exe = 'copy ' + src_name + ' %s' % dst_name
+                os.system(exe)
+                if searchFile(src, files):
+                    os.system('del '+src_name)
+            else:
+                print("TAR is not a file!")
 
-            # TODO optional: cmd command=> xcopy /s/e "D:\A_FOLDER" "E:\B_FOLDER\"
-            files1, files2 = BMAutomation.detectCrashDumps()
+        src = "C:\\Windows"
+        for files in files2:
+            dst_name = os.path.join(
+                dst, "[Windows]MEMORY_%s.DMP" % datetime.datetime.now().strftime("%m.%d-%H%M-%Y"))
+            src_name = files
+            if os.path.isfile(src_name):
+                exe = 'copy ' + src_name + ' %s' % dst_name
+                os.system(exe)
+                if searchFile(src, "MEMORY.DMP"):
+                    os.system('del '+src_name)
 
-        ########################################################################
-        # Past Code
-        # # Copy the dump file
-        # tarFile = "MEMORY_" + datetime.datetime.now().strftime("%m.%d-%H%M-%Y")
-        # if not tar is None:
-        #     exe = 'copy %LOCALAPPDATA%\CrashDumps\MEMORY.DMP '+tar+'\%s.DMP'%tarFile
-        #     res = tar+'\%s.DMP'%tarFile
-        # else:
-        #     exe = 'copy %LOCALAPPDATA%\CrashDumps\MEMORY.DMP %s.DMP'%tarFile
-        #     res = '\%s.DMP'%tarFile
-        # os.system(exe)
-        # if searchFile(tar, tarFile):
-        #     os.system('del %LOCALAPPDATA%\CrashDumps\MEMORY.DMP')
-        #     return res
+        # TODO optional: cmd command=> xcopy /s/e "D:\A_FOLDER" "E:\B_FOLDER\"
+        files1, files2 = detectCrashDumps()
+
+    ########################################################################
+    # Past Code
+    # # Copy the dump file
+    # tarFile = "MEMORY_" + datetime.datetime.now().strftime("%m.%d-%H%M-%Y")
+    # if not tar is None:
+    #     exe = 'copy %LOCALAPPDATA%\CrashDumps\MEMORY.DMP '+tar+'\%s.DMP'%tarFile
+    #     res = tar+'\%s.DMP'%tarFile
+    # else:
+    #     exe = 'copy %LOCALAPPDATA%\CrashDumps\MEMORY.DMP %s.DMP'%tarFile
+    #     res = '\%s.DMP'%tarFile
+    # os.system(exe)
+    # if searchFile(tar, tarFile):
+    #     os.system('del %LOCALAPPDATA%\CrashDumps\MEMORY.DMP')
+    #     return res

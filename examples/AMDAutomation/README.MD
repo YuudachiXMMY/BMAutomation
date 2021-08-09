@@ -54,6 +54,12 @@ Can be found under `\\crazystone\Incoming\JasonWu\MyAPI\AMDAutomation\scripts\`
 
 Please read [`\\crazystone\Incoming\JasonWu\MyAPI\AMDAutomation\VITAL\README.MD`](.\VITAL\README.MD)
 
-##  5. <a name='ScriptsDevelopment'></a>Scripts Development
+##  5. <a name='ScriptsDevelopment'></a>Scripts
+
+Please run the following code in your command line first:
+
+```
+python -m pip install -r requirements.txt
+```
 
 [`\\crazystone.amd.com\Incoming\JasonWu\MyAPI\AMDAutomation\dev`](.\dev)
