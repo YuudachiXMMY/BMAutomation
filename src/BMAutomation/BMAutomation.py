@@ -3256,9 +3256,14 @@ class BMAutomation:
                 Logger.WriteLine(
                     'BA() WARNING: BenchmarkTime is less than 20 seconds. Use setBenchmarkTime() to modify.', ConsoleColor.Yellow)
 
-    def start(self) -> List:
+    def start(self, killProcess: bool = False) -> List:
         """
         Start BMAutomation.
+
+        Parameters
+        ----------
+        killProcess : bool.
+            True to kill process by executor.
 
         Returns
         -------
@@ -3275,7 +3280,7 @@ class BMAutomation:
                     if not game in res:
                         res[game] = []
 
-                    startCode, quitCode = self._start(game)
+                    startCode, quitCode = self._start(game, killProcess)
                     res[game].append((startCode, quitCode))
                     Logger.WriteLine("BA() FINISHED %s: Start Code %s and Quit Code %s" % (
                         game, startCode, quitCode))
@@ -3285,9 +3290,16 @@ class BMAutomation:
                 'BA() ERROR: %s' % e, ConsoleColor.Red)
             return None
 
-    def _start(self, game: str) -> Tuple[int, int]:
+    def _start(self, game: str, killProcess: bool = False) -> Tuple[int, int]:
         """
         A private method for start to start Games.
+
+        Parameters
+        ----------
+        game : string.
+            The current game.
+        killProcess : bool.
+            True to kill process by executor.
 
         Returns
         -------
@@ -3303,6 +3315,8 @@ class BMAutomation:
             startCode = tar.start()
             tar.startBenchMarking()
             quitCode = tar.quit()
+            if killProcess:
+                killProgress(tar.getExecutor())
             times += 1
         return startCode, quitCode
 

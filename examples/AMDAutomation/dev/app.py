@@ -18,6 +18,7 @@ import bmautomation as ba
 config = ba.read_json("config.json")
 RunList = config["RunList"]
 
+KILL_PROCESS = True
 
 ################################################################################
 ################################# Directories ##################################
@@ -217,7 +218,7 @@ def SidMeiersCivilizationVI():
         game: ba.Game = ba.Game(game_name, benchDirectory=SidMeiersCivilizationVIDir,
                                 exe="CivilizationVI_DX12.exe")
 
-        game.setBenchmarkTime(app.getBenchmarkTime())
+        game.setBenchmarkTime(30)
 
         game.setLaunchParam(SidMeiersCivilizationVIArgs)
 
@@ -612,7 +613,7 @@ def main():
     if not checkCode:
         return checkCode
 
-    codes = app.start()
+    codes = app.start(killProcess=KILL_PROCESS)
     return codes
 
 
