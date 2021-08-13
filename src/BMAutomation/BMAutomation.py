@@ -1694,6 +1694,10 @@ class Game:
         else:
             self.absolutePath: str = absolutePath
 
+        if loopTimes < 1:
+            loopTimes = 1
+            Logger.WriteLine(
+                'GAME() WARNING %s: BMAutomation is not initialized with a valid loopTimes.' % gameName, ConsoleColor.Yellow)
         self.loopTimes: int = loopTimes
 
         if mode >= 0 and mode <= 4:
@@ -1915,6 +1919,8 @@ class Game:
             Loop Times to be setted.
 
         """
+        if t < 1:
+            t = 1
         self.loopTimes = t
 
     def getLoopTimes(self) -> int:
