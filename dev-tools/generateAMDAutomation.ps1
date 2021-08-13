@@ -19,3 +19,4 @@ New-Item -Path $tar_dir/scripts/$folder_name -Name tinytask -type directory
 Copy-Item $tar_dir/dev/tinytask/* $tar_dir/scripts/$folder_name/tinytask
 Copy-Item $tar_dir/dev/tinytask/mouse/* $tar_dir/scripts/$folder_name/tinytask/mouse
 Copy-Item $tar_dir/dev/config.json $tar_dir/scripts/$folder_name/config.json
+Copy-Item $tar_dir/dev/app.py $tar_dir/scripts/$folder_name/app.py
