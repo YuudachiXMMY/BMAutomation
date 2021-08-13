@@ -73,6 +73,8 @@ def SniperEliteV2():
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
+        game.setLoopTimes(5)
+
         game.setStartActions([])
         game.setQuitActions([
             ["k", "esc", 0.6],
@@ -101,6 +103,8 @@ def AvP():
 
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
+
+        game.setLoopTimes(5)
 
         game.setStartActions([])
         game.setQuitActions([
@@ -135,7 +139,6 @@ def UnigineHeaven():
 
         game.setStartActions([])
         game.setQuitActions([
-            ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
@@ -165,7 +168,6 @@ def UnigineSanctuary():
 
         game.setStartActions([])
         game.setQuitActions([
-            ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
@@ -197,7 +199,6 @@ def DOOMEternal():
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
-            ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
@@ -225,11 +226,12 @@ def SidMeiersCivilizationVI():
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
+        game.setLoopTimes(5)
+
         game.setStartActions([
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
-            ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
@@ -261,7 +263,6 @@ def Rainbow6():
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
-            ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
@@ -293,7 +294,6 @@ def Borderlands3():
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
-            ["s", "key_alt_f4", 0.6],
             ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
@@ -391,8 +391,7 @@ def FFXIV_Endwalker_Bench():
         game.setStartActions([])
         game.setQuitActions([
             ["k", "esc", 0.6],
-            ["w", "wait", 30],
-            ["s", "key_alt_f4", 1.0]
+            ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
 
@@ -458,8 +457,7 @@ def FFXIV_Shadowbringers_Bench():
         game.setStartActions([])
         game.setQuitActions([
             ["k", "esc", 0.6],
-            ["w", "wait", 30],
-            ["s", "key_alt_f4", 0.6]
+            ["w", "wait", 30]
         ])
         game.setBenchmarkingMode(0)
 
