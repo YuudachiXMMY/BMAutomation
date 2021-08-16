@@ -1,0 +1,1 @@
+- Wait 20/30 seconds for each game to launch.

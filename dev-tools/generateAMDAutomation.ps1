@@ -5,8 +5,6 @@ $folder_name = "AMDAutomation_$time"
 $working_dir = Get-Location
 $tar_dir = "$working_dir\examples\AMDAutomation\"
 
-echo $tar_dir
-
 cd $tar_dir
 # cd .\examples\AMDAutomation\dev
 
@@ -20,3 +18,4 @@ Copy-Item $tar_dir/dev/tinytask/* $tar_dir/scripts/$folder_name/tinytask
 Copy-Item $tar_dir/dev/tinytask/mouse/* $tar_dir/scripts/$folder_name/tinytask/mouse
 Copy-Item $tar_dir/dev/config.json $tar_dir/scripts/$folder_name/config.json
 Copy-Item $tar_dir/dev/app.py $tar_dir/scripts/$folder_name/app.py
+Copy-Item $tar_dir/dev/changes.txt $tar_dir/scripts/$folder_name/changes.txt

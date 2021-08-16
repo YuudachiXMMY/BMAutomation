@@ -137,7 +137,9 @@ def UnigineHeaven():
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 20]
+        ])
         game.setQuitActions([
             ["w", "wait", 30]
         ])
@@ -166,7 +168,9 @@ def UnigineSanctuary():
         game.setExecutorPath("b/")
         game.setLauncherMode(0)
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 20]
+        ])
         game.setQuitActions([
             ["w", "wait", 30]
         ])
@@ -196,6 +200,7 @@ def DOOMEternal():
         game.setLauncherMode(0)
 
         game.setStartActions([
+            ["w", "wait", 30],
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
@@ -229,6 +234,7 @@ def SidMeiersCivilizationVI():
         game.setLoopTimes(5)
 
         game.setStartActions([
+            ["w", "wait", 10],
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
@@ -260,6 +266,7 @@ def Rainbow6():
         game.setLauncherMode(0)
 
         game.setStartActions([
+            ["w", "wait", 20],
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
@@ -291,6 +298,7 @@ def Borderlands3():
         game.setLauncherMode(0)
 
         game.setStartActions([
+            ["w", "wait", 20],
             ["s", "key_alt_tab", 1.0]
         ])
         game.setQuitActions([
@@ -322,7 +330,9 @@ def FFXIV_ARR_Bench():
                          uiAppControlType="PaneControl", uiAppName='FINAL FANTASY XIV: A Realm Reborn Official Benchmark (Character Creation)',
                          uiStartControlType="ButtonControl", uiStartIndex=11, uiStartName='')
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 30]
+        ])
         game.setQuitActions([
             ["k", "esc", 0.6],
             ["w", "wait", 30],
@@ -353,6 +363,7 @@ def FFXIVBenchmark():
         game.setLauncherMode(0)
 
         game.setStartActions([
+            ["w", "wait", 10],
             ["k", "right_arrow", 0.6],
             ["k", "enter", 0.6],
             ["k", "enter", 0.6],
@@ -388,7 +399,9 @@ def FFXIV_Endwalker_Bench():
                          uiAppControlType="WindowControl", uiAppName='FINAL FANTASY XIV: Endwalker Benchmark',
                          uiStartControlType="CustomControl", uiStartIndex=20, uiStartName='')
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 30]
+        ])
         game.setQuitActions([
             ["k", "esc", 0.6],
             ["w", "wait", 30]
@@ -420,7 +433,9 @@ def FFXIV_Heavensward_Bench():
                          uiAppControlType="PaneControl", uiAppName='FINAL FANTASY XIV: Heavensward Benchmark',
                          uiStartControlType="ButtonControl", uiStartIndex=16, uiStartName='')
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 30]
+        ])
         game.setQuitActions([
             ["k", "esc", 0.6],
             ["w", "wait", 30],
@@ -454,7 +469,9 @@ def FFXIV_Shadowbringers_Bench():
                          uiAppControlType="WindowControl", uiAppName='FINAL FANTASY XIV: Shadowbringers Benchmark',
                          uiStartControlType="CustomControl", uiStartIndex=20, uiStartName='')
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 30]
+        ])
         game.setQuitActions([
             ["k", "esc", 0.6],
             ["w", "wait", 30]
@@ -486,7 +503,9 @@ def FFXIV_Stormblood_Bench():
                          uiAppControlType="PaneControl", uiAppName='FINAL FANTASY XIV: Stormblood Benchmark',
                          uiStartControlType="ButtonControl", uiStartIndex=16, uiStartName='')
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 30]
+        ])
         game.setQuitActions([
             ["k", "esc", 0.6],
             ["w", "wait", 30],
@@ -517,7 +536,9 @@ def GenshinImpact():
         game.setExecutorPath("b/")
         game.setLauncherMode(2)
 
-        game.setStartActions([])
+        game.setStartActions([
+            ["w", "wait", 30]
+        ])
         game.setQuitActions([])
         game.setBenchmarkingMode(0)
 
