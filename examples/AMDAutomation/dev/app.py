@@ -536,10 +536,15 @@ def GenshinImpact():
         game.setExecutorPath("b/")
         game.setLauncherMode(2)
 
+        # TODO: Change the clickPos For specific screen resolution
+        game.setLauncher(clickPos=(300, 300))
+
         game.setStartActions([
             ["w", "wait", 30]
         ])
-        game.setQuitActions([])
+        game.setQuitActions([
+            ["s", "key_alt_f4", 300]
+        ])
         game.setBenchmarkingMode(0)
 
         checkCode = game.check()

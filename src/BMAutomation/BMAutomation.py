@@ -3369,6 +3369,8 @@ def killProgress(process):
     try:
         statusCode = subprocess.Popen(
             'taskkill /F /IM %s' % process, close_fds=True)
+        statusCode.wait(5)
+        statusCode.kill()
     except Exception:
         return 0
     else:
