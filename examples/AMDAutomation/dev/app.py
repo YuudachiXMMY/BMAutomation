@@ -18,7 +18,10 @@ import bmautomation as ba
 config = ba.read_json("config.json")
 RunList = config["RunList"]
 
+<<<<<<< HEAD
 KILL_PROCESS = True
+=======
+>>>>>>> a224ed2034f343fa515dcaced9a1739229fd7912
 
 ################################################################################
 ################################# Directories ##################################
